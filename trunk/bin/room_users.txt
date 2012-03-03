@@ -1,0 +1,2 @@
+user id: 3774503	username: GG.Dragon	country: NZ	experience: 40	playing?: false	external IP: /125.237.99.14	internal IP: /125.237.99.14	external port: 1513	internal port: 1513	correct IP: null	correct port: -1	virtual suffix: 1
+user id: 14632659	username: XIII.Dragon	country: NZ	experience: 26	playing?: false	external IP: /125.237.99.14	internal IP: /125.237.99.14	external port: 1514	internal port: 8687	correct IP: null	correct port: -1	virtual suffix: 18
