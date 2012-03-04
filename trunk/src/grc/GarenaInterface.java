@@ -1255,7 +1255,7 @@ public class GarenaInterface {
 			out.write("\tcorrect IP: " + member.correctIP);
 			out.write("\tcorrect port: " + member.correctPort);
 			out.write("\tvirtual suffix: " + member.virtualSuffix);
-			out.write("\n");
+			out.write("\r\n");
 		}
 
 		out.close();
@@ -1538,7 +1538,7 @@ public class GarenaInterface {
 	}
 	
 	public void startPlaying() {
-		Main.println("[GInterface] Sending GCRP START...", Main.ROOM);
+		Main.println("[GInterface] Sending GCRP START...", Main.SERVER);
 
 		ByteBuffer lbuf = ByteBuffer.allocate(9);
 		lbuf.order(ByteOrder.LITTLE_ENDIAN);
