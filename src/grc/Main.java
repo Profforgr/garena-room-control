@@ -354,7 +354,7 @@ public class Main {
 			}
 			if(log_server) {
 				//keep seperate logs in seperate folders
-				File log_server_dir = new File("log_server/");
+				File log_server_dir = new File("log/log_server/");
 				//if folder doesn't exist, create
 				if(!log_server_dir.exists()) {
 					log_server_dir.mkdir();
@@ -366,7 +366,7 @@ public class Main {
 			}
 			if(log_room) {
 				//see comments for log_server, same code but with different file names
-				File log_room_dir = new File("log_room/");
+				File log_room_dir = new File("log/log_room/");
 				if(!log_room_dir.exists()) {
 					log_room_dir.mkdir();
 				}
@@ -375,7 +375,7 @@ public class Main {
 			}
 			if(log_command) {
 				//see comments for log_server, same code but with different file names
-				File log_cmd_dir = new File("log_cmd/");
+				File log_cmd_dir = new File("log/log_cmd/");
 				if(!log_cmd_dir.exists()) {
 					log_cmd_dir.mkdir();
 				}
@@ -384,7 +384,7 @@ public class Main {
 			}
 			if(log_database) {
 				//see comments for log_server, same code but with different file names
-				File log_db_dir = new File("log_database/");
+				File log_db_dir = new File("log/log_database/");
 				if(!log_db_dir.exists()) {
 					log_db_dir.mkdir();
 				}
@@ -393,7 +393,7 @@ public class Main {
 			}
 			if(log_error) {
 				//see comments for log_server, same code but with different file names
-				File log_error_dir = new File("log_error/");
+				File log_error_dir = new File("log/log_error/");
 				if(!log_error_dir.exists()) {
 					log_error_dir.mkdir();
 				}
@@ -415,7 +415,8 @@ public class Main {
 	}
 
 	public static void println(String str, int type) {
-		if(type == ROOM || type == COMMAND || (type == DATABASE && SHOW_INFO) || (type == ERROR && DEBUG)) {
+		//check whether to display each type
+		if(type == ROOM || type == COMMAND || ((type == DATABASE || type == SERVER) && SHOW_INFO) || (type == ERROR && DEBUG)) {
 			System.out.println(str);
 		}
 		
