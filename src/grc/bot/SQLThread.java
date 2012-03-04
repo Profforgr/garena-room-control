@@ -20,18 +20,19 @@ import java.util.ArrayList;
 
 /**
  *
- * @author wizardus
+ * @author wizardus & GG.Dragon
  */
+ 
 public class SQLThread extends Thread {
 
-	ArrayList<Connection> connections;
-	String host; //MySQL hostname
-	String username; //MySQL username
-	String password; //MySQL password
+	private ArrayList<Connection> connections;
+	private String host; //MySQL hostname
+	private String username; //MySQL username
+	private String password; //MySQL password
 
 	private int botId; //In case you are running multiple bots at the same time
 	private int bannedWordDetectType; //Spam check settings
-	private int dbRefreshRate; //how often to synchronize database with bot
+	private int dbRefreshRate; //how often to synchronize database with bot in seconds
 	private GChatBot bot;
 	private boolean initial;
 
@@ -45,7 +46,7 @@ public class SQLThread extends Thread {
 		password = GRCConfig.configuration.getString("grc_db_password");
 		botId = GRCConfig.configuration.getInt("grc_bot_id", 0); //Default 0
 		bannedWordDetectType = GRCConfig.configuration.getInt("grc_bot_detect", 3); //Default 3
-		dbRefreshRate = GRCConfig.configuration.getInt("grc_bot_refresh_rate", 60); //Default 60
+		dbRefreshRate = GRCConfig.configuration.getInt("grc_bot_refresh_rate", 60); //Default 60 seconds, 1 minute
 	}
 
 	public void init() {
@@ -54,19 +55,9 @@ public class SQLThread extends Thread {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException cnfe) {
-			//Main controls what to do with error output
+			//give error information to Main
 			Main.println("[SQLThread] MySQL driver cannot be found: " + cnfe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				cnfe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				cnfe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				cnfe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(cnfe);
 		}
 	}
 	
@@ -75,27 +66,15 @@ public class SQLThread extends Thread {
 		synchronized(connections) {
 			if(connections.isEmpty()) {
 				try {
-					//Main controls what to do with database output
 					Main.println("[SQLThread] Creating new connection...", Main.DATABASE);
 					connections.add(DriverManager.getConnection(host, username, password));
 				}
 				catch(SQLException e) {
-					//Main controls what to do with error output
+					//give error information to Main
 					Main.println("[SQLThread] Unable to connect to mysql database: " + e.getLocalizedMessage(), Main.ERROR);
-					//show error stack trace on console
-					if(Main.DEBUG) {
-						e.printStackTrace();
-					}
-					//save error stack trace in log
-					if(Main.log_error) {
-						e.printStackTrace(Main.log_error_out);
-					}
-					if(Main.log_single) {
-						e.printStackTrace(Main.log_single_out);
-					}
+					Main.stackTrace(e);
 				}
 			}
-			//Main controls what to do with database output
 			Main.println("[SQLThread] Currently have " + connections.size() + " connections", Main.DATABASE);
 
 			return connections.remove(0);
@@ -105,7 +84,6 @@ public class SQLThread extends Thread {
 	public void connectionReady(Connection connection) {
 		synchronized(connections) {
 			connections.add(connection);
-			//Main controls what to do with database output
 			Main.println("[SQLThread] Recovering connection; now at " + connections.size() + " connections", Main.DATABASE);
 		}
 	}
@@ -145,25 +123,15 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Error while creating phrases table: " + e.getLocalizedMessage());
 				}*/
 				try {
-					//Main controls what to do with database output
 					Main.println("[SQLThread] Creating users table if not exists...", Main.DATABASE);
 					
 					Statement statement = connection.createStatement();
 					//not sure how to write this statement without it being a block of text
 					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ipaddress varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown', unbannedby varchar(15) NOT NULL DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
+					//give error information to Main
 					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
-					//show error stack trace on console
-					if(Main.DEBUG) {
-						e.printStackTrace();
-					}
-					//save error stack trace in log
-					if(Main.log_error) {
-						e.printStackTrace(Main.log_error_out);
-					}
-					if(Main.log_single) {
-						e.printStackTrace(Main.log_single_out);
-					}
+					Main.stackTrace(e);
 				}
 				connectionReady(connection);
 			}
@@ -225,8 +193,9 @@ public class SQLThread extends Thread {
 			try {
 				Thread.sleep(dbRefreshRate*1000);
 			} catch(InterruptedException e) {
-				//Main controls what to do with error output
+				//give error information to Main
 				Main.println("[SQLThread] Run sleep was interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(e);
 			}
 		}
 	}
