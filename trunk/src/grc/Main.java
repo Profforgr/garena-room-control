@@ -464,6 +464,20 @@ public class Main {
 		}
 	}
 	
+	public static void stackTrace(Exception e) {
+		//show error stack trace on console
+		if(DEBUG) {
+			e.printStackTrace();
+		}
+		//save error stack trace in log
+		if(log_error) {
+			e.printStackTrace(log_error_out);
+		}
+		if(log_single) {
+			e.printStackTrace(log_single_out);
+		}
+	}
+	
 	public static String date() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);

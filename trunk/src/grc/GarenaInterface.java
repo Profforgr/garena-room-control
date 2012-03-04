@@ -111,18 +111,9 @@ public class GarenaInterface {
 			String main_hostname = GRCConfig.configuration.getString("grc_mainhost", "con2.garenaconnect.com");
 			main_address = InetAddress.getByName(main_hostname);
 		} catch(UnknownHostException uhe) {
+			//give error information to Main
 			Main.println("[GInterface] Unable to locate main host: " + uhe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				uhe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				uhe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				uhe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(uhe);
 			
 			disconnected(GARENA_MAIN);
 			return false;
@@ -134,18 +125,9 @@ public class GarenaInterface {
 			socket = new Socket(main_address, 7456);
 			Main.println("[GInterface] Using local port: " + socket.getLocalPort(), Main.SERVER);
 		} catch(IOException ioe) {
+			//give error information to Main
 			Main.println("[GInterface] Error: " + ioe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				ioe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				ioe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				ioe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(ioe);
 			
 			disconnected(GARENA_MAIN);
 			return false;
@@ -155,18 +137,9 @@ public class GarenaInterface {
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());
 		} catch(IOException ioe) {
+			//give error information to Main
 			Main.println("[GInterface] Error: " + ioe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				ioe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				ioe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				ioe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(ioe);
 			
 			disconnected(GARENA_MAIN);
 			return false;
@@ -193,18 +166,9 @@ public class GarenaInterface {
 				Main.println("[GInterface] Warning: binded to IPv6 address: " + peer_socket.getInetAddress(), Main.ERROR);
 			}
 		} catch(IOException ioe) {
+			//give error information to Main
 			Main.println("[GInterface] Unable to establish peer socket on port " + peer_port + ": " + ioe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				ioe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				ioe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				ioe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(ioe);
 			
 			disconnected(GARENA_PEER);
 			return false;
@@ -265,18 +229,9 @@ public class GarenaInterface {
 					return false;
 				}
 			} catch(IOException ioe) {
+				//give error information to Main
 				Main.println("[GInterface] Error during autosearch: " + ioe.getLocalizedMessage(), Main.ERROR);
-				//show error stack trace on console
-				if(Main.DEBUG) {
-					ioe.printStackTrace();
-				}
-				//save error stack trace in log
-				if(Main.log_error) {
-					ioe.printStackTrace(Main.log_error_out);
-				}
-				if(Main.log_single) {
-					ioe.printStackTrace(Main.log_single_out);
-				}
+				Main.stackTrace(ioe);
 				
 				disconnected(GARENA_ROOM);
 				return false;
@@ -289,18 +244,9 @@ public class GarenaInterface {
 		try {
 			address = InetAddress.getByName(room_hostname);
 		} catch(UnknownHostException uhe) {
+			//give error information to Main
 			Main.println("[GInterface] Unable to locate room host: " + uhe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				uhe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				uhe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				uhe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(uhe);
 
 			disconnected(GARENA_ROOM);
 			return false;
@@ -312,20 +258,11 @@ public class GarenaInterface {
 			room_socket = new Socket(address, 8687);
 			Main.println("[GInterface] Using local port: " + room_socket.getLocalPort(), Main.SERVER);
 		} catch(IOException ioe) {
+			//give error information to Main
 			Main.println("[GInterface] Error: " + ioe.getLocalizedMessage(), Main.ERROR);
 			disconnected(GARENA_ROOM);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				ioe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				ioe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				ioe.printStackTrace(Main.log_single_out);
-			}
-
+			Main.stackTrace(ioe);
+			
 			return false;
 		}
 
@@ -333,18 +270,9 @@ public class GarenaInterface {
 			rout = new DataOutputStream(room_socket.getOutputStream());
 			rin = new DataInputStream(room_socket.getInputStream());
 		} catch(IOException ioe) {
+			//give error information to Main
 			Main.println("[GInterface] Error: " + ioe.getLocalizedMessage(), Main.ERROR);
-			//show error stack trace on console
-			if(Main.DEBUG) {
-				ioe.printStackTrace();
-			}
-			//save error stack trace in log
-			if(Main.log_error) {
-				ioe.printStackTrace(Main.log_error_out);
-			}
-			if(Main.log_single) {
-				ioe.printStackTrace(Main.log_single_out);
-			}
+			Main.stackTrace(ioe);
 
 			disconnected(GARENA_ROOM);
 			return false;
@@ -737,11 +665,9 @@ public class GarenaInterface {
 				disconnected(GARENA_MAIN);
 				return;
 			} catch(Exception e) {
-				if(Main.DEBUG) {
-					e.printStackTrace();
-				}
-
+				//give error information to Main
 				Main.println("[GInterface] GSLoop: error: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(e);
 			}
 		}
 	}
@@ -1108,19 +1034,16 @@ public class GarenaInterface {
 					}
 				}
 			} catch(IOException ioe) {
-				if(Main.DEBUG) {
-					ioe.printStackTrace();
-				}
-				
+				//give error information to Main
 				Main.println("[GInterface] GCRP loop IO error: " + ioe.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(ioe);
+				
 				disconnected(GARENA_ROOM);
 				return;
 			} catch(Exception e) {
-				if(Main.DEBUG) {
-					e.printStackTrace();
-				}
-
+				//give error information to Main
 				Main.println("[GInterface] GCRP loop error: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(e);
 			}
 		}
 	}
