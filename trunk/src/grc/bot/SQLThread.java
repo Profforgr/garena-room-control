@@ -54,10 +54,18 @@ public class SQLThread extends Thread {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException cnfe) {
-			Main.println("[SQLThread] MySQL driver cannot be found: " + cnfe.getLocalizedMessage());
-			
+			//Main controls what to do with error output
+			Main.println("[SQLThread] MySQL driver cannot be found: " + cnfe.getLocalizedMessage(), Main.ERROR);
+			//show error stack trace on console
 			if(Main.DEBUG) {
 				cnfe.printStackTrace();
+			}
+			//save error stack trace in log
+			if(Main.log_error) {
+				cnfe.printStackTrace(Main.log_error_out);
+			}
+			if(Main.log_single) {
+				cnfe.printStackTrace(Main.log_single_out);
 			}
 		}
 	}
@@ -67,19 +75,28 @@ public class SQLThread extends Thread {
 		synchronized(connections) {
 			if(connections.isEmpty()) {
 				try {
-					Main.println("[SQLThread] Creating new connection...");
+					//Main controls what to do with database output
+					Main.println("[SQLThread] Creating new connection...", Main.DATABASE);
 					connections.add(DriverManager.getConnection(host, username, password));
 				}
 				catch(SQLException e) {
-					Main.println("[SQLThread] Unable to connect to mysql database: " + e.getLocalizedMessage());
-					
+					//Main controls what to do with error output
+					Main.println("[SQLThread] Unable to connect to mysql database: " + e.getLocalizedMessage(), Main.ERROR);
+					//show error stack trace on console
 					if(Main.DEBUG) {
 						e.printStackTrace();
 					}
+					//save error stack trace in log
+					if(Main.log_error) {
+						e.printStackTrace(Main.log_error_out);
+					}
+					if(Main.log_single) {
+						e.printStackTrace(Main.log_single_out);
+					}
 				}
 			}
-					
-			Main.debug("[SQLThread] Currently have " + connections.size() + " connections");
+			//Main controls what to do with database output
+			Main.println("[SQLThread] Currently have " + connections.size() + " connections", Main.DATABASE);
 
 			return connections.remove(0);
 		}
@@ -88,8 +105,8 @@ public class SQLThread extends Thread {
 	public void connectionReady(Connection connection) {
 		synchronized(connections) {
 			connections.add(connection);
-			
-			Main.debug("[SQLThread] Recovering connection; now at " + connections.size() + " connections");
+			//Main controls what to do with database output
+			Main.println("[SQLThread] Recovering connection; now at " + connections.size() + " connections", Main.DATABASE);
 		}
 	}
 
@@ -126,22 +143,31 @@ public class SQLThread extends Thread {
 						e.printStackTrace();
 					}
 					Main.println("[SQLThread] Error while creating phrases table: " + e.getLocalizedMessage());
-				}
+				}*/
 				try {
-					Main.println("[SQLThread] Creating users table if not exists...");
+					//Main controls what to do with database output
+					Main.println("[SQLThread] Creating users table if not exists...", Main.DATABASE);
+					
 					Statement statement = connection.createStatement();
+					//not sure how to write this statement without it being a block of text
 					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ipaddress varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown', unbannedby varchar(15) NOT NULL DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
+					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
+					//show error stack trace on console
 					if(Main.DEBUG) {
 						e.printStackTrace();
 					}
-					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage());
-				}*/
+					//save error stack trace in log
+					if(Main.log_error) {
+						e.printStackTrace(Main.log_error_out);
+					}
+					if(Main.log_single) {
+						e.printStackTrace(Main.log_single_out);
+					}
+				}
 				connectionReady(connection);
 			}
-			if(Main.DEBUG) {
-				Main.println("[SQLThread] Refreshing internal lists with database...");
-			}
+			Main.println("[SQLThread] Refreshing internal lists with database...", Main.DATABASE);
 			
 			Connection connection = connection();
 			
@@ -199,7 +225,8 @@ public class SQLThread extends Thread {
 			try {
 				Thread.sleep(dbRefreshRate*1000);
 			} catch(InterruptedException e) {
-				Main.println("[SQLThread] Run sleep was interrupted: " + e.getLocalizedMessage());
+				//Main controls what to do with error output
+				Main.println("[SQLThread] Run sleep was interrupted: " + e.getLocalizedMessage(), Main.ERROR);
 			}
 		}
 	}
