@@ -375,7 +375,7 @@ public class Main {
 			}
 			if(log_command) {
 				//see comments for log_server, same code but with different file names
-				File log_cmd_dir = new File("log_room/");
+				File log_cmd_dir = new File("log_cmd/");
 				if(!log_cmd_dir.exists()) {
 					log_cmd_dir.mkdir();
 				}
@@ -430,8 +430,12 @@ public class Main {
 			}
 			//for each log type (room, command, database, error)
 			switch(type) {
-				case ROOM:
+				case SERVER:
 					//write to file
+					if(log_server && log_server_out != null) {
+						log_server_out.println("[" + dateString + "]" + str);
+					}
+				case ROOM:
 					if(log_room && log_room_out != null) {
 						log_room_out.println("[" + dateString + "]" + str);
 					}

@@ -63,7 +63,7 @@ public class ChatThread extends Thread {
 			}
 
 			chat_queue.notifyAll(); //in case run() is waiting for us
-			Main.println("[QUEUED: " + target_user + "] " + message);
+			Main.println("[QUEUED: " + target_user + "] " + message, Main.ROOM);
 		}
 	}
 
@@ -99,13 +99,13 @@ public class ChatThread extends Thread {
 				try {
 					Thread.sleep(1500);
 				} catch(InterruptedException e) {
-					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage());
+					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), Main.ERROR);
 				}
 			} else if(message.target_user == SLEEP) { //stops the bot sending messages too quickly
 				try {
 				Thread.sleep(1500); //prevent flooding
 				} catch(InterruptedException e) {
-					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage());
+					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), Main.ERROR);
 				}
 			} else {
 				garena.sendGCRPWhisper(message.target_user, message.str);
