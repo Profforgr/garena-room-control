@@ -25,10 +25,27 @@ import java.util.Date;
 public class Main {
 	public static String VERSION = "GRC v0.01";
 	public static boolean DEBUG = false;
+	public static boolean SHOW_INFO = false;
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	public static final int SERVER = 1;
+	public static final int ROOM = 2;
+	public static final int COMMAND = 3;
+	public static final int DATABASE = 4;
+	public static final int ERROR = 5;
 	public static boolean log;
+	public static boolean log_single;
+	public static boolean log_server;
+	public static boolean log_room;
+	public static boolean log_command;
+	public static boolean log_database;
+	public static boolean log_error;
 
-	static PrintWriter log_out;
+	public static PrintWriter log_single_out;
+	public static PrintWriter log_server_out;
+	public static PrintWriter log_room_out;
+	public static PrintWriter log_command_out;
+	public static PrintWriter log_database_out;
+	public static PrintWriter log_error_out;
 	
 	GChatBot bot;
 
@@ -51,8 +68,23 @@ public class Main {
 		System.out.println(VERSION);
 		GRCConfig.load(args);
 
-		//determine what to load based on grc_reverse and grc_bot
+		//log settings
 		log = GRCConfig.configuration.getBoolean("grc_log", false);
+		if(log) {
+			log_single = GRCConfig.configuration.getBoolean("grc_log_single", false);
+			log_server = GRCConfig.configuration.getBoolean("grc_log_server", false);
+			log_room = GRCConfig.configuration.getBoolean("grc_log_room", false);
+			log_command = GRCConfig.configuration.getBoolean("grc_log_command", false);
+			log_database = GRCConfig.configuration.getBoolean("grc_log_database", false);
+			log_error = GRCConfig.configuration.getBoolean("grc_log_error", false);
+		} else {
+			log_single = false;
+			log_server = false;
+			log_room = false;
+			log_command = false;
+			log_database = false;
+			log_error = false;
+		}
 
 		//first load all the defaults
 		loadPlugins = true;
@@ -126,14 +158,14 @@ public class Main {
 			//lookup
 			garena.sendPeerLookup();
 
-			Main.println("[Main] Waiting for lookup response...");
+			Main.println("[Main] Waiting for lookup response...", SERVER);
 			while(garena.iExternal == null) {
 				try {
 					Thread.sleep(100);
 				} catch(InterruptedException e) {}
 			}
 
-			Main.println("[Main] Received lookup response!");
+			Main.println("[Main] Received lookup response!", SERVER);
 		}
 	}
 
@@ -217,7 +249,7 @@ public class Main {
 				if(reconnectInterval != -1 && reconnectCounter >= reconnectInterval) {
 					reconnectCounter = 0;
 					//reconnect to Garena room
-					Main.println("[Main] Reconnecting to Garena room");
+					Main.println("[Main] Reconnecting to Garena room", ROOM);
 					garena.disconnectRoom();
 
 					try {
@@ -237,7 +269,7 @@ public class Main {
 						//gametype = 1001 for warcraft/dota
 						garena.sendGSPXP(garena.user_id, 100, 1001);
 						if(DEBUG) {
-							println("[Main] Sent exp packet to Garena");
+							println("[Main] Sent exp packet to Garena", SERVER);
 						}
 					}
 				}
@@ -272,7 +304,7 @@ public class Main {
 						//gametype = 1001 for warcraft/dota
 						garena.sendGSPXP(garena.user_id, 100, 1001);
 						if(DEBUG) {
-							println("[Main] Sent exp packet to Garena");
+							println("[Main] Sent exp packet to Garena", SERVER);
 						}
 					}
 				}
@@ -317,10 +349,62 @@ public class Main {
 
 		//init log
 		if(log) {
-			log_out = new PrintWriter(new FileWriter("grc.log", true), true);
+			if(log_single) {
+				log_single_out = new PrintWriter(new FileWriter("grc.log", true), true);
+			}
+			if(log_server) {
+				//keep seperate logs in seperate folders
+				File log_server_dir = new File("log_server/");
+				//if folder doesn't exist, create
+				if(!log_server_dir.exists()) {
+					log_server_dir.mkdir();
+				}
+				//set target to folder and set file name
+				File log_server_target = new File(log_server_dir, "grc_server.log");
+				//initialize printwriter
+				log_server_out = new PrintWriter(new FileWriter(log_server_target, true), true);
+			}
+			if(log_room) {
+				//see comments for log_server, same code but with different file names
+				File log_room_dir = new File("log_room/");
+				if(!log_room_dir.exists()) {
+					log_room_dir.mkdir();
+				}
+				File log_room_target = new File(log_room_dir, "grc_room.log");
+				log_room_out = new PrintWriter(new FileWriter(log_room_target, true), true);
+			}
+			if(log_command) {
+				//see comments for log_server, same code but with different file names
+				File log_cmd_dir = new File("log_room/");
+				if(!log_cmd_dir.exists()) {
+					log_cmd_dir.mkdir();
+				}
+				File log_cmd_target = new File(log_cmd_dir, "grc_cmd.log");
+				log_command_out = new PrintWriter(new FileWriter(log_cmd_target, true), true);
+			}
+			if(log_database) {
+				//see comments for log_server, same code but with different file names
+				File log_db_dir = new File("log_database/");
+				if(!log_db_dir.exists()) {
+					log_db_dir.mkdir();
+				}
+				File log_db_target = new File(log_db_dir, "grc_db.log");
+				log_database_out = new PrintWriter(new FileWriter(log_db_target, true), true);
+			}
+			if(log_error) {
+				//see comments for log_server, same code but with different file names
+				File log_error_dir = new File("log_error/");
+				if(!log_error_dir.exists()) {
+					log_error_dir.mkdir();
+				}
+				File log_error_target = new File(log_error_dir, "grc_error.log");
+				log_error_out = new PrintWriter(new FileWriter(log_error_target, true), true);
+			}
 		}
 		
+		//whether to output information on console
 		DEBUG = GRCConfig.configuration.getBoolean("grc_debug", false);
+		SHOW_INFO = GRCConfig.configuration.getBoolean("grc_show_info", false);
 
 		main.initPlugins();
 		if(!main.initGarena(false)) return;
@@ -330,20 +414,47 @@ public class Main {
 		main.helloLoop();
 	}
 
-	public static void println(String str) {
-		Date date = new Date();
-		String dateString = DateFormat.getDateTimeInstance().format(date);
-		
-		System.out.println(str);
-		
-		if(log_out != null) {
-			log_out.println("[" + dateString + "] " + str);
+	public static void println(String str, int type) {
+		if(type == ROOM || type == COMMAND || (type == DATABASE && SHOW_INFO) || (type == ERROR && DEBUG)) {
+			System.out.println(str);
 		}
-	}
-
-	public static void debug(String str) {
-		if(Main.DEBUG) {
-			println(str);
+		
+		if(log) {
+			//format date nicely
+			Date date = new Date();
+			String dateString = DateFormat.getDateTimeInstance().format(date);
+			
+			//for single log file
+			if(log_single && log_single_out != null) {
+				log_single_out.println("[" + dateString + "]" + str);
+			}
+			//for each log type (room, command, database, error)
+			switch(type) {
+				case ROOM:
+					//write to file
+					if(log_room && log_room_out != null) {
+						log_room_out.println("[" + dateString + "]" + str);
+					}
+					break;
+				case COMMAND:
+					if(log_command && log_command_out != null) {
+						log_command_out.println("[" + dateString + "]" + str);
+					}
+					break;
+				case DATABASE:
+					if(log_database && log_database_out != null) {
+						log_database_out.println("[" + dateString + "]" + str);
+					}
+					break;
+				case ERROR:
+					if(log_error && log_error_out != null) {
+						log_error_out.println("[" + dateString + "]" + str);
+					}
+					break;
+				default:
+					System.out.println(str);
+					System.out.println("Ouput type unknown, discarding");
+			}
 		}
 	}
 	

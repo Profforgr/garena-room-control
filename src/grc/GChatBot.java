@@ -43,7 +43,7 @@ public class GChatBot implements GarenaListener {
 	public SQLThread sqlthread;
 	public ChatThread chatthread;
 	
-	private ArrayList<String> muteList;
+	private ArrayList<String> ignoreList;
 	//ArrayList<String> voteLeaver;
 	
 	//Settings
@@ -51,19 +51,22 @@ public class GChatBot implements GarenaListener {
 	private int publicDelay;
 	private String root_admin; //root admin for this bot; null if root is disabled
 	private boolean commandline; //enable commandline input?
-	
+	private int bannedWordMode; //what to do when banned word is detected
+	private int bannedWordBanLength; //how long to ban the user for when banned word is detected
+	private String accessMessage; //response to when a user does not have enough access to use a command
+	private String welcomeMessage; //sends this message to all public users when they join the room
+	private String bannedWordMessage; //sends this message as an announcement when a user types a banned word
+	private String owner; //any string representing who runs the bot
+	private boolean enablePublicCommands; //enable public to use certain commands
+	private boolean showIp; //show ip in whois/whoami
+	private boolean userJoinAnnouncement; //display an announcement when a ranked user joins the room
+	private boolean publicUserMessage; //whisper a message to any user that has no rank ie new users
 	private boolean entryLevels; //whether to kick low/high level users when they join the room
 	private int minLevel; //minimum entry level to not be kicked from the room upon joining, only used if grc_bot_entry_levels = true
 	private int maxLevel; //maximum entry level to not be kicked from the room upon joining, only used if grc_bot_entry_levels = true
 	
-	private String access_message; //response to when a user does not have enough access to use a command
-	private String welcome_message; //sends this message to all public users when they join the room
-	private String banned_word_detect_message; //sends this message as an announcement when a user types a banned word
-	private String owner; //any string representing who runs the bot
-	private boolean enablePublicCommands;
-	private boolean showIp; //show ip in whois/whoami
-	private boolean userJoinAnnouncement; //display an announcement when a ranked user joins the room
-	private boolean publicUserMessage; //whisper a message to any user that has no rank ie new users
+	private String dotaVersion; //for informational purposes only, just a string
+	private String warcraftVersion; //for informational purposes only, just a string
 	
 	//thread safe objects
 	public Vector<UserInfo> userDB; //contains all users to ever enter the room, may be quite large
@@ -99,6 +102,67 @@ public class GChatBot implements GarenaListener {
 	}
 
 	public void init() {
+		//settings
+		owner = GRCConfig.getString("grc_bot_owner");
+		trigger = GRCConfig.configuration.getString("grc_bot_trigger", "!");
+		root_admin = GRCConfig.configuration.getString("grc_bot_root");
+		publicDelay = GRCConfig.configuration.getInt("grc_bot_publicdelay", 3000);
+		bannedWordMode = GRCConfig.configuration.getInt("grc_bot_detect", 0);
+		bannedWordBanLength = GRCConfig.configuration.getInt("grc_bot_detect_ban_length", 365);
+		accessMessage = GRCConfig.getString("grc_bot_access_message");
+		welcomeMessage = GRCConfig.getString("grc_bot_welcome_message");
+		enablePublicCommands = GRCConfig.configuration.getBoolean("grc_bot_publiccommands", true);
+		userJoinAnnouncement = GRCConfig.configuration.getBoolean("grc_bot_user_join_announcement", false);
+		publicUserMessage = GRCConfig.configuration.getBoolean("grc_bot_public_join_message", false);
+		showIp = GRCConfig.configuration.getBoolean("grc_bot_showip", false);
+		entryLevels = GRCConfig.configuration.getBoolean("grc_bot_entry_levels", false);
+		minLevel = GRCConfig.configuration.getInt("grc_bot_min_level", 10);
+		maxLevel = GRCConfig.configuration.getInt("grc_bot_max_level", 60);
+		
+		dotaVersion = GRCConfig.getString("grc_bot_dota_version");
+		warcraftVersion = GRCConfig.getString("grc_bot_warcraft_version");
+		
+		//registerCommand("exit", LEVEL_ROOT_ADMIN);
+		//registerCommand("deleteuser", LEVEL_ROOT_ADMIN);
+		//registerCommand("addadmin", LEVEL_ROOT_ADMIN);
+		//registerCommand("room", LEVEL_ROOT_ADMIN);
+		
+		//registerCommand("kick", LEVEL_ADMIN);
+		//registerCommand("quickkick", LEVEL_ADMIN);
+		//registerCommand("ban", LEVEL_ADMIN);
+		//registerCommand("unban", LEVEL_ADMIN);
+		
+		//registerCommand("clear", LEVEL_TRUSTED);
+		//registerCommand("findip", LEVEL_TRUSTED);
+		//registerCommand("checkuserip", LEVEL_TRUSTED);
+		//registerCommand("traceuser", LEVEL_TRUSTED);
+		//registerCommand("traceip", LEVEL_TRUSTED);
+		
+		//registerCommand("getpromote", LEVEL_VIP);
+		//registerCommand("getunban", LEVEL_VIP);
+		
+		//registerCommand("whois", LEVEL_SAFELIST);
+		//registerCommand("whoisuid", LEVEL_SAFELIST);
+		//registerCommand("roomstats", LEVEL_SAFELIST);
+		//registerCommand("random", LEVEL_SAFELIST);
+		//registerCommand("status", LEVEL_SAFELIST);
+		
+		int public_level = LEVEL_PUBLIC;
+		if(!enablePublicCommands) {
+			public_level = LEVEL_SAFELIST;
+		}
+		
+		//registerCommand("whoami", public_level);
+		//registerCommand("commands", public_level);
+		//registerCommand("baninfo", public_level);
+		//registerCommand("kickinfo", public_level);
+		//registerCommand("uptime", public_level);
+		//registerCommand("version", public_level);
+		//registerCommand("allstaff", public_level);
+		//registerCommand("staff", public_level);
+		//registerCommand("creater", public_level);
+		//registerCommand("alias", public_level);
+		//registerCommand("help", public_level);
 		
 		//start input thread
 		if(commandline) {
@@ -108,9 +172,15 @@ public class GChatBot implements GarenaListener {
 	}
 
 	public String command(MemberInfo member, String command, String payload) {
+		//if user is on the ignore list
+		if(ignoreList.contains(member.username)) {
+			chatthread.queueChat("You are being ignored! A trusted user must unignore you to allow you to use commands again", member.userID);
+			return null;
+		}
+		
 		int memberRank = getUserRank(member.username.toLowerCase());
 		String memberRankTitle = getTitleFromRank(memberRank);
-		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username);
+		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Main.ROOM);
 
 		command = processAlias(command.toLowerCase()); //if it's alias, convert it to original command
 		
@@ -126,6 +196,57 @@ public class GChatBot implements GarenaListener {
 			} else {
 				member.lastCommandTime = System.currentTimeMillis();
 			}
+		}
+		
+		if(memberRank >= LEVEL_ROOT_ADMIN) {
+			//ROOT ADMIN COMMANDS
+			if(command.equals("exit")) {
+				//EXIT COMMAND
+				exit();
+			} /*else if(command.equals("addadmin")) {
+				//ADD ADMIN COMMAND
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "addadmin <username>. For further help use " + trigger + "help addadmin", member.userID);
+					return null;
+				}
+				
+				//format payload into something easier to process
+				String target = trimUsername(removeSpaces(payload));
+				UserInfo targetUser = userFromName(target.toLowerCase());
+				
+				if(targetUser != null) { //if user exists in database
+					//prevent demotion of root admins even by other root admin
+					if(targetUser.rank == LEVEL_ROOT_ADMIN) {
+						return "Failed. It is impossible to demote a Root Admin!";
+					}
+					
+					//update rank in database and in memory
+					if(sqlthread.setRank(target.toLowerCase(), member.username, LEVEL_ADMIN)) {
+						targetUser.rank = LEVEL_ADMIN;
+						return "Success! <" + targetUser.properUsername + "> is now an Admin!";
+					} else {
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						return null;
+					}
+				} else { //if user doesn't exist in database create new user
+					if(sqlthread.add(target.toLowerCase(), "unknown", 0, LEVEL_ADMIN, "unknown", "unknown", member.username, "unknown")) {
+						UserInfo user = new UserInfo();
+						user.username = target.toLowerCase();
+						user.properUsername = "unknown";
+						user.userID = 0;
+						user.rank = LEVEL_ADMIN;
+						user.ipAddress = "unknown";
+						user.lastSeen = "unknown";
+						user.promotedBy = member.username;
+						user.unbannedBy = "unknown";
+						userDB.add(user);
+						return "Success! " + target + " is now an Admin!";
+					} else {
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						return null;
+					}
+				}
+			}*/
 		}
 		
 		//notify plugins
@@ -173,7 +294,7 @@ public class GChatBot implements GarenaListener {
 			try {
 				aliases = GRCConfig.configuration.getStringArray("grc_bot_alias_" + command);
 			} catch(ConversionException e) {
-				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command);
+				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command, Main.ERROR);
 				aliases = new String[] {command};
 			}
 		}
