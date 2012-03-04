@@ -429,13 +429,14 @@ public class Main {
 			if(log_single && log_single_out != null) {
 				log_single_out.println("[" + dateString + "]" + str);
 			}
-			//for each log type (room, command, database, error)
+			//for each log type (server, room, command, database, error)
 			switch(type) {
 				case SERVER:
 					//write to file
 					if(log_server && log_server_out != null) {
 						log_server_out.println("[" + dateString + "]" + str);
 					}
+					break;
 				case ROOM:
 					if(log_room && log_room_out != null) {
 						log_room_out.println("[" + dateString + "]" + str);
