@@ -34,16 +34,14 @@ public class GChatBot implements GarenaListener {
 	public static final int LEVEL_SHITLIST = 0;
 	public static final int MAIN_CHAT = -1;
 	public static final int ANNOUNCEMENT = -2;
-	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	private int rotateAnn = -1; //Track which announcement the bot is up to
 	
 	public GarenaInterface garena;
 	public PluginManager plugins;
 	public SQLThread sqlthread;
 	public ChatThread chatthread;
-	
-	private ArrayList<String> ignoreList;
 	//ArrayList<String> voteLeaver;
 	
 	//Settings
@@ -64,12 +62,13 @@ public class GChatBot implements GarenaListener {
 	private boolean entryLevels; //whether to kick low/high level users when they join the room
 	private int minLevel; //minimum entry level to not be kicked from the room upon joining, only used if grc_bot_entry_levels = true
 	private int maxLevel; //maximum entry level to not be kicked from the room upon joining, only used if grc_bot_entry_levels = true
-	
 	private String dotaVersion; //for informational purposes only, just a string
 	private String warcraftVersion; //for informational purposes only, just a string
 	
+	private ArrayList<String> ignoreList;
 	//thread safe objects
-	public Vector<UserInfo> userDB; //contains all users to ever enter the room, may be quite large
+	public TreeNode userDatabaseRoot; //contains the user database, often synched with mysql database. May be quite large
+	public int num_users = 0;
 	
 	private HashMap<String, String> aliasToCommand; //maps aliases to the command they alias
 	private HashMap<String, String[]> commandToAlias; //maps commands to all of the command's aliases
@@ -99,6 +98,8 @@ public class GChatBot implements GarenaListener {
 		
 		aliasToCommand = new HashMap<String, String>();
 		commandToAlias = new HashMap<String, String[]>();
+		
+		userDatabaseRoot = new TreeNode(new UserInfo()); //initialize user database tree
 	}
 
 	public void init() {
@@ -177,8 +178,8 @@ public class GChatBot implements GarenaListener {
 			chatthread.queueChat("You are being ignored! A trusted user must unignore you to allow you to use commands again", member.userID);
 			return null;
 		}
-		
-		int memberRank = getUserRank(member.username.toLowerCase());
+		UserInfo user = getUserFromName(member.username, userDatabaseRoot);
+		int memberRank = user.rank;
 		String memberRankTitle = getTitleFromRank(memberRank);
 		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Main.ROOM);
 
@@ -200,6 +201,12 @@ public class GChatBot implements GarenaListener {
 		
 		if(memberRank >= LEVEL_ROOT_ADMIN) {
 			//ROOT ADMIN COMMANDS
+			
+			/*switch(command) {
+				case "exit": //EXIT COMMAND
+					exit();
+			}*/
+			
 			if(command.equals("exit")) {
 				//EXIT COMMAND
 				exit();
@@ -398,14 +405,130 @@ public class GChatBot implements GarenaListener {
 	
 	//Add new user to room list, updates info if existing user
 	public void addRoomList() {
-		
+		for(int i = 0; i < garena.members.size(); i++) {
+			MemberInfo target = garena.members.get(i);
+			UserInfo user = getUserFromName(target.username.toLowerCase(), userDatabaseRoot);
+			if(user == null) {
+				//if new user
+				if(sqlthread.add(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
+					//if successfully added to mysql database
+					UserInfo newUser = new UserInfo();
+					newUser.username = target.username.toLowerCase();
+					newUser.properUsername = target.username;
+					newUser.userID = target.userID;
+					newUser.rank = LEVEL_PUBLIC;
+					newUser.ipAddress = target.externalIP.toString().substring(1);
+					newUser.lastSeen = time();
+					TreeNode newUserNode = new TreeNode(newUser);
+					addUserByUid(newUserNode, userDatabaseRoot);
+					addUserByName(newUserNode, userDatabaseRoot);
+				}
+			}
+		}
+		System.out.println("asd\n\n\n\n");
 	}
 	
 	public void addRoot() {
 		
 	}
 	
-	//Retrieve userinfo given UID
+	//add new user to user database by uid
+	public void addUserByUid(TreeNode user, TreeNode node) {
+		if(user.getValue().userID < node.getValue().userID) {
+			//if user uid is less than node uid
+			if(node.getLeftUid() == null) {
+				//if left_uid node is null
+				node.setLeftUid(user);
+			} else {
+				//else give to left_uid child node
+				addUserByUid(user, node.getLeftUid());
+			}
+		} else {
+			//use else because we don't want to discard any users, user id may not be known
+			if(node.getRightUid() == null) {
+				//if right_uid node is null
+				node.setRightUid(user);
+			} else {
+				//else give to right_uid child node
+				addUserByUid(user, node.getRightUid());
+			}
+		}
+	}
+	
+	//add new user to user database by username
+	public void addUserByName(TreeNode user, TreeNode node) {
+		if(user.getValue().username.compareToIgnoreCase(node.getValue().username) < 0) {
+			//if user username is alphabetically lower than node username
+			if(node.getLeftUser() == null) {
+				//if left_user is null
+				node.setLeftUser(user);
+			} else {
+				//else give to left_user child node
+				addUserByName(user, node.getLeftUser());
+			}
+		} else {
+			//use else because username is unique, impossible to get 2 of the same username
+			if(node.getRightUser() == null) {
+				node.setRightUser(user);
+			} else {
+				//else give to right_user child node
+				addUserByName(user, node.getRightUser());
+			}
+		}
+	}
+	
+	/*//retrieve rank given username
+	//case does not matter due to usage of compareToIgnoreCase
+	public int getUserRankFromName(String user, TreeNode node) {
+		if(user.compareToIgnoreCase(node.getValue().username) == 0) { //base case
+			//if user is equal to node's username
+			return node.getValue().rank;
+		} else if(user.compareToIgnoreCase(node.getValue().username) < 0) {
+			//if user is alphabetically lower than node's username
+			return getUserRankFromName(user, node.getLeftUser());
+		} else {
+			//last option, user is alphabetically higher than node's username
+			return getUserRankFromName(user, node.getRightUser());
+		}
+	}*/
+	
+	//retrieve userinfo given UID
+	public UserInfo getUserFromUid(int uid, TreeNode node) {
+		if(uid == node.getValue().userID) { //base case
+			//if uid is equal to node's userID
+			return node.getValue();
+		} else if(uid < node.getValue().userID) {
+			//if uid is less than node's userID
+			return getUserFromUid(uid, node.getLeftUid());
+		} else {
+			//last option, uid is greater than node's userID
+			return getUserFromUid(uid, node.getRightUid());
+		}
+	}
+	
+	//retrieve 
+	public UserInfo getUserFromName(String user, TreeNode node) {
+		if(user.compareToIgnoreCase(node.getValue().username) == 0) { //base case
+			//if user is equal to node's username
+			return node.getValue();
+		} else if(user.compareToIgnoreCase(node.getValue().username) < 0) {
+			//if user is alphabetically lower than node's username
+			if(node.getLeftUser() == null) {
+				return null;
+			} else {
+				return getUserFromName(user, node.getLeftUser());
+			}
+		} else {
+			//last option, user is alphabetically higher than node's username
+			if(node.getRightUser() == null) {
+				return null;
+			} else {
+				return getUserFromName(user, node.getRightUser());
+			}
+		}
+	}
+	
+	/*//Retrieve userinfo given UID
 	public UserInfo userFromID(int uid) {
 		for(int i = 0; i < userDB.size(); i++) {
 			if(userDB.get(i).userID == uid) {
@@ -413,9 +536,9 @@ public class GChatBot implements GarenaListener {
 			}
 		}
 		return null;
-	}
+	}*/
 	
-	//Retrieve userinfo given username in lower case
+	/*//Retrieve userinfo given username in lower case
 	public UserInfo userFromName(String name) {
 		for(int i = 0; i < userDB.size(); i++) {
 			if(userDB.get(i).username.equals(name)) {
@@ -423,9 +546,9 @@ public class GChatBot implements GarenaListener {
 			}
 		}
 		return null;
-	}
+	}*/
 	
-	//Retrieve rank given username in lower case
+	/*//Retrieve rank given username in lower case
 	public int getUserRank(String user) {
 		for(int i = 0; i < userDB.size(); i++) {
 			if(userDB.get(i).username.equals(user)) {
@@ -433,7 +556,7 @@ public class GChatBot implements GarenaListener {
 			}
 		}
 		return LEVEL_PUBLIC;
-	}
+	}*/
 	
 	public String getTitleFromRank(int rank) {
 		switch(rank) {
@@ -459,7 +582,8 @@ public class GChatBot implements GarenaListener {
 	}
 
 	public void chatReceived(MemberInfo player, String chat, boolean whisper) {
-		int memberRank = getUserRank(player.username.toLowerCase());
+		UserInfo user = getUserFromName(player.username, userDatabaseRoot);
+		//int memberRank = getUserRank(player.username.toLowerCase());
 		
 		if(player != null && chat.startsWith("?trigger")) {
 			String trigger_msg = "Trigger: " + trigger;

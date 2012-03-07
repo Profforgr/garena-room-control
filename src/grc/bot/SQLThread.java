@@ -9,6 +9,7 @@ import grc.GRCConfig;
 import grc.GChatBot;
 import grc.Main;
 import grc.UserInfo;
+import grc.TreeNode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -87,6 +88,29 @@ public class SQLThread extends Thread {
 			Main.println("[SQLThread] Recovering connection; now at " + connections.size() + " connections", Main.DATABASE);
 		}
 	}
+	
+	public boolean add(String username, String properUsername, int uid, int rank, String ip, String lastSeen, String promotedBy, String unbannedBy) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO users (id, username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+			statement.setString(1, username);
+			statement.setString(2, properUsername);
+			statement.setInt(3, uid);
+			statement.setInt(4, rank);
+			statement.setString(5, ip);
+			statement.setString(6, lastSeen);
+			statement.setString(7, promotedBy);
+			statement.setString(8, unbannedBy);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to add user " + properUsername + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
 
 	public void run() {
 		while(true) {
@@ -127,7 +151,7 @@ public class SQLThread extends Thread {
 					
 					Statement statement = connection.createStatement();
 					//not sure how to write this statement without it being a block of text
-					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ipaddress varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown', unbannedby varchar(15) NOT NULL DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown', unbannedby varchar(15) NOT NULL DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
 					//give error information to Main
 					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
@@ -138,6 +162,39 @@ public class SQLThread extends Thread {
 			Main.println("[SQLThread] Refreshing internal lists with database...", Main.DATABASE);
 			
 			Connection connection = connection();
+			
+			try {
+				//sync user database with mysql database
+				//unfortunately the best way to do this is to remake the userDB tree each time
+				PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby FROM users");
+				ResultSet result = statement.executeQuery();
+				bot.userDatabaseRoot.clear();
+				bot.num_users = 0;
+				while(result.next()) {
+					UserInfo user = new UserInfo();
+					user.username = result.getString("username");
+					user.properUsername = result.getString("properusername");
+					user.userID = result.getInt("uid");
+					int rank = result.getInt("rank");
+					//prevent people from editing database to give themselves root admin
+					if(user.rank == bot.LEVEL_ROOT_ADMIN) {
+						rank = bot.LEVEL_ADMIN;
+					}
+					user.rank = rank;
+					user.ipAddress = result.getString("ip");
+					user.lastSeen = result.getString("lastseen");
+					user.promotedBy = result.getString("promotedby");
+					user.unbannedBy = result.getString("unbannedby");
+					TreeNode newUser = new TreeNode(user);
+					bot.addUserByUid(newUser, bot.userDatabaseRoot);
+					bot.addUserByName(newUser, bot.userDatabaseRoot);
+					bot.num_users++;
+				}
+			} catch(SQLException e) {
+				//give error information to Main
+				Main.println("[SQLThread] Unable to refresh lists: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(e);
+			}
 			
 			/*try {
 				//refresh admin list
