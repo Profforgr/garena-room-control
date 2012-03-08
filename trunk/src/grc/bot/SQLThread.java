@@ -89,7 +89,8 @@ public class SQLThread extends Thread {
 		}
 	}
 	
-	public boolean add(String username, String properUsername, int uid, int rank, String ip, String lastSeen, String promotedBy, String unbannedBy) {
+	//add new user to database given full information
+	public boolean addUser(String username, String properUsername, int uid, int rank, String ip, String lastSeen, String promotedBy, String unbannedBy) {
 		try {
 			Connection connection = connection();
 			PreparedStatement statement = connection.prepareStatement("INSERT INTO users (id, username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -110,6 +111,66 @@ public class SQLThread extends Thread {
 			Main.stackTrace(e);
 		}
 		return false;
+	}
+	
+	//update user already in database given properusername, uid, ip, lastseen
+	//occurs when you promote a user who has never appeared in the room, and then they enter the room
+	public boolean updateUser(String properUsername, int uid, String ip, String lastSeen) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE users SET properusername=?, uid=?, ip=?, lastseen=? WHERE username=?");
+			statement.setString(1, properUsername);
+			statement.setInt(2, uid);
+			statement.setString(3, ip);
+			statement.setString(4, lastSeen);
+			statement.setString(5, properUsername.toLowerCase());
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to update user " + properUsername + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+			return false;
+		}
+	}
+	
+	//sync user database with mysql database
+	//unfortunately the best way to do this is to remake the userDB tree each time
+	public boolean syncDatabase() {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby FROM users");
+			ResultSet result = statement.executeQuery();
+			bot.userDatabaseRoot.clear();
+			bot.num_users = 0;
+			while(result.next()) {
+				UserInfo user = new UserInfo();
+				user.username = result.getString("username");
+				user.properUsername = result.getString("properusername");
+				user.userID = result.getInt("uid");
+				int rank = result.getInt("rank");
+				//prevent people from editing database to give themselves root admin
+				if(user.rank == bot.LEVEL_ROOT_ADMIN) {
+					rank = bot.LEVEL_ADMIN;
+				}
+				user.rank = rank;
+				user.ipAddress = result.getString("ip");
+				user.lastSeen = result.getString("lastseen");
+				user.promotedBy = result.getString("promotedby");
+				user.unbannedBy = result.getString("unbannedby");
+				TreeNode newUser = new TreeNode(user);
+				bot.addUserByUid(newUser, bot.userDatabaseRoot);
+				bot.addUserByName(newUser, bot.userDatabaseRoot);
+				bot.num_users++;
+			}
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to refresh lists: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+			return false;
+		}
 	}
 
 	public void run() {
@@ -163,38 +224,8 @@ public class SQLThread extends Thread {
 			
 			Connection connection = connection();
 			
-			try {
-				//sync user database with mysql database
-				//unfortunately the best way to do this is to remake the userDB tree each time
-				PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby FROM users");
-				ResultSet result = statement.executeQuery();
-				bot.userDatabaseRoot.clear();
-				bot.num_users = 0;
-				while(result.next()) {
-					UserInfo user = new UserInfo();
-					user.username = result.getString("username");
-					user.properUsername = result.getString("properusername");
-					user.userID = result.getInt("uid");
-					int rank = result.getInt("rank");
-					//prevent people from editing database to give themselves root admin
-					if(user.rank == bot.LEVEL_ROOT_ADMIN) {
-						rank = bot.LEVEL_ADMIN;
-					}
-					user.rank = rank;
-					user.ipAddress = result.getString("ip");
-					user.lastSeen = result.getString("lastseen");
-					user.promotedBy = result.getString("promotedby");
-					user.unbannedBy = result.getString("unbannedby");
-					TreeNode newUser = new TreeNode(user);
-					bot.addUserByUid(newUser, bot.userDatabaseRoot);
-					bot.addUserByName(newUser, bot.userDatabaseRoot);
-					bot.num_users++;
-				}
-			} catch(SQLException e) {
-				//give error information to Main
-				Main.println("[SQLThread] Unable to refresh lists: " + e.getLocalizedMessage(), Main.ERROR);
-				Main.stackTrace(e);
-			}
+			//sync database
+			syncDatabase();
 			
 			/*try {
 				//refresh admin list

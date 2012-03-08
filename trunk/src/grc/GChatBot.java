@@ -276,19 +276,6 @@ public class GChatBot implements GarenaListener {
 		return "";
 	}
 
-	public void exit() {
-		garena.disconnectRoom();
-		System.exit(0);
-	}
-
-	public String processAlias(String alias) {
-		if(aliasToCommand.containsKey(alias)) {
-			return aliasToCommand.get(alias);
-		} else {
-			return alias;
-		}
-	}
-
 	public void registerCommand(String command) {
 		registerCommand(command, LEVEL_PUBLIC);
 	}
@@ -333,76 +320,6 @@ public class GChatBot implements GarenaListener {
 		commandToAlias.put(command, aliases);
 	}
 	
-	public static String arrayToString(String[] a) {
-		StringBuilder result = new StringBuilder();
-		if (a.length > 0) {
-			result.append(a[0]);
-
-			for (int i = 1; i < a.length; i++) {
-				result.append(", ");
-				result.append(a[i]);
-			}
-		}
-		
-		return result.toString();
-	}
-	
-	//Removes all " " from the string
-	public String removeSpaces(String text) {
-		String result = text.replaceAll(" ", "");
-		return result;
-	}
-	
-	//Removes "<" and ">" from ends of the username
-	public String trimUsername(String username) {
-		if(username.length() > 2) {
-			if(username.charAt(username.length()-1) == '>') { //trims > at end of username
-				username = username.substring(0, username.length()-1);
-			}
-			if(username.charAt(0) == '<') { //trims < at start of username
-				username = username.substring(1);
-			}
-		} else {
-			return username;
-		}
-		return username;
-	}
-	
-	public String time() {
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-		return sdf.format(cal.getTime());
-	}
-	
-	public String time(int hours) {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, hours);
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-		return sdf.format(cal.getTime());
-	}
-	
-	//Check if IP address is valid
-	public boolean validIP(String ip) {
-		try {
-			if(ip == null || ip.isEmpty()) {
-				return false;
-			}
-			String[] parts = ip.split("\\.");
-			if(parts.length != 4) {
-				return false;
-			}
-			for(int i = 0; i < parts.length; i++) {
-				int num = Integer.parseInt(parts[i]);
-				if (num < 0 || num > 255) {
-					return false;
-				}
-			}
-			return true;
-		} catch(NumberFormatException nfe) {
-			return false;
-		}
-	}
-	
 	//Add new user to room list, updates info if existing user
 	public void addRoomList() {
 		for(int i = 0; i < garena.members.size(); i++) {
@@ -410,7 +327,7 @@ public class GChatBot implements GarenaListener {
 			UserInfo user = getUserFromName(target.username.toLowerCase(), userDatabaseRoot);
 			if(user == null) {
 				//if new user
-				if(sqlthread.add(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
+				if(sqlthread.addUser(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
 					//if successfully added to mysql database
 					UserInfo newUser = new UserInfo();
 					newUser.username = target.username.toLowerCase();
@@ -423,13 +340,77 @@ public class GChatBot implements GarenaListener {
 					addUserByUid(newUserNode, userDatabaseRoot);
 					addUserByName(newUserNode, userDatabaseRoot);
 				}
+			} else if(user.properUsername.equals("unknown")) {
+				if(sqlthread.updateUser(target.username, target.userID, target.externalIP.toString().substring(1), time())) {
+					user.properUsername = target.username;
+					user.userID = target.userID;
+					user.ipAddress = target.externalIP.toString().substring(1);
+					user.lastSeen = time();
+				}
 			}
 		}
-		System.out.println("asd\n\n\n\n");
 	}
 	
 	public void addRoot() {
 		
+	}
+
+	public void chatReceived(MemberInfo player, String chat, boolean whisper) {
+		UserInfo user = getUserFromName(player.username, userDatabaseRoot);
+		//int memberRank = getUserRank(player.username.toLowerCase());
+		
+		if(player != null && chat.startsWith("?trigger")) {
+			String trigger_msg = "Trigger: " + trigger;
+
+			if(whisper) {
+				chatthread.queueChat(trigger_msg, player.userID);
+			} else {
+				chatthread.queueChat(trigger_msg, MAIN_CHAT);
+			}
+		}
+
+		//do we have a command?
+		if(player != null && chat.startsWith(trigger) && !chat.substring(1).startsWith(trigger) && !chat.equals(trigger)) {
+			//remove trigger from string, and split with space separator
+			String[] array = chat.substring(trigger.length()).split(" ", 2);
+			String command = array[0];
+			String payload = "";
+
+			if(array.length >= 2) {
+				payload = array[1];
+			}
+
+			String response = command(player, command, payload);
+			
+			if(response != null) {
+				if(whisper) {
+					chatthread.queueChat(response, player.userID);
+				} else {
+					chatthread.queueChat(response, MAIN_CHAT);
+				}
+			}
+		}
+	}
+
+	public void playerJoined(MemberInfo player) {
+		
+	}
+
+	public void playerLeft(MemberInfo player) {
+
+	}
+
+	public void playerStopped(MemberInfo player) {
+
+	}
+
+	public void playerStarted(MemberInfo player) {
+
+	}
+
+	public void disconnected(int x) {
+		//try to reconnect
+
 	}
 	
 	//add new user to user database by uid
@@ -506,7 +487,7 @@ public class GChatBot implements GarenaListener {
 		}
 	}
 	
-	//retrieve 
+	//retrieve userinfo given username
 	public UserInfo getUserFromName(String user, TreeNode node) {
 		if(user.compareToIgnoreCase(node.getValue().username) == 0) { //base case
 			//if user is equal to node's username
@@ -527,36 +508,6 @@ public class GChatBot implements GarenaListener {
 			}
 		}
 	}
-	
-	/*//Retrieve userinfo given UID
-	public UserInfo userFromID(int uid) {
-		for(int i = 0; i < userDB.size(); i++) {
-			if(userDB.get(i).userID == uid) {
-				return userDB.get(i);
-			}
-		}
-		return null;
-	}*/
-	
-	/*//Retrieve userinfo given username in lower case
-	public UserInfo userFromName(String name) {
-		for(int i = 0; i < userDB.size(); i++) {
-			if(userDB.get(i).username.equals(name)) {
-				return userDB.get(i);
-			}
-		}
-		return null;
-	}*/
-	
-	/*//Retrieve rank given username in lower case
-	public int getUserRank(String user) {
-		for(int i = 0; i < userDB.size(); i++) {
-			if(userDB.get(i).username.equals(user)) {
-				return userDB.get(i).rank;
-			}
-		}
-		return LEVEL_PUBLIC;
-	}*/
 	
 	public String getTitleFromRank(int rank) {
 		switch(rank) {
@@ -581,62 +532,87 @@ public class GChatBot implements GarenaListener {
 		}
 	}
 
-	public void chatReceived(MemberInfo player, String chat, boolean whisper) {
-		UserInfo user = getUserFromName(player.username, userDatabaseRoot);
-		//int memberRank = getUserRank(player.username.toLowerCase());
-		
-		if(player != null && chat.startsWith("?trigger")) {
-			String trigger_msg = "Trigger: " + trigger;
+	public String processAlias(String alias) {
+		if(aliasToCommand.containsKey(alias)) {
+			return aliasToCommand.get(alias);
+		} else {
+			return alias;
+		}
+	}
 
-			if(whisper) {
-				chatthread.queueChat(trigger_msg, player.userID);
-			} else {
-				chatthread.queueChat(trigger_msg, MAIN_CHAT);
+	public void exit() {
+		garena.disconnectRoom();
+		System.exit(0);
+	}
+	
+	public static String arrayToString(String[] a) {
+		StringBuilder result = new StringBuilder();
+		if (a.length > 0) {
+			result.append(a[0]);
+
+			for (int i = 1; i < a.length; i++) {
+				result.append(", ");
+				result.append(a[i]);
 			}
 		}
-
-		//do we have a command?
-		if(player != null && chat.startsWith(trigger) && !chat.substring(1).startsWith(trigger) && !chat.equals(trigger)) {
-			//remove trigger from string, and split with space separator
-			String[] array = chat.substring(trigger.length()).split(" ", 2);
-			String command = array[0];
-			String payload = "";
-
-			if(array.length >= 2) {
-				payload = array[1];
+		
+		return result.toString();
+	}
+	
+	//Removes all " " from the string
+	public String removeSpaces(String text) {
+		String result = text.replaceAll(" ", "");
+		return result;
+	}
+	
+	//Removes "<" and ">" from ends of the username
+	public String trimUsername(String username) {
+		if(username.length() > 2) {
+			if(username.charAt(username.length()-1) == '>') { //trims > at end of username
+				username = username.substring(0, username.length()-1);
 			}
-
-			String response = command(player, command, payload);
-			
-			if(response != null) {
-				if(whisper) {
-					chatthread.queueChat(response, player.userID);
-				} else {
-					chatthread.queueChat(response, MAIN_CHAT);
+			if(username.charAt(0) == '<') { //trims < at start of username
+				username = username.substring(1);
+			}
+		} else {
+			return username;
+		}
+		return username;
+	}
+	
+	public String time() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		return sdf.format(cal.getTime());
+	}
+	
+	public String time(int hours) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, hours);
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		return sdf.format(cal.getTime());
+	}
+	
+	//Check if IP address is valid
+	public boolean validIP(String ip) {
+		try {
+			if(ip == null || ip.isEmpty()) {
+				return false;
+			}
+			String[] parts = ip.split("\\.");
+			if(parts.length != 4) {
+				return false;
+			}
+			for(int i = 0; i < parts.length; i++) {
+				int num = Integer.parseInt(parts[i]);
+				if (num < 0 || num > 255) {
+					return false;
 				}
 			}
+			return true;
+		} catch(NumberFormatException nfe) {
+			return false;
 		}
-	}
-
-	public void playerJoined(MemberInfo player) {
-		
-	}
-
-	public void playerLeft(MemberInfo player) {
-
-	}
-
-	public void playerStopped(MemberInfo player) {
-
-	}
-
-	public void playerStarted(MemberInfo player) {
-
-	}
-
-	public void disconnected(int x) {
-		//try to reconnect
-
 	}
 }
 
