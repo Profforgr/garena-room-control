@@ -39,54 +39,56 @@ public class GarenaInterface {
 	public static int GARENA_ROOM = 1;
 	public static int GARENA_PEER = 2;
 	public static final String TIME_FORMAT = "HH:mm:ss";
-
+	
+	public boolean hasRoomList = false;
+	
 	//cryptography class
-	GarenaEncrypt crypt;
+	private GarenaEncrypt crypt;
 
 	//login server address
-	InetAddress main_address;
+	private InetAddress main_address;
 
 	//plugin manager
-	PluginManager plugins;
+	private PluginManager plugins;
 	
 	//login server objects
-	Socket socket;
-	DataOutputStream out;
-	DataInputStream in;
+	public Socket socket;
+	private DataOutputStream out;
+	private DataInputStream in;
 
 	//room server objects
-	Socket room_socket;
-	DataOutputStream rout;
-	DataInputStream rin;
-	int room_id;
+	public Socket room_socket;
+	private DataOutputStream rout;
+	private DataInputStream rin;
+	private int room_id;
 
 	//peer to peer objects
-	int peer_port;
-	DatagramSocket peer_socket;
+	public int peer_port;
+	public DatagramSocket peer_socket;
 
-	Vector<MemberInfo> members;
-	Vector<RoomInfo> rooms;
-	Vector<GarenaListener> listeners;
+	public Vector<MemberInfo> members;
+	private Vector<RoomInfo> rooms;
+	private Vector<GarenaListener> listeners;
 	
 	//our user ID
-	int user_id;
+	public int user_id;
 	
 	//unknown values in myinfo block
-	int unknown1;
-	int unknown2;
-	int unknown3;
-	int unknown4;
+	private int unknown1;
+	private int unknown2;
+	private int unknown3;
+	private int unknown4;
 
 	//external and internal IP address, will be set later
-	byte[] iExternal;
-	byte[] iInternal;
+	public byte[] iExternal;
+	private byte[] iInternal;
 	
 	//external and internal port, will be set later
-	int pExternal;
-	int pInternal;
+	private int pExternal;
+	private int pInternal;
 
 	//myinfo block
-	byte[] myinfo;
+	private byte[] myinfo;
 
 	public GarenaInterface(PluginManager plugins) {
 		this.plugins = plugins;
@@ -1089,6 +1091,8 @@ public class GarenaInterface {
 		}
 
 		displayMemberInfo();
+		
+		hasRoomList = true;
 	}
 
 	public MemberInfo readMemberInfo(int size, ByteBuffer lbuf) throws IOException {

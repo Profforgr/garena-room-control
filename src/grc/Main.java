@@ -50,7 +50,7 @@ public class Main {
 	public static PrintWriter log_error_out;
 	public static PrintWriter log_time_out;
 	
-	GChatBot bot;
+	private GChatBot bot;
 
 	private PluginManager plugins;
 	public GarenaInterface garena;
@@ -209,6 +209,8 @@ public class Main {
 		}
 		
 		bot.sqlthread = sqlthread;
+		
+		syncRoomLoop();
 	}
 	
 	public void helloLoop() {
@@ -465,6 +467,28 @@ public class Main {
 					System.out.println(str);
 					System.out.println("Ouput type unknown, discarding");
 			}
+		}
+	}
+	
+	//poll garena interface if it has finished parsing room list for users every second
+	public void syncRoomLoop() {
+		while(true) {
+			if(garena.hasRoomList) {
+				syncRoom();
+				break;
+			} else {
+				try {
+					Thread.sleep(1000);
+				} catch(InterruptedException e) {
+					println("[Main] sync room loop sleep interrupted", ERROR);
+				}
+			}
+		}
+	}
+	
+	public void syncRoom() {
+		for(int i = 0; i < garena.members.size(); i++) {
+			bot.addUserToDatabase(garena.members.get(i));
 		}
 	}
 	
