@@ -1626,7 +1626,7 @@ public class GarenaInterface {
 					// Main.println("[GInterface] Received UDP broadcast from " + sender.username + " from port " + sourcePort + " to port " + destPort, Main.ROOM);
 					
 				} else {
-					Main.println("[GInterface] PeerLoop: unknown type received: " + buf_array[0] + "; size is: " + length, Main.SERVER);
+					Main.println("[GInterface] PeerLoop: unknown type received: " + buf_array[0] + "; size is: " + length, Main.ERROR);
 				}
 			} catch(IOException ioe) {
 				Main.println("[GInterface] Error: " + ioe.getLocalizedMessage(), Main.ERROR);

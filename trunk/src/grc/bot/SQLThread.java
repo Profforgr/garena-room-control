@@ -161,7 +161,7 @@ public class SQLThread extends Thread {
 			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby FROM users");
 			ResultSet result = statement.executeQuery();
 			bot.userDatabaseRoot.clear();
-			bot.num_users = 0;
+			UserInfo.numUsers = 0;
 			while(result.next()) {
 				UserInfo user = new UserInfo();
 				user.username = result.getString("username");
@@ -184,7 +184,7 @@ public class SQLThread extends Thread {
 					bot.addUserByUid(newUser, bot.userDatabaseRoot);
 				}
 				bot.addUserByName(newUser, bot.userDatabaseRoot);
-				bot.num_users++;
+				UserInfo.numUsers++;
 			}
 			return true;
 		} catch(SQLException e) {
@@ -244,61 +244,18 @@ public class SQLThread extends Thread {
 			}
 			Main.println("[SQLThread] Refreshing internal lists with database...", Main.DATABASE);
 			
-			Connection connection = connection();
-			
 			//sync database
 			syncDatabase();
 			
-			/*try {
-				//refresh admin list
-				PreparedStatement statement = connection.prepareStatement("SELECT username, properUsername, uid, rank, ipaddress, lastseen, promotedby, unbannedby FROM users");
-				ResultSet result = statement.executeQuery();
-				bot.userDB.clear();
-				while(result.next()) {
-					UserInfo user = new UserInfo();
-					user.username = result.getString("username");
-					user.properUsername = result.getString("properUsername");
-					user.userID = result.getInt("uid");
-					int rank = result.getInt("rank");
-					if(rank == bot.LEVEL_ROOT_ADMIN) {
-						rank = bot.LEVEL_ADMIN;
-					}
-					user.rank = rank;
-					user.ipAddress = result.getString("ipaddress");
-					user.lastSeen = result.getString("lastseen");
-					user.promotedBy = result.getString("promotedby");
-					user.unbannedBy = result.getString("unbannedby");
-					bot.userDB.add(user);
-				}
-				
-				if(bannedWordDetectType > 0) {
-					result = statement.executeQuery("SELECT phrase FROM phrases WHERE type='bannedword'");
-					//bot.bannedWords.clear();
-					while(result.next()) {
-						//bot.bannedWords.add(result.getString("phrase"));
-					}
-				}
-				
-				if(initial) {
-					Main.println("[SQLThread] Initial refresh: found " + bot.userDB.size() + " Users");
-					//Main.println("[SQLThread] Initial refresh: found " + bot.autoAnn.size() + " Auto Announcements");
-					if(bannedWordDetectType > 0) {
-						Main.println("[SQLThread] Initial refresh: found " + bot.bannedWords.size() + " Banned Words");
-					}
-				}
-			} catch(SQLException e) {
-				if(Main.DEBUG) {
-					e.printStackTrace();
-				}
-				Main.println("[SQLThread] Unable to refresh lists: " + e.getLocalizedMessage());
-			}*/
+			Main.println("[SQLThread] Refresh: found " + UserInfo.numUsers + " Users", Main.DATABASE);
 			
-			connectionReady(connection);
 			
 			if(initial) {
 				initial = false;
 			}
+			
 			bot.addRoot();
+			
 			try {
 				Thread.sleep(dbRefreshRate*1000);
 			} catch(InterruptedException e) {
