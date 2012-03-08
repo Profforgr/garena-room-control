@@ -320,33 +320,46 @@ public class GChatBot implements GarenaListener {
 		commandToAlias.put(command, aliases);
 	}
 	
-	//Add new user to room list, updates info if existing user
-	public void addRoomList() {
-		for(int i = 0; i < garena.members.size(); i++) {
-			MemberInfo target = garena.members.get(i);
-			UserInfo user = getUserFromName(target.username.toLowerCase(), userDatabaseRoot);
-			if(user == null) {
-				//if new user
-				if(sqlthread.addUser(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
-					//if successfully added to mysql database
-					UserInfo newUser = new UserInfo();
-					newUser.username = target.username.toLowerCase();
-					newUser.properUsername = target.username;
-					newUser.userID = target.userID;
-					newUser.rank = LEVEL_PUBLIC;
-					newUser.ipAddress = target.externalIP.toString().substring(1);
-					newUser.lastSeen = time();
-					TreeNode newUserNode = new TreeNode(newUser);
-					addUserByUid(newUserNode, userDatabaseRoot);
-					addUserByName(newUserNode, userDatabaseRoot);
-				}
-			} else if(user.properUsername.equals("unknown")) {
-				if(sqlthread.updateUser(target.username, target.userID, target.externalIP.toString().substring(1), time())) {
-					user.properUsername = target.username;
-					user.userID = target.userID;
-					user.ipAddress = target.externalIP.toString().substring(1);
-					user.lastSeen = time();
-				}
+	public boolean addUserToDatabase(MemberInfo target) {
+		UserInfo user = getUserFromName(target.username.toLowerCase(), userDatabaseRoot);
+		if(user == null) {
+			//if new user
+			if(sqlthread.addUser(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
+				//if successfully added to mysql database
+				UserInfo newUser = new UserInfo();
+				newUser.username = target.username.toLowerCase();
+				newUser.properUsername = target.username;
+				newUser.userID = target.userID;
+				newUser.rank = LEVEL_PUBLIC;
+				newUser.ipAddress = target.externalIP.toString().substring(1);
+				newUser.lastSeen = time();
+				TreeNode newUserNode = new TreeNode(newUser);
+				addUserByUid(newUserNode, userDatabaseRoot);
+				addUserByName(newUserNode, userDatabaseRoot);
+				return true;
+			} else {
+				return false;
+			}
+		} else if(user.properUsername.equals("unknown")) {
+			//occurs when you add a user using promote when the user has never been seen by the bot
+			if(sqlthread.updateUser(target.username, target.userID, target.externalIP.toString().substring(1), time())) {
+				user.properUsername = target.username;
+				user.userID = target.userID;
+				user.ipAddress = target.externalIP.toString().substring(1);
+				user.lastSeen = time();
+				//now that the user has a valid uid, add to uid sorted database
+				addUserByUid(getNodeFromName(user.username, userDatabaseRoot), userDatabaseRoot);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			//user is already in database, only need to update last seen
+			if(sqlthread.updateUser(target.username, time())) {
+				user.lastSeen = time();
+				return true;
+			} else {
+				return false;
 			}
 		}
 	}
@@ -505,6 +518,27 @@ public class GChatBot implements GarenaListener {
 				return null;
 			} else {
 				return getUserFromName(user, node.getRightUser());
+			}
+		}
+	}
+	
+	public TreeNode getNodeFromName(String user, TreeNode node) {
+		if(user.compareToIgnoreCase(node.getValue().username) == 0) { //base case
+			//if user is equal to node's username
+			return node;
+		} else if(user.compareToIgnoreCase(node.getValue().username) < 0) {
+			//if user is alphabetically lower than node's username
+			if(node.getLeftUser() == null) {
+				return null;
+			} else {
+				return getNodeFromName(user, node.getLeftUser());
+			}
+		} else {
+			//last option, user is alphabetically higher than node's username
+			if(node.getRightUser() == null) {
+				return null;
+			} else {
+				return getNodeFromName(user, node.getRightUser());
 			}
 		}
 	}

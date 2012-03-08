@@ -114,7 +114,7 @@ public class SQLThread extends Thread {
 	}
 	
 	//update user already in database given properusername, uid, ip, lastseen
-	//occurs when you promote a user who has never appeared in the room, and then they enter the room
+	//occurs when you promote a user who has never been seen by the bot, and then they enter the room
 	public boolean updateUser(String properUsername, int uid, String ip, String lastSeen) {
 		try {
 			Connection connection = connection();
@@ -130,6 +130,24 @@ public class SQLThread extends Thread {
 		} catch(SQLException e) {
 			//give error information to Main
 			Main.println("[SQLThread] Unable to update user " + properUsername + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+			return false;
+		}
+	}
+	
+	//update just last seen
+	public boolean updateUser(String username, String lastSeen) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE users SET lastseen=? WHERE username=?");
+			statement.setString(1, lastSeen);
+			statement.setString(2, username);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to update user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
 			return false;
 		}
@@ -160,7 +178,11 @@ public class SQLThread extends Thread {
 				user.promotedBy = result.getString("promotedby");
 				user.unbannedBy = result.getString("unbannedby");
 				TreeNode newUser = new TreeNode(user);
-				bot.addUserByUid(newUser, bot.userDatabaseRoot);
+				if(user.userID != 0) {
+					//if user does not have a valid uid, don't add to uid sorted database
+					//occurs when you promote someone that the bot has never seen
+					bot.addUserByUid(newUser, bot.userDatabaseRoot);
+				}
 				bot.addUserByName(newUser, bot.userDatabaseRoot);
 				bot.num_users++;
 			}
@@ -276,7 +298,6 @@ public class SQLThread extends Thread {
 			if(initial) {
 				initial = false;
 			}
-			bot.addRoomList();
 			bot.addRoot();
 			try {
 				Thread.sleep(dbRefreshRate*1000);

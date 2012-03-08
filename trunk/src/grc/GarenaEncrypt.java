@@ -38,6 +38,7 @@ import org.bouncycastle.openssl.PEMReader;
  *
  * @author wizardus
  */
+ 
 public class GarenaEncrypt {
 	SecretKey skey;
 	SecretKeySpec skey_spec;
