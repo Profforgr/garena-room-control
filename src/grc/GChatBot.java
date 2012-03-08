@@ -68,7 +68,6 @@ public class GChatBot implements GarenaListener {
 	private ArrayList<String> ignoreList;
 	//thread safe objects
 	public TreeNode userDatabaseRoot; //contains the user database, often synched with mysql database. May be quite large
-	public int num_users = 0;
 	
 	private HashMap<String, String> aliasToCommand; //maps aliases to the command they alias
 	private HashMap<String, String[]> commandToAlias; //maps commands to all of the command's aliases
@@ -336,6 +335,7 @@ public class GChatBot implements GarenaListener {
 				TreeNode newUserNode = new TreeNode(newUser);
 				addUserByUid(newUserNode, userDatabaseRoot);
 				addUserByName(newUserNode, userDatabaseRoot);
+				UserInfo.numUsers++;
 				return true;
 			} else {
 				return false;

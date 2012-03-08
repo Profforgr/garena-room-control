@@ -486,6 +486,7 @@ public class Main {
 		}
 	}
 	
+	//if garena interface has finished parsing room list, sync with user database
 	public void syncRoom() {
 		for(int i = 0; i < garena.members.size(); i++) {
 			bot.addUserToDatabase(garena.members.get(i));

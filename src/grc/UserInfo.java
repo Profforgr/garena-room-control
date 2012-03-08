@@ -20,6 +20,7 @@ public class UserInfo {
 	public String lastSeen;
 	public String promotedBy;
 	public String unbannedBy;
+	public static int numUsers = 0;
 	
 	public UserInfo() {
 		username = "unknown";
