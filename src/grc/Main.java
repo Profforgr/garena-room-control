@@ -32,6 +32,7 @@ public class Main {
 	public static final int COMMAND = 3;
 	public static final int DATABASE = 4;
 	public static final int ERROR = 5;
+	public static final int TIME = 6;
 	public static boolean log;
 	public static boolean log_single;
 	public static boolean log_server;
@@ -39,6 +40,7 @@ public class Main {
 	public static boolean log_command;
 	public static boolean log_database;
 	public static boolean log_error;
+	public static boolean log_time;
 
 	public static PrintWriter log_single_out;
 	public static PrintWriter log_server_out;
@@ -46,17 +48,18 @@ public class Main {
 	public static PrintWriter log_command_out;
 	public static PrintWriter log_database_out;
 	public static PrintWriter log_error_out;
+	public static PrintWriter log_time_out;
 	
 	GChatBot bot;
 
-	PluginManager plugins;
-	GarenaInterface garena;
-	GarenaThread gsp_thread;
-	GarenaThread gcrp_thread;
-	GarenaThread pl_thread;
-	SQLThread sqlthread;
-	ChatThread chatthread;
-	GarenaReconnect reconnect;
+	private PluginManager plugins;
+	public GarenaInterface garena;
+	private GarenaThread gsp_thread;
+	private GarenaThread gcrp_thread;
+	private GarenaThread pl_thread;
+	private SQLThread sqlthread;
+	private ChatThread chatthread;
+	private GarenaReconnect reconnect;
 
 	//determine what will be loaded, what won't be loaded
 	boolean loadPlugins;
@@ -77,6 +80,7 @@ public class Main {
 			log_command = GRCConfig.configuration.getBoolean("grc_log_command", false);
 			log_database = GRCConfig.configuration.getBoolean("grc_log_database", false);
 			log_error = GRCConfig.configuration.getBoolean("grc_log_error", false);
+			log_time = GRCConfig.configuration.getBoolean("grc_log_time", true);
 		} else {
 			log_single = false;
 			log_server = false;
