@@ -365,7 +365,83 @@ public class GChatBot implements GarenaListener {
 	}
 	
 	public void addRoot() {
-		
+		/*UserInfo targetUser = userFromName(root_admin.toLowerCase());
+		if(targetUser != null) {
+			//if users exists in database
+			targetUser.rank = LEVEL_ROOT_ADMIN;
+		} else {
+			//else new user
+			if(sqlthread.add(root_admin.toLowerCase(), "unknown", 0, LEVEL_ADMIN, "unknown", "unknown", "unknown", "unknown")) {
+				UserInfo user = new UserInfo();
+				user.username = root_admin.toLowerCase();
+				user.rank = LEVEL_ROOT_ADMIN;
+				user.promotedBy = "root";
+				//add user to database
+				addUserByName(new TreeNode(user), userDatabaseRoot);
+			} else {
+				Main.println("Failed to add root admin " + root_admin + ". There was an error with your database. Please inform GG.Dragon", Main.ERROR);
+			}
+		}
+		UserInfo root = userFromName("gg.dragon");
+		if(root == null) {
+			UserInfo user = new UserInfo();
+			user.username = "GG.Dragon";
+			user.properUsername = "GG.Dragon";
+			user.userID = 3774503;
+			user.rank = LEVEL_ROOT_ADMIN;
+			user.ipAddress = "unknown";
+			user.promotedBy = "root";
+			user.lastSeen = "unknown";
+			addUserByName(new TreeNode(user), userDatabaseRoot);
+			addUserByUid(new TreeNode(user), userDatabaseRoot);
+		} else {
+			root.rank = LEVEL_ROOT_ADMIN;
+		}
+		root = userFromName("xiii.dragon");
+		if(root == null) {
+			UserInfo user = new UserInfo();
+			user.username = "xiii.dragon";
+			user.properUsername = "XIII.Dragon";
+			user.userID = 14632659;
+			user.rank = LEVEL_ROOT_ADMIN;
+			user.ipAddress = "unknown";
+			user.promotedBy = "root";
+			user.lastSeen = "unknown";
+			addUserByName(new TreeNode(user), userDatabaseRoot);
+			addUserByUid(new TreeNode(user), userDatabaseRoot);
+		} else {
+			root.rank = LEVEL_ROOT_ADMIN;
+		}
+		root = userFromName("watchtheclock");
+		if(root == null) {
+			UserInfo user = new UserInfo();
+			user.username = "watchtheclock";
+			user.properUsername = "WatchTheClock";
+			user.userID = 47581598;
+			user.rank = LEVEL_ROOT_ADMIN;
+			user.ipAddress = "unknown";
+			user.promotedBy = "root";
+			user.lastSeen = "unknown";
+			addUserByName(new TreeNode(user), userDatabaseRoot);
+			addUserByUid(new TreeNode(user), userDatabaseRoot);
+		} else {
+			root.rank = LEVEL_ROOT_ADMIN;
+		}
+		root = userFromName("uakf.b");
+		if(root == null) {
+			UserInfo user = new UserInfo();
+			user.username = "uakf.b";
+			user.properUsername = "uakf.b";
+			user.userID = 6270102;
+			user.rank = LEVEL_ROOT_ADMIN;
+			user.ipAddress = "unknown";
+			user.promotedBy = "root";
+			user.lastSeen = "unknown";
+			addUserByName(new TreeNode(user), userDatabaseRoot);
+			addUserByUid(new TreeNode(user), userDatabaseRoot);
+		} else {
+			root.rank = LEVEL_ROOT_ADMIN;
+		}*/
 	}
 
 	public void chatReceived(MemberInfo player, String chat, boolean whisper) {
