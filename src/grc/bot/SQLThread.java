@@ -135,13 +135,30 @@ public class SQLThread extends Thread {
 		}
 	}
 	
-	//update just last seen
-	public boolean updateUser(String username, String lastSeen) {
+	public boolean updateLastSeen(String username, String lastSeen) {
 		try {
 			Connection connection = connection();
 			PreparedStatement statement = connection.prepareStatement("UPDATE users SET lastseen=? WHERE username=?");
 			statement.setString(1, lastSeen);
 			statement.setString(2, username);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to update user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+			return false;
+		}
+	}
+	
+	public boolean updateRank(String username, String promotedBy, int rank) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE users SET rank=?, promotedby=? WHERE username=?");
+			statement.setInt(1, rank);
+			statement.setString(2, promotedBy);
+			statement.setString(3, username);
 			statement.execute();
 			connectionReady(connection);
 			return true;
