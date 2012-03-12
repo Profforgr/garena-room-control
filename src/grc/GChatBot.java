@@ -32,10 +32,17 @@ public class GChatBot implements GarenaListener {
 	public static final int LEVEL_SAFELIST = 2;
 	public static final int LEVEL_PUBLIC = 1;
 	public static final int LEVEL_SHITLIST = 0;
-	public static final int MAIN_CHAT = -1;
-	public static final int ANNOUNCEMENT = -2;
+	//membership types
+	public static final int MEMBERSHIP_BASIC = 0;
+	public static final int MEMBERSHIP_PREMIUM = 1;
+	public static final int MEMBERSHIP_PLATINUM = 2;
+	public static final int MEMBERSHIP_CHANNEL = 3;
+	public static final int MEMBERSHIP_LEAGUE = 4;
+	public static final int MEMBERSHIP_ADMIN = 5;
+	public static final int MEMBERSHIP_SERVER = 6;
+	public static final int MEMBERSHIP_GOLD = 100;
 	
-	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 	private int rotateAnn = -1; //Track which announcement the bot is up to
 	
 	public GarenaInterface garena;
@@ -71,7 +78,7 @@ public class GChatBot implements GarenaListener {
 	
 	private HashMap<String, String> aliasToCommand; //maps aliases to the command they alias
 	private HashMap<String, String[]> commandToAlias; //maps commands to all of the command's aliases
-	private Vector<String> rootCommands; //Will contain all commands that can be used
+	private Vector<String> rootCommands;
 	private Vector<String> adminCommands;
 	private Vector<String> trialAdminCommands;
 	private Vector<String> trustedCommands;
@@ -147,7 +154,7 @@ public class GChatBot implements GarenaListener {
 		
 		registerCommand("whois", LEVEL_SAFELIST);
 		registerCommand("whoisuid", LEVEL_SAFELIST);
-		//registerCommand("roomstats", LEVEL_SAFELIST);
+		registerCommand("roomstats", LEVEL_SAFELIST);
 		//registerCommand("random", LEVEL_SAFELIST);
 		//registerCommand("status", LEVEL_SAFELIST);
 		
@@ -225,7 +232,7 @@ public class GChatBot implements GarenaListener {
 						targetUser.rank = LEVEL_ADMIN;
 						return "Success! <" + targetUser.properUsername + "> is now an Admin!";
 					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 						return null;
 					}
 				} else { //if user doesn't exist in database create new user
@@ -238,7 +245,7 @@ public class GChatBot implements GarenaListener {
 						addUserByName(new TreeNode(newUser), userDatabaseRoot);
 						return "Success! " + target + " is now an Admin!";
 					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 						return null;
 					}
 				}
@@ -271,7 +278,7 @@ public class GChatBot implements GarenaListener {
 						targetUser.rank = LEVEL_TRIAL_ADMIN;
 						return "Success! <" + targetUser.properUsername + "> is now a Trial Admin!";
 					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 						return null;
 					}
 				} else { //new user
@@ -284,7 +291,7 @@ public class GChatBot implements GarenaListener {
 						addUserByName(new TreeNode(newUser), userDatabaseRoot);
 						return "Success! " + target + " is now a Trial Admin!";
 					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ANNOUNCEMENT);
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 						return null;
 					}
 				}
@@ -317,35 +324,25 @@ public class GChatBot implements GarenaListener {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "whoisuid <uid>. For further help use " + trigger + "help whoisuid", member.userID);
 					return null;
 				}
+			} else if(command.equals("roomstats")) {
+				return roomStatistics();
 			}
 		}
 		
 		//PUBLIC COMMANDS
 		if(memberRank >= LEVEL_PUBLIC) {
 			if(command.equals("commands")) {
-				String str = "";
-				switch(memberRank) {
-					case LEVEL_ROOT_ADMIN:
-						str = "Root Admin commands: " + rootCommands.toString();
-					case LEVEL_ADMIN:
-						str = str + "\nAdmin commands: " + adminCommands.toString();
-					case LEVEL_TRIAL_ADMIN:
-						str = str + "\nTrial Admin commands: " + trialAdminCommands.toString();
-					case LEVEL_TRUSTED:
-						str = str + "\nTrusted commands: " + trustedCommands.toString();
-					case LEVEL_VIP:
-						str = str + "\nV.I.P. commands: " + vipCommands.toString();
-					case LEVEL_SAFELIST:
-						str = str + "\nSafelist commands: " + safelistCommands.toString();
-					case LEVEL_PUBLIC:
-						str = str + "\nPublic commands: " + publicCommands.toString();
-					case LEVEL_SHITLIST:
-						str = str + "\nShitlist commands: " + shitlistCommands.toString();
-					default:
-						return str;
-				}
+				commandList(memberRank); //void
+				return null;
 			} else if(command.equals("whoami")) {
-				return whois(member.username);
+				return whois(member.username); //returns a string representing whois
+			}
+		}
+		
+		//check if they tried to use a command that needs a higher rank
+		if(accessMessage != null) {
+			if(commandAboveRank(command, memberRank)) {
+				return accessMessage;
 			}
 		}
 		
@@ -355,13 +352,7 @@ public class GChatBot implements GarenaListener {
 			return pluginResponse;
 		}
 		
-		/*if(access_message != null) {
-			if(LEVEL_ROOT_ADMIN > memberRank) {
-				if(rootCommands.contains(command.toLowerCase())) {
-					return access_message;
-				}
-			}
-		}*/
+		//if command is not recognised
 		return "Invalid command detected. Please check your spelling and try again";
 	}
 	
@@ -403,6 +394,128 @@ public class GChatBot implements GarenaListener {
 		}
 		//return results
 		return username + userTitle + uid + promotedBy + lastSeen + ip;
+	}
+	
+	public String roomStatistics() {
+		int numGold = 0;
+		int numBasic = 0;
+		int numPlaying = 0;
+		int numPlayers = garena.members.size();
+		for(int i = 0; i < garena.members.size(); i++) {
+			MemberInfo tempMember = garena.members.get(i);
+			if(tempMember.membership == MEMBERSHIP_GOLD) {
+				numGold++;
+			}
+			if(tempMember.membership == MEMBERSHIP_BASIC) {
+				numBasic++;
+			}
+			if(tempMember.playing) {
+				numPlaying++;
+			}
+		}
+		//correct plurals
+		String goldPlural = " gold member";
+		if(numGold != 1) {
+			goldPlural = goldPlural + "s";
+		}
+		String basicPlural = " basic member";
+		if(numBasic != 1) {
+			basicPlural = basicPlural + "s";
+		}
+		String playingPlural = " has";
+		if(numPlaying != 1) {
+			playingPlural = " have";
+		}
+		//There are 100 players in this room. 1 gold member, 99 basic members. 50 have Warcraft 3 open. 200 users are stored in the database
+		return "There are " + numPlayers + " players in this room. " + numGold + goldPlural + ", " + numBasic + basicPlural + ". " + numPlaying + playingPlural + " Warcraft 3 open. " + UserInfo.numUsers + " users are stored in the database";
+	}
+	
+	public void commandList(int memberRank) {
+		String str = "";
+		switch(memberRank) {
+			case LEVEL_ROOT_ADMIN:
+				str = "Root Admin commands: " + rootCommands.toString();
+			case LEVEL_ADMIN:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Admin commands: " + adminCommands.toString();
+			case LEVEL_TRIAL_ADMIN:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Trial Admin commands: " + trialAdminCommands.toString();
+			case LEVEL_TRUSTED:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Trusted commands: " + trustedCommands.toString();
+			case LEVEL_VIP:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "V.I.P. commands: " + vipCommands.toString();
+			case LEVEL_SAFELIST:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Safelist commands: " + safelistCommands.toString();
+			case LEVEL_PUBLIC:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Public commands: " + publicCommands.toString();
+			case LEVEL_SHITLIST:
+				if(!str.equals("")) {
+					str += "\n";
+				}
+				str = str + "Shitlist commands: " + shitlistCommands.toString();
+			default:
+				chatthread.queueChat(str, chatthread.ANNOUNCEMENT);
+		}
+	}
+	
+	public boolean commandAboveRank(String command, int memberRank) {
+		//if admin or below try to use a root admin command
+		if(memberRank <= LEVEL_ADMIN) {
+			if(rootCommands.contains(command)) {
+				return true;
+			}
+		}
+		//if trial admin or below try to use an admin command
+		if(memberRank <= LEVEL_TRIAL_ADMIN) {
+			if(adminCommands.contains(command)) {
+				return true;
+			}
+		}
+		//if trusted or below try to use a trial admin command
+		if(memberRank <= LEVEL_TRUSTED) {
+			if(trialAdminCommands.contains(command)) {
+				return true;
+			}
+		}
+		//and so on
+		if(memberRank <= LEVEL_VIP) {
+			if(trustedCommands.contains(command)) {
+				return true;
+			}
+		}
+		if(memberRank <= LEVEL_SAFELIST) {
+			if(vipCommands.contains(command)) {
+				return true;
+			}
+		}
+		if(memberRank <= LEVEL_PUBLIC) {
+			if(safelistCommands.contains(command)) {
+				return true;
+			}
+		}
+		if(memberRank <= LEVEL_SHITLIST) {
+			if(publicCommands.contains(command)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void registerCommand(String command) {
@@ -466,16 +579,16 @@ public class GChatBot implements GarenaListener {
 		}
 		switch(user.rank) {
 			case LEVEL_ROOT_ADMIN:
-				chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", ANNOUNCEMENT);
+				chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
 				return;
 			case LEVEL_ADMIN:
-				chatthread.queueChat("Admin <" + target.username + "> has entered the room", ANNOUNCEMENT);
+				chatthread.queueChat("Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
 				return;
 			case LEVEL_TRIAL_ADMIN:
-				chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", ANNOUNCEMENT);
+				chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
 				return;
 			case LEVEL_VIP:
-				chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", ANNOUNCEMENT);
+				chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
 				return;
 			default:
 				return;
@@ -638,7 +751,7 @@ public class GChatBot implements GarenaListener {
 			if(whisper) {
 				chatthread.queueChat(trigger_msg, player.userID);
 			} else {
-				chatthread.queueChat(trigger_msg, MAIN_CHAT);
+				chatthread.queueChat(trigger_msg, chatthread.MAIN_CHAT);
 			}
 		}
 
@@ -659,7 +772,7 @@ public class GChatBot implements GarenaListener {
 				if(whisper) {
 					chatthread.queueChat(response, player.userID);
 				} else {
-					chatthread.queueChat(response, MAIN_CHAT);
+					chatthread.queueChat(response, chatthread.MAIN_CHAT);
 				}
 			}
 		}
