@@ -35,9 +35,9 @@ import java.util.Iterator;
  */
  
 public class GarenaInterface {
-	public static int GARENA_MAIN = 0;
-	public static int GARENA_ROOM = 1;
-	public static int GARENA_PEER = 2;
+	public static final int GARENA_MAIN = 0;
+	public static final int GARENA_ROOM = 1;
+	public static final int GARENA_PEER = 2;
 	public static final String TIME_FORMAT = "HH:mm:ss";
 	
 	public boolean hasRoomList = false;
@@ -1118,6 +1118,10 @@ public class GarenaInterface {
 		byte[] country_bytes = new byte[2];
 		lbuf.get(country_bytes);
 		member.country = crypt.strFromBytes(country_bytes);
+		
+		//membership int value
+		lbuf.position(23);
+		member.membership = lbuf.get();
 
 		member.experience = crypt.unsignedByte(lbuf.get(25));
 		member.playing = (lbuf.get(27)) == 1;
@@ -1152,7 +1156,6 @@ public class GarenaInterface {
 		member.internalPort = crypt.unsignedShort(lbuf.getShort(42));
 		member.virtualSuffix = crypt.unsignedByte(lbuf.get(44));
 		lbuf.order(ByteOrder.LITTLE_ENDIAN);
-		member.inRoom = true;
 		members.add(member);
 
 		//read remainder

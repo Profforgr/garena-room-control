@@ -16,6 +16,7 @@ public class MemberInfo {
 	public int userID;
 	public String username;
 	public String country;
+	public int membership;
 	public int experience;
 	public boolean playing;
 	public InetAddress externalIP;
@@ -25,8 +26,8 @@ public class MemberInfo {
 	public int virtualSuffix;
 	public long lastCommandTime;
 
-	public boolean inRoom;
-	public int numWarnings = 0;
+	//public boolean inRoom;
+	//public int numWarnings = 0;
 	//public String[] lastMessages = {"", "", ""}; //stores last 3 messages sent
 	
 	//these will be set after HELLO is received
