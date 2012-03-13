@@ -53,7 +53,7 @@ public class GChatBot implements GarenaListener {
 	
 	//Settings
 	private String trigger;
-	private int publicDelay;
+	private int publicDelay; //interval between accepting commands from public users, helps prevent the bot from being spammed
 	private String root_admin; //root admin for this bot; null if root is disabled
 	private boolean commandline; //enable commandline input?
 	private int bannedWordMode; //what to do when banned word is detected
@@ -138,6 +138,10 @@ public class GChatBot implements GarenaListener {
 		//registerCommand("room", LEVEL_ROOT_ADMIN);
 		
 		registerCommand("addtrialadmin", LEVEL_ADMIN);
+		registerCommand("addtrusted", LEVEL_ADMIN);
+		registerCommand("addvip", LEVEL_ADMIN);
+		registerCommand("promote", LEVEL_ADMIN);
+		registerCommand("demote", LEVEL_ADMIN);
 		//registerCommand("kick", LEVEL_ADMIN);
 		//registerCommand("quickkick", LEVEL_ADMIN);
 		//registerCommand("ban", LEVEL_ADMIN);
@@ -190,7 +194,7 @@ public class GChatBot implements GarenaListener {
 		}
 		UserInfo user = getUserFromName(member.username, userDatabaseRoot);
 		int memberRank = user.rank;
-		String memberRankTitle = getTitleFromRank(memberRank);
+		String memberRankTitle = getTitle(memberRank);
 		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Main.ROOM);
 
 		command = processAlias(command.toLowerCase()); //if it's alias, convert it to original command
@@ -222,33 +226,7 @@ public class GChatBot implements GarenaListener {
 				}
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
-				if(targetUser != null) { //if user exists in database
-					//prevent demotion of root admins even by other root admin
-					if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-						return "Failed. It's impossible to demote a Root Admin!";
-					}
-					//update rank in database and in memory
-					if(sqlthread.updateRank(target.toLowerCase(), member.username, LEVEL_ADMIN)) {
-						targetUser.rank = LEVEL_ADMIN;
-						return "Success! <" + targetUser.properUsername + "> is now an Admin!";
-					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-						return null;
-					}
-				} else { //if user doesn't exist in database create new user
-					if(sqlthread.addUser(target.toLowerCase(), "unknown", 0, LEVEL_ADMIN, "unknown", "unknown", member.username, "unknown")) {
-						UserInfo newUser = new UserInfo();
-						newUser.username = target.toLowerCase();
-						newUser.rank = LEVEL_ADMIN;
-						newUser.promotedBy = member.username;
-						//add user to database
-						addUserByName(new TreeNode(newUser), userDatabaseRoot);
-						return "Success! " + target + " is now an Admin!";
-					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-						return null;
-					}
-				}
+				return setRank(member, targetUser, LEVEL_ADMIN);
 			}
 		}
 		
@@ -259,41 +237,72 @@ public class GChatBot implements GarenaListener {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "addtrialadmin <username>. For further help use " + trigger + "help addtrialadmin", member.userID);
 					return null;
 				}
-				
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
-				if(target.equalsIgnoreCase(member.username)) {
-					return "Failed. You can't demote yourself!";
-				}
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
-				if(targetUser != null) { //if user exists in database
-					//stop people from doing bad stuff
-					if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-						return "Failed. It's impossible to demote a Root Admin!";
-					} else if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
-						return "Failed. You can't demote an Admin!";
-					}
-					//if promotion is ok
-					//update rank in database and in memory
-					if(sqlthread.updateRank(target.toLowerCase(), member.username, LEVEL_TRIAL_ADMIN)) {
-						targetUser.rank = LEVEL_TRIAL_ADMIN;
-						return "Success! <" + targetUser.properUsername + "> is now a Trial Admin!";
-					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-						return null;
-					}
-				} else { //new user
-					if(sqlthread.addUser(target.toLowerCase(), "unknown", 0, LEVEL_TRIAL_ADMIN, "unknown", "unknown", member.username, "unknown")) {
-						UserInfo newUser = new UserInfo();
-						user.username = target.toLowerCase();
-						user.rank = LEVEL_TRIAL_ADMIN;
-						user.promotedBy = member.username;
-						//add user to database
-						addUserByName(new TreeNode(newUser), userDatabaseRoot);
-						return "Success! " + target + " is now a Trial Admin!";
-					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-						return null;
-					}
+				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
+					return "Failed. You can't demote an Admin!";
+				}
+				return setRank(member, targetUser, LEVEL_TRIAL_ADMIN);
+			} else if(command.equals("addtrusted")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "addtrusted <username>. For further help use " + trigger + "help addtrusted", member.userID);
+					return null;
+				}
+				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
+					return "Failed. You can't demote an Admin!";
+				}
+				return setRank(member, targetUser, LEVEL_TRUSTED);
+			} else if(command.equals("addvip")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "addvip <username>. For further help use " + trigger + "addvip <username>", member.userID);
+				}
+				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
+					return "Failed. You can't demote an Admin!";
+				}
+				return setRank(member, targetUser, LEVEL_VIP);
+			} else if(command.equals("promote")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "promote <username>. For further help use " + trigger + "help promote", member.userID);
+					return null;
+				}
+				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) { //if user can't be found
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help promote";
+				}
+				//target user is searched for by username, so will only be found if they have been seen by the bot at least once
+				//check for loopholes
+				if(targetUser.rank == LEVEL_ADMIN) {
+					return "Failed. " + targetUser.properUsername + " can't be promoted to Root Admin!";
+				} else if(targetUser.rank == LEVEL_TRIAL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
+					return "Failed. " + targetUser.properUsername + " can only be promoted by a Root Admin!";
+				} else {
+					//promotion is ok
+					return setRank(member, targetUser, targetUser.rank + 1);
+				}
+			} else if(command.equals("demote")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "demote <username>. For further help use " + trigger + "help demote", member.userID);
+					return null;
+				}
+				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) { //if user can't be found
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help demote";
+				}
+				//target user is searched for by username, so will only be found if they have been seen by the bot at least once
+				//check for loopholes
+				if(targetUser.rank == LEVEL_ROOT_ADMIN) {
+					return "Failed. " + targetUser.properUsername + " is a Root Admin!";
+				} else if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
+					return "Failed. " + targetUser.properUsername + " can only be demoted by a Root Admin";
+				} else {
+					//demotion is ok
+					return setRank(member, targetUser, targetUser.rank - 1);
 				}
 			}
 		}
@@ -332,7 +341,7 @@ public class GChatBot implements GarenaListener {
 		//PUBLIC COMMANDS
 		if(memberRank >= LEVEL_PUBLIC) {
 			if(command.equals("commands")) {
-				commandList(memberRank); //void
+				commandList(memberRank); //returns void no matter what
 				return null;
 			} else if(command.equals("whoami")) {
 				return whois(member.username); //returns a string representing whois
@@ -342,7 +351,8 @@ public class GChatBot implements GarenaListener {
 		//check if they tried to use a command that needs a higher rank
 		if(accessMessage != null) {
 			if(commandAboveRank(command, memberRank)) {
-				return accessMessage;
+				chatthread.queueChat(accessMessage, member.userID);
+				return null;
 			}
 		}
 		
@@ -353,7 +363,43 @@ public class GChatBot implements GarenaListener {
 		}
 		
 		//if command is not recognised
-		return "Invalid command detected. Please check your spelling and try again";
+		chatthread.queueChat("Invalid command. Please check your spelling and try again", member.userID);
+		return null;
+	}
+	
+	public String setRank(MemberInfo admin, UserInfo targetUser, int rank) {
+		if(targetUser.username.equalsIgnoreCase(admin.username)) {
+			return "Failed. You can't change your own rank!";
+		}
+		if(targetUser != null) { //if user exists in database
+			//prevent demotion of root admins
+			if(targetUser.rank == LEVEL_ROOT_ADMIN) {
+				return "Failed. It's impossible to demote a Root Admin!";
+			}
+			//update rank in database and in memory
+			if(sqlthread.updateRank(targetUser.username, admin.username, rank)) {
+				targetUser.rank = rank;
+				targetUser.promotedBy = admin.username;
+				//Success! <GG.Dragon> is now an Admin!
+				return "Success! <" + targetUser.properUsername + "> is now " + getGrammaticalTitle(rank);
+			} else {
+				chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+				return null;
+			}
+		} else { //if user doesn't exist in database create new user
+			if(sqlthread.addUser(targetUser.username, "unknown", 0, rank, "unknown", "unknown", admin.username, "unknown")) {
+				UserInfo newUser = new UserInfo();
+				newUser.username = targetUser.username;
+				newUser.rank = rank;
+				newUser.promotedBy = admin.username;
+				//add user to database
+				addUserByName(new TreeNode(newUser), userDatabaseRoot);
+				return "Success! " + targetUser.username + " is now " + getGrammaticalTitle(rank);
+			} else {
+				chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+				return null;
+			}
+		}
 	}
 	
 	public String whois(String target) {
@@ -363,7 +409,7 @@ public class GChatBot implements GarenaListener {
 		}
 		//set up whois information
 		String username = "";
-		String userTitle = " [" + getTitleFromRank(targetUser.rank) + "]";
+		String userTitle = " [" + getTitle(targetUser.rank) + "]";
 		String ip = "";
 		String uid = "";
 		String lastSeen = "";
@@ -927,7 +973,30 @@ public class GChatBot implements GarenaListener {
 		}
 	}
 	
-	public String getTitleFromRank(int rank) {
+	public String getGrammaticalTitle(int rank) {
+		switch(rank) {
+			case LEVEL_ROOT_ADMIN:
+				return "a Root Admin!";
+			case LEVEL_ADMIN:
+				return "an Admin!";
+			case LEVEL_TRIAL_ADMIN:
+				return "a Trial Admin!";
+			case LEVEL_TRUSTED:
+				return "Trusted!";
+			case LEVEL_VIP:
+				return "a V.I.P.!";
+			case LEVEL_SAFELIST:
+				return "Safelisted!";
+			case LEVEL_PUBLIC:
+				return "Public!";
+			case LEVEL_SHITLIST:
+				return "Shitlisted!";
+			default:
+				return "an unknown rank?";
+		}
+	}
+	
+	public String getTitle(int rank) {
 		switch(rank) {
 			case LEVEL_ROOT_ADMIN:
 				return "Root Admin";
