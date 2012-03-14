@@ -60,7 +60,7 @@ public class GarenaInterface {
 	public Socket room_socket;
 	private DataOutputStream rout;
 	private DataInputStream rin;
-	private int room_id;
+	public int room_id;
 
 	//peer to peer objects
 	public int peer_port;
