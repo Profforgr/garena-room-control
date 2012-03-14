@@ -131,8 +131,8 @@ public class SQLThread extends Thread {
 			//give error information to Main
 			Main.println("[SQLThread] Unable to update user " + properUsername + ": " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
-			return false;
 		}
+		return false;
 	}
 	
 	public boolean updateLastSeen(String username, String lastSeen) {
@@ -148,8 +148,8 @@ public class SQLThread extends Thread {
 			//give error information to Main
 			Main.println("[SQLThread] Unable to update user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
-			return false;
 		}
+		return false;
 	}
 	
 	public boolean updateRank(String username, String promotedBy, int rank) {
@@ -166,8 +166,48 @@ public class SQLThread extends Thread {
 			//give error information to Main
 			Main.println("[SQLThread] Unable to update user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
-			return false;
 		}
+		return false;
+	}
+	
+	public boolean deleteUser(String user) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE username=?");
+			statement.setString(1, user);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to delete rank for user " + user + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
+	
+	public boolean ban(String user, int uid, String ip, String admin, String reason, String date, String expiry, int room) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO bans (id, botid, username, uid, ip, admin, reason, date, expiry, room) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			statement.setInt(1, botId);
+			statement.setString(2, user);
+			statement.setInt(3, uid);
+			statement.setString(4, ip);
+			statement.setString(5, admin);
+			statement.setString(6, reason);
+			statement.setString(7, date);
+			statement.setString(8, expiry);
+			statement.setInt(9, room);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to add kick to MySQL database: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
 	}
 	
 	//sync user database with mysql database
@@ -208,8 +248,8 @@ public class SQLThread extends Thread {
 			//give error information to Main
 			Main.println("[SQLThread] Unable to refresh lists: " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
-			return false;
 		}
+		return false;
 	}
 
 	public void run() {
@@ -255,6 +295,16 @@ public class SQLThread extends Thread {
 				} catch(SQLException e) {
 					//give error information to Main
 					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
+					Main.stackTrace(e);
+				}
+				try {
+					Main.println("[SQLThread] Creating bans table if not exists...", Main.DATABASE);
+					Statement statement = connection.createStatement();
+					//not sure how to write this statement without it being a block of text
+					statement.execute("CREATE TABLE IF NOT EXISTS bans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', admin varchar(15) NOT NULL, reason varchar(15) NOT NULL, date varchar(31) NOT NULL, expiry varchar(15) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+				} catch(SQLException e) {
+					//give error information to Main
+					Main.println("[SQLThread] Error while creating bans table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
 				connectionReady(connection);
