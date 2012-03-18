@@ -355,7 +355,7 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Creating unbans table if not exists...", Main.DATABASE);
 					Statement statement = connection.createStatement();
 					//not sure how to write this statement without it being a block of text
-					statement.execute("CREATE TABLE IF NOT EXISTS unbans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', admin varchar(15) NOT NULL, reason varchar(150) NOT NULL, date varchar(31) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=ytf8 AUTO_INCREMENT=1");
+					statement.execute("CREATE TABLE IF NOT EXISTS unbans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', admin varchar(15) NOT NULL, reason varchar(150) NOT NULL, date varchar(31) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
 					//give error information to Main
 					Main.println("[SQLThread] Error while creating unbans table: " + e.getLocalizedMessage(), Main.ERROR);

@@ -146,8 +146,8 @@ public class GChatBot implements GarenaListener {
 		registerCommand("ban", LEVEL_ADMIN);
 		registerCommand("unban", LEVEL_ADMIN);
 		
-		//registerCommand("clear", LEVEL_TRUSTED);
-		//registerCommand("findip", LEVEL_TRUSTED);
+		registerCommand("clear", LEVEL_TRUSTED);
+		registerCommand("findip", LEVEL_TRUSTED);
 		//registerCommand("checkuserip", LEVEL_TRUSTED);
 		//registerCommand("traceuser", LEVEL_TRUSTED);
 		//registerCommand("traceip", LEVEL_TRUSTED);
@@ -495,6 +495,17 @@ public class GChatBot implements GarenaListener {
 			}
 		}
 		
+		//TRUSTED COMMNANDS
+		if(memberRank >= LEVEL_TRUSTED) {
+			if(command.equals("clear")) {
+				chatthread.clearQueue();
+				chatthread.queueChat("Success. Cleared chat queue", member.userID);
+				return null;
+			} else if(command.equals("findip")) {
+				return findIP(payload, member);
+			}
+		}
+		
 		//SAFELIST COMMANDS
 		if(memberRank >= LEVEL_SAFELIST) {
 			if(command.equals("whois")) {
@@ -553,6 +564,33 @@ public class GChatBot implements GarenaListener {
 		//if command is not recognised
 		chatthread.queueChat("Invalid command. Please check your spelling and try again", member.userID);
 		return null;
+	}
+	
+	public String findIP(String payload, MemberInfo member) {
+		String invalidFormat = "Invalid format detected. Correct format is " + trigger + "findip <ip_address>. For further help use " + trigger + "help findip";
+		if(payload.equals("")) {
+			chatthread.queueChat(invalidFormat, member.userID);
+			return null;
+		}
+		payload = removeSpaces(payload);
+		if(!validIP(payload)) {
+			chatthread.queueChat(invalidFormat, member.userID);
+			return null;
+		}
+		if(payload.charAt(0) != '/') {
+			payload = "/" + payload;
+		}
+		ArrayList<String> listOfUsers = new ArrayList<String>();
+		for(int i = 0; i < garena.members.size(); i++) {
+			if(garena.members.get(i).externalIP.toString().equals(payload)) {
+				listOfUsers.add("<" + garena.members.get(i).username + ">");
+			}
+		}
+		if(listOfUsers.size() > 0) {
+			return "The following users have IP address " + payload + ": " + listOfUsers.toString();
+		} else {
+			return "There are no users in the room with IP address: " + payload + ".";
+		}
 	}
 	
 	public String setRank(MemberInfo admin, UserInfo targetUser, int rank) {
