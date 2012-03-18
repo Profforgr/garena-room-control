@@ -12,6 +12,7 @@ package grc;
  
 public class UserInfo {
 	
+	public static int numUsers = 0;
 	public String username;
 	public String properUsername;
 	public int userID;
@@ -19,8 +20,6 @@ public class UserInfo {
 	public String ipAddress;
 	public String lastSeen;
 	public String promotedBy;
-	public String unbannedBy;
-	public static int numUsers = 0;
 	
 	public UserInfo() {
 		username = "unknown";
@@ -30,6 +29,5 @@ public class UserInfo {
 		ipAddress = "unknown";
 		lastSeen = "unknown";
 		promotedBy = "unknown";
-		unbannedBy = "unknown";
 	}
 }

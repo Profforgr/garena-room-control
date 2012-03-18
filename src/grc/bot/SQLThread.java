@@ -89,11 +89,57 @@ public class SQLThread extends Thread {
 		}
 	}
 	
-	//add new user to database given full information
-	public boolean addUser(String username, String properUsername, int uid, int rank, String ip, String lastSeen, String promotedBy, String unbannedBy) {
+	public boolean doesBanExist(String user) {
+		int count = 0;
 		try {
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO users (id, username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement statement = connection.prepareStatement("SELECT COUNT (*) FROM bans WHERE name=?");
+			statement.setString(1, user);
+			ResultSet result = statement.executeQuery();
+			connectionReady(connection);
+			while(result.next()) {
+				count = result.getInt(1);
+			}
+			if(count == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to check if " + user + " is banned: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
+	
+	public boolean unban(String username, int uid, String admin, String reason, String date, int room) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO unbans (id, botid, username, uid, admin, reason, date) VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+			statement.setInt(1, botId);
+			statement.setString(2, username);
+			statement.setInt(3, uid);
+			statement.setString(4, admin);
+			statement.setString(5, reason);
+			statement.setString(6, date);
+			statement.setInt(7, room);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to unban user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
+	
+	//add new user to database given full information
+	public boolean addUser(String username, String properUsername, int uid, int rank, String ip, String lastSeen, String promotedBy) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO users (id, username, properusername, uid, rank, ip, lastseen, promotedby) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
 			statement.setString(1, username);
 			statement.setString(2, properUsername);
 			statement.setInt(3, uid);
@@ -101,7 +147,6 @@ public class SQLThread extends Thread {
 			statement.setString(5, ip);
 			statement.setString(6, lastSeen);
 			statement.setString(7, promotedBy);
-			statement.setString(8, unbannedBy);
 			statement.execute();
 			connectionReady(connection);
 			return true;
@@ -215,7 +260,7 @@ public class SQLThread extends Thread {
 	public boolean syncDatabase() {
 		try {
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, unbannedby FROM users");
+			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby FROM users");
 			ResultSet result = statement.executeQuery();
 			bot.userDatabaseRoot.clear();
 			UserInfo.numUsers = 0;
@@ -233,7 +278,6 @@ public class SQLThread extends Thread {
 				user.ipAddress = result.getString("ip");
 				user.lastSeen = result.getString("lastseen");
 				user.promotedBy = result.getString("promotedby");
-				user.unbannedBy = result.getString("unbannedby");
 				TreeNode newUser = new TreeNode(user);
 				if(user.userID != 0) {
 					//if user does not have a valid uid, don't add to uid sorted database
@@ -291,7 +335,7 @@ public class SQLThread extends Thread {
 					
 					Statement statement = connection.createStatement();
 					//not sure how to write this statement without it being a block of text
-					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown', unbannedby varchar(15) NOT NULL DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+					statement.execute("CREATE TABLE IF NOT EXISTS users (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, username varchar(15) NOT NULL, properusername varchar(15) NOT NULL DEFAULT 'unknown', uid INT(10) NOT NULL DEFAULT '0', rank INT(2) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', lastseen varchar(31) NOT NULL DEFAULT 'unknown', promotedby varchar(15) NOT NULL DEFAULT 'unknown' DEFAULT 'unknown') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
 					//give error information to Main
 					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
@@ -301,10 +345,20 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Creating bans table if not exists...", Main.DATABASE);
 					Statement statement = connection.createStatement();
 					//not sure how to write this statement without it being a block of text
-					statement.execute("CREATE TABLE IF NOT EXISTS bans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', admin varchar(15) NOT NULL, reason varchar(15) NOT NULL, date varchar(31) NOT NULL, expiry varchar(15) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+					statement.execute("CREATE TABLE IF NOT EXISTS bans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', ip varchar(15) NOT NULL DEFAULT 'unknown', admin varchar(15) NOT NULL, reason varchar(150) NOT NULL, date varchar(31) NOT NULL, expiry varchar(31) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
 					//give error information to Main
 					Main.println("[SQLThread] Error while creating bans table: " + e.getLocalizedMessage(), Main.ERROR);
+					Main.stackTrace(e);
+				}
+				try {
+					Main.println("[SQLThread] Creating unbans table if not exists...", Main.DATABASE);
+					Statement statement = connection.createStatement();
+					//not sure how to write this statement without it being a block of text
+					statement.execute("CREATE TABLE IF NOT EXISTS unbans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid INT(3) NOT NULL, username varchar(15) NOT NULL, uid INT(10) NOT NULL DEFAULT '0', admin varchar(15) NOT NULL, reason varchar(150) NOT NULL, date varchar(31) NOT NULL, room INT(6) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=ytf8 AUTO_INCREMENT=1");
+				} catch(SQLException e) {
+					//give error information to Main
+					Main.println("[SQLThread] Error while creating unbans table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
 				connectionReady(connection);
