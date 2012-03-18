@@ -144,7 +144,7 @@ public class GChatBot implements GarenaListener {
 		registerCommand("kick", LEVEL_ADMIN);
 		registerCommand("quickkick", LEVEL_ADMIN);
 		registerCommand("ban", LEVEL_ADMIN);
-		//registerCommand("unban", LEVEL_ADMIN);
+		registerCommand("unban", LEVEL_ADMIN);
 		
 		//registerCommand("clear", LEVEL_TRUSTED);
 		//registerCommand("findip", LEVEL_TRUSTED);
@@ -453,7 +453,45 @@ public class GChatBot implements GarenaListener {
 					return null;
 				}
 			} else if(command.equals("unban")) {
-				
+				String[] parts = payload.split(" ", 2);
+				if(parts.length < 2) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "unban <username> <reason>. For further help use " + trigger + "help unban", member.userID);
+					return null;
+				}
+				String target = trimUsername(removeSpaces(parts[0])); //format payload into something easier to process
+				//check if unban is ok
+				if(target.equalsIgnoreCase(member.username)) {
+					return "Failed. You can't unban yourself!";
+				}
+				if(!sqlthread.doesBanExist(target.toLowerCase())) {
+					chatthread.queueChat("Failed. " + target + " was not banned by this bot!", chatthread.ANNOUNCEMENT);
+					return null;
+				}
+				//unban is ok, continue
+				int uid = 0;
+				String reason = parts[1];
+				String date = time();
+				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
+				if(!targetUser.properUsername.equals("unknown")) {
+					//user has entered the room before
+					target = targetUser.properUsername;
+					uid = targetUser.userID;
+				}
+				if(sqlthread.unban(target, uid, member.username, reason, date, garena.room_id)) {
+					garena.unban(target);
+					try {
+						Thread.sleep(1000);
+					} catch(InterruptedException e) {
+						//give error information to Main
+						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+						Main.stackTrace(e);
+					}
+					chatthread.queueChat("For information about this unban use " + trigger + "unbaninfo " + target, chatthread.ANNOUNCEMENT);
+					return null;
+				} else {
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					return null;
+				}
 			}
 		}
 		
@@ -537,7 +575,7 @@ public class GChatBot implements GarenaListener {
 				return null;
 			}
 		} else { //if user doesn't exist in database create new user
-			if(sqlthread.addUser(targetUser.username, "unknown", 0, rank, "unknown", "unknown", admin.username, "unknown")) {
+			if(sqlthread.addUser(targetUser.username, "unknown", 0, rank, "unknown", "unknown", admin.username)) {
 				UserInfo newUser = new UserInfo();
 				newUser.username = targetUser.username;
 				newUser.rank = rank;
@@ -821,7 +859,7 @@ public class GChatBot implements GarenaListener {
 	public boolean addUserToDatabase(MemberInfo target, UserInfo user) {
 		if(user == null) {
 			//if new user
-			if(sqlthread.addUser(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown", "unknown")) {
+			if(sqlthread.addUser(target.username.toLowerCase(), target.username, target.userID, LEVEL_PUBLIC, target.externalIP.toString().substring(1), time(), "unknown")) {
 				//if successfully added to mysql database
 				//build userinfo
 				UserInfo newUser = new UserInfo();
@@ -872,7 +910,7 @@ public class GChatBot implements GarenaListener {
 			targetUser.rank = LEVEL_ROOT_ADMIN;
 		} else {
 			//else new user
-			if(sqlthread.addUser(root_admin.toLowerCase(), "unknown", 0, LEVEL_ADMIN, "unknown", "unknown", "unknown", "unknown")) {
+			if(sqlthread.addUser(root_admin.toLowerCase(), "unknown", 0, LEVEL_ADMIN, "unknown", "unknown", "unknown")) {
 				UserInfo user = new UserInfo();
 				user.username = root_admin.toLowerCase();
 				user.rank = LEVEL_ROOT_ADMIN;
