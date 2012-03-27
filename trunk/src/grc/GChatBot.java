@@ -148,7 +148,7 @@ public class GChatBot implements GarenaListener {
 		
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
-		//registerCommand("checkuserip", LEVEL_TRUSTED);
+		registerCommand("checkuserip", LEVEL_TRUSTED);
 		//registerCommand("traceuser", LEVEL_TRUSTED);
 		//registerCommand("traceip", LEVEL_TRUSTED);
 		
@@ -503,6 +503,36 @@ public class GChatBot implements GarenaListener {
 				return null;
 			} else if(command.equals("findip")) {
 				return findIP(payload, member);
+			} else if(command.equals("checkuserip")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "checkuserip <username>. For further help use " + trigger + "help checkuserip", member.userID);
+					return null;
+				}
+				payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
+				//check if targetuser is ok
+				if(targetUser == null) {
+					chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help checkuserip", member.userID);
+					return null;
+				}
+				if(targetUser.ipAddress.equals("unknown")) {
+					chatthread.queueChat("Failed. " + payload + " has never entered this room and has no known IP address! For further help use " + trigger + "help checkuserip", member.userID);
+					return null;
+				}
+				//targetuser is ok, continue
+				ArrayList<String> listOfUsers = new ArrayList<String>();
+				for(int i = 0; i < garena.members.size(); i++) {
+					if(garena.members.get(i).externalIP.toString().substring(1).equals(targetUser.ipAddress)) {
+						listOfUsers.add(garena.members.get(i).username);
+					}
+				}
+				if(listOfUsers.size() > 0) {
+					chatthread.queueChat("The following users have IP address " + targetUser.ipAddress + ": " + listOfUsers.toString(), member.userID);
+					return null;
+				} else {
+					chatthread.queueChat("There are no users in the room who have IP address: " + targetUser.ipAddress + ". For further help use " + trigger + "help checkuserip", member.userID);
+					return null;
+				}
 			}
 		}
 		
