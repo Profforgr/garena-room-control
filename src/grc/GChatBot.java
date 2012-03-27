@@ -155,6 +155,7 @@ public class GChatBot implements GarenaListener {
 		registerCommand("traceuser", LEVEL_TRUSTED);
 		//registerCommand("traceip", LEVEL_TRUSTED);
 		
+		registerCommand("announce", LEVEL_VIP);
 		registerCommand("getpromote", LEVEL_VIP);
 		//registerCommand("getunban", LEVEL_VIP);
 		
@@ -543,6 +544,13 @@ public class GChatBot implements GarenaListener {
 					return null;
 				}
 				getPromote(payload, member);
+				return null;
+			} else if(command.equals("announce")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "announce <message>. For further help use " + trigger + "help announce", member.userID);
+					return null;
+				}
+				chatthread.queueChat(payload, chatthread.ANNOUNCEMENT);
 				return null;
 			}
 		}
