@@ -89,11 +89,39 @@ public class SQLThread extends Thread {
 		}
 	}
 	
+	public String getBanInfo(String user) {
+		String name = "";
+		String admin = "";
+		String reason = "";
+		String date = "";
+		String expiry = "";
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("SELECT username, admin, reason, date, expiry FROM bans WHERE name=?");
+			statement.setString(1, user);
+			ResultSet result = statement.executeQuery();
+			connectionReady(connection);
+			while(result.next()) {
+				name = result.getString(1);
+				admin = result.getString(2);
+				reason = result.getString(3);
+				date = result.getString(4);
+				expiry = result.getString(5);
+			}
+			return "<" + name + "> last banned on " + date + " by <" + admin + ">. Reason: " + reason + ". Ban expires on " + expiry;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to get ban information on " + user + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return "";
+	}
+	
 	public boolean doesBanExist(String user) {
 		int count = 0;
 		try {
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("SELECT COUNT (*) FROM bans WHERE name=?");
+			PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM bans WHERE username=?");
 			statement.setString(1, user);
 			ResultSet result = statement.executeQuery();
 			connectionReady(connection);
