@@ -43,6 +43,7 @@ public class GChatBot implements GarenaListener {
 	
 	public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 	private int rotateAnn = -1; //Track which announcement the bot is up to
+	private final String startTime;
 	
 	public GarenaInterface garena;
 	public PluginManager plugins;
@@ -108,6 +109,8 @@ public class GChatBot implements GarenaListener {
 		ignoreList = new ArrayList<String>();
 		
 		userDatabaseRoot = new TreeNode(new UserInfo()); //initialize user database tree
+		
+		startTime = time();
 	}
 
 	public void init() {
@@ -149,16 +152,16 @@ public class GChatBot implements GarenaListener {
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
 		registerCommand("checkuserip", LEVEL_TRUSTED);
-		//registerCommand("traceuser", LEVEL_TRUSTED);
+		registerCommand("traceuser", LEVEL_TRUSTED);
 		//registerCommand("traceip", LEVEL_TRUSTED);
 		
-		//registerCommand("getpromote", LEVEL_VIP);
+		registerCommand("getpromote", LEVEL_VIP);
 		//registerCommand("getunban", LEVEL_VIP);
 		
 		registerCommand("whois", LEVEL_SAFELIST);
 		registerCommand("whoisuid", LEVEL_SAFELIST);
 		registerCommand("roomstats", LEVEL_SAFELIST);
-		//registerCommand("random", LEVEL_SAFELIST);
+		registerCommand("random", LEVEL_SAFELIST);
 		//registerCommand("status", LEVEL_SAFELIST);
 		
 		int public_level = LEVEL_PUBLIC;
@@ -168,10 +171,10 @@ public class GChatBot implements GarenaListener {
 		
 		registerCommand("whoami", public_level);
 		registerCommand("commands", public_level);
-		//registerCommand("baninfo", public_level);
+		registerCommand("baninfo", public_level);
 		//registerCommand("kickinfo", public_level);
-		//registerCommand("uptime", public_level);
-		//registerCommand("version", public_level);
+		registerCommand("uptime", public_level);
+		registerCommand("version", public_level);
 		//registerCommand("allstaff", public_level);
 		//registerCommand("staff", public_level);
 		//registerCommand("creater", public_level);
@@ -508,31 +511,39 @@ public class GChatBot implements GarenaListener {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "checkuserip <username>. For further help use " + trigger + "help checkuserip", member.userID);
 					return null;
 				}
-				payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
-				UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
-				//check if targetuser is ok
-				if(targetUser == null) {
-					chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help checkuserip", member.userID);
+				checkUserIP(payload, member);
+				return null;
+			} else if(command.equals("traceuser")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "traceuser <username>. For further help use " + trigger + "help traceuser", member.userID);
 					return null;
 				}
-				if(targetUser.ipAddress.equals("unknown")) {
-					chatthread.queueChat("Failed. " + payload + " has never entered this room and has no known IP address! For further help use " + trigger + "help checkuserip", member.userID);
+				traceUser(payload, member);
+				return null;
+			} else if(command.equals("traceip")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "traceip <ip_address>. For further help use " + trigger + "help traceip", member.userID);
 					return null;
 				}
-				//targetuser is ok, continue
-				ArrayList<String> listOfUsers = new ArrayList<String>();
-				for(int i = 0; i < garena.members.size(); i++) {
-					if(garena.members.get(i).externalIP.toString().substring(1).equals(targetUser.ipAddress)) {
-						listOfUsers.add(garena.members.get(i).username);
-					}
-				}
-				if(listOfUsers.size() > 0) {
-					chatthread.queueChat("The following users have IP address " + targetUser.ipAddress + ": " + listOfUsers.toString(), member.userID);
-					return null;
-				} else {
-					chatthread.queueChat("There are no users in the room who have IP address: " + targetUser.ipAddress + ". For further help use " + trigger + "help checkuserip", member.userID);
+				payload = removeSpaces(payload); //format payload into something easier to process
+				if(!validIP(payload)) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "traceip <ip_address>. For further help use " + trigger + "help traceip", member.userID);
 					return null;
 				}
+				chatthread.queueChat("http://www.dnsstuff.com/tools/whois/?ip=" + payload + " or http://www.ip-adress.com/ip_tracer/" + payload, member.userID);
+				return null;
+			}
+		}
+		
+		//VIP COMMANDS
+		if(memberRank >= LEVEL_VIP) {
+			if(command.equals("getpromote")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "getpromote <username>. For further help use " + trigger + "help getpromote", member.userID);
+					return null;
+				}
+				getPromote(payload, member);
+				return null;
 			}
 		}
 		
@@ -564,6 +575,17 @@ public class GChatBot implements GarenaListener {
 				}
 			} else if(command.equals("roomstats")) {
 				return roomStatistics();
+			} else if(command.equals("random")) {
+				long scale = 100;
+				if(!payload.equals("")) {
+					try {
+						scale = Long.parseLong(removeSpaces(payload));
+					} catch(NumberFormatException e) {
+						return "Invalid number specified";
+					}
+				}
+				long random = (long)(Math.random()*scale)+1;
+				return "You randomed: " + random;
 			}
 		}
 		
@@ -574,6 +596,23 @@ public class GChatBot implements GarenaListener {
 				return null;
 			} else if(command.equals("whoami")) {
 				return whois(member.username); //returns a string representing whois
+			} else if(command.equals("baninfo")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "baninfo <username>. For further help use " + trigger + "help baninfo", member.userID);
+					return null;
+				}
+				payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+				//check if target is ok
+				if(sqlthread.doesBanExist(payload.toLowerCase())) {
+					return sqlthread.getBanInfo(payload.toLowerCase());
+				} else {
+					chatthread.queueChat("Failed. Can not find any ban information for " + payload + ". Are you sure they were banned by this bot?", member.userID);
+					return null;
+				}
+			} else if(command.equals("uptime")) {
+				return "Online since: " + startTime;
+			} else if(command.equals("version")) {
+				return "Current DotA version is " + dotaVersion + ", current Warcraft 3 version is " + warcraftVersion;
 			}
 		}
 		
@@ -594,6 +633,99 @@ public class GChatBot implements GarenaListener {
 		//if command is not recognised
 		chatthread.queueChat("Invalid command. Please check your spelling and try again", member.userID);
 		return null;
+	}
+	
+	public void getPromote(String payload, MemberInfo member) {
+		payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+		UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
+		//check if targetuser is ok
+		if(targetUser == null) {
+			chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help traceuser", member.userID);
+			return;
+		}
+		//targetuser is ok, continue
+		ArrayList<String> listOfUsers = new ArrayList<String>();
+		listOfUsers = searchPromotedBy(payload, listOfUsers, userDatabaseRoot);
+		if(listOfUsers.size() == 0) {
+			if(targetUser.properUsername.equals("unknown")) {
+				chatthread.queueChat(payload + " has not promoted any users", member.userID);
+				return;
+			} else {
+				chatthread.queueChat(targetUser.properUsername + " has not promoted any users", member.userID);
+				return;
+			}
+		} else {
+			if(targetUser.properUsername.equals("unknown")) {
+				chatthread.queueChat(payload + " has promoted " + listOfUsers.toString(), member.userID);
+				return;
+			} else {
+				chatthread.queueChat(targetUser.properUsername + " has promoted " + listOfUsers.toString(), member.userID);
+				return;
+			}
+		}
+	}
+	
+	public ArrayList<String> searchPromotedBy(String payload, ArrayList<String> listOfUsers, TreeNode node) {
+		if(node.getLeftUser() != null) { //if node has a left child
+			searchPromotedBy(payload, listOfUsers, node.getLeftUser());
+		}
+		if(node.getRightUser() != null) { //if node has a right child
+			searchPromotedBy(payload, listOfUsers, node.getRightUser());
+		}
+		UserInfo user = node.getValue();
+		if(user.promotedBy.equalsIgnoreCase(payload)) { //match is found
+			if(user.properUsername.equals("unknown")) { //user hasn't entered the room before
+				listOfUsers.add(user.username);
+			} else { //we have users's properusername
+				listOfUsers.add(user.properUsername);
+			}
+		}
+		return listOfUsers;
+	}
+	
+	public void traceUser(String payload, MemberInfo member) {
+		payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+		UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
+		//check if targetuser is ok
+		if(targetUser == null) {
+			chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help traceuser", member.userID);
+			return;
+		}
+		if(targetUser.ipAddress.equals("unknown")) {
+			chatthread.queueChat("Failed. " + payload + " has never entered this room and has no known IP address! For further help use " + trigger + "help traceuser", member.userID);
+			return;
+		}
+		//targetuser is ok, continue
+		chatthread.queueChat("http://www.dnsstuff.com/tools/whois/?ip=" + targetUser.ipAddress + " or http://www.ip-adress.com/ip_tracer/" + targetUser.ipAddress, member.userID);
+		return;
+	}
+	
+	public void checkUserIP(String payload, MemberInfo member) {
+		payload = trimUsername(removeSpaces(payload)); //format payload into something easier to process
+		UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
+		//check if targetuser is ok
+		if(targetUser == null) {
+			chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help checkuserip", member.userID);
+			return;
+		}
+		if(targetUser.ipAddress.equals("unknown")) {
+			chatthread.queueChat("Failed. " + payload + " has never entered this room and has no known IP address! For further help use " + trigger + "help checkuserip", member.userID);
+			return;
+		}
+		//targetuser is ok, continue
+		ArrayList<String> listOfUsers = new ArrayList<String>();
+		for(int i = 0; i < garena.members.size(); i++) {
+			if(garena.members.get(i).externalIP.toString().substring(1).equals(targetUser.ipAddress)) {
+				listOfUsers.add(garena.members.get(i).username);
+			}
+		}
+		if(listOfUsers.size() > 0) {
+			chatthread.queueChat("The following users have IP address " + targetUser.ipAddress + ": " + listOfUsers.toString(), member.userID);
+			return;
+		} else {
+			chatthread.queueChat("There are no users in the room who have IP address: " + targetUser.ipAddress + ". For further help use " + trigger + "help checkuserip", member.userID);
+			return;
+		}
 	}
 	
 	public String findIP(String payload, MemberInfo member) {
