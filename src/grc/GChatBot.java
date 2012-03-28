@@ -1010,8 +1010,13 @@ public class GChatBot implements GarenaListener {
 	}
 	
 	public void joinMessage(MemberInfo target, UserInfo user) {
+		if(user == null) {
+			chatthread.queueChat(welcomeMessage, target.userID);
+			return;
+		}
 		if(user.rank <= LEVEL_SAFELIST) {
 			chatthread.queueChat(welcomeMessage, target.userID);
+			return;
 		}
 	}
 	
