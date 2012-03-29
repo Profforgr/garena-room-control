@@ -97,7 +97,7 @@ public class SQLThread extends Thread {
 		String expiry = "";
 		try {
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("SELECT username, admin, reason, date, expiry FROM bans WHERE name=?");
+			PreparedStatement statement = connection.prepareStatement("SELECT username, admin, reason, date, expiry FROM bans WHERE username=?");
 			statement.setString(1, user);
 			ResultSet result = statement.executeQuery();
 			connectionReady(connection);
