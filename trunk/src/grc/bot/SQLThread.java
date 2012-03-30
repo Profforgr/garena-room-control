@@ -47,7 +47,7 @@ public class SQLThread extends Thread {
 		password = GRCConfig.configuration.getString("grc_db_password");
 		botId = GRCConfig.configuration.getInt("grc_bot_id", 0); //Default 0
 		bannedWordDetectType = GRCConfig.configuration.getInt("grc_bot_detect", 3); //Default 3
-		dbRefreshRate = GRCConfig.configuration.getInt("grc_bot_refresh_rate", 60); //Default 60 seconds, 1 minute
+		dbRefreshRate = GRCConfig.configuration.getInt("grc_db_refresh_rate", 60); //Default 60 seconds, 1 minute
 	}
 
 	public void init() {

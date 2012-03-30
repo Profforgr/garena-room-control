@@ -907,11 +907,6 @@ public class GChatBot implements GarenaListener {
 					str += "\n";
 				}
 				str = str + "Public commands: " + publicCommands.toString();
-			case LEVEL_SHITLIST:
-				if(!str.equals("")) {
-					str += "\n";
-				}
-				str = str + "Shitlist commands: " + shitlistCommands.toString();
 			default:
 				chatthread.queueChat(str, chatthread.ANNOUNCEMENT);
 		}
