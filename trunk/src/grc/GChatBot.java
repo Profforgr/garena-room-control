@@ -229,6 +229,9 @@ public class GChatBot implements GarenaListener {
 				}
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) {
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help addadmin";
+				}
 				return setRank(member, targetUser, LEVEL_ADMIN);
 			} else if(command.equals("deleteuser")) {
 				if(payload.equals("")) {
@@ -262,6 +265,9 @@ public class GChatBot implements GarenaListener {
 				}
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) {
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help addtrialadmin";
+				}
 				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
 					return "Failed. You can't demote an Admin!";
 				}
@@ -273,6 +279,9 @@ public class GChatBot implements GarenaListener {
 				}
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) {
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help addtrusted";
+				}
 				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
 					return "Failed. You can't demote an Admin!";
 				}
@@ -283,6 +292,9 @@ public class GChatBot implements GarenaListener {
 				}
 				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
 				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
+				if(targetUser == null) {
+					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help addvip";
+				}
 				if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
 					return "Failed. You can't demote an Admin!";
 				}
@@ -402,6 +414,7 @@ public class GChatBot implements GarenaListener {
 						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
 						Main.stackTrace(e);
 					}
+					garena.unban(victim.username);
 					chatthread.queueChat("For information about this kick use " + trigger + "kickinfo " + victim.username, chatthread.ANNOUNCEMENT);
 					return null;
 				} else {
@@ -584,10 +597,11 @@ public class GChatBot implements GarenaListener {
 			} else if(command.equals("roomstats")) {
 				return roomStatistics();
 			} else if(command.equals("random")) {
+				String[] parts = payload.split(" ", 2);
 				long scale = 100;
-				if(!payload.equals("")) {
+				if(!parts[0].equals("")) {
 					try {
-						scale = Long.parseLong(removeSpaces(payload));
+						scale = Long.parseLong(removeSpaces(parts[0]));
 					} catch(NumberFormatException e) {
 						return "Invalid number specified";
 					}
@@ -1444,8 +1458,7 @@ public class GChatBot implements GarenaListener {
 	
 	//Removes all " " from the string
 	public String removeSpaces(String text) {
-		String result = text.replaceAll(" ", "");
-		return result;
+		return text.replaceAll(" ", "");
 	}
 	
 	//Removes "<" and ">" from ends of the username
