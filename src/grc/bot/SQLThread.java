@@ -144,7 +144,7 @@ public class SQLThread extends Thread {
 	public boolean unban(String username, int uid, String admin, String reason, String date, int room) {
 		try {
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO unbans (id, botid, username, uid, admin, reason, date) VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO unbans (id, botid, username, uid, admin, reason, date, room) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
 			statement.setInt(1, botId);
 			statement.setString(2, username);
 			statement.setInt(3, uid);
