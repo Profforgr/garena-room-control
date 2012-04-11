@@ -475,6 +475,7 @@ public class Main {
 		while(true) {
 			if(garena.hasRoomList) {
 				syncRoom();
+				bot.startAnnTimer();
 				break;
 			} else {
 				try {
