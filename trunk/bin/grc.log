@@ -50,3 +50,1353 @@
 [3/03/2012 1:43:41 PM] [GarenaInterface] GG.Dragon with ID 3774503: d
 [3/03/2012 1:43:41 PM] [GInterface] GCRP loop error: null
 [3/03/2012 1:43:49 PM] [GInterface] PeerLoop: unknown type received: 24; size is: 16
+[10/04/2012 9:36:55 PM][GInterface] Initializing...
+[10/04/2012 9:36:55 PM][GEncrypt] Initializing AES Keys...
+[10/04/2012 9:36:56 PM][GEncrypt] Initializing RSA Keys...
+[10/04/2012 9:36:56 PM][GEncrypt] Reading private key in PEM format...
+[10/04/2012 9:36:56 PM][GInterface] Connecting to 74.86.218.64...
+[10/04/2012 9:36:56 PM][GInterface] Using local port: 10890
+[10/04/2012 9:36:56 PM][GInterface] Sending GSP session init...
+[10/04/2012 9:36:56 PM][GInterface] Reading GSP session init reply...
+[10/04/2012 9:36:57 PM][GInterface] GSP session init reply received!
+[10/04/2012 9:36:57 PM][GInterface] Sending GSP session hello...
+[10/04/2012 9:36:57 PM][GInterface] Reading GSP session hello reply...
+[10/04/2012 9:36:57 PM][GInterface] GSP session hello reply received!
+[10/04/2012 9:36:57 PM][GInterface] Sending GSP session login...
+[10/04/2012 9:36:57 PM][GEncrypt] Internal IP address determined at 192.168.1.100
+[10/04/2012 9:36:57 PM][GInterface] Reading GSP session login reply...
+[10/04/2012 9:36:57 PM][GInterface] Successfully logged in!
+[10/04/2012 9:36:57 PM][GInterface] Server says your ID is: 14632659
+[10/04/2012 9:36:57 PM][GInterface] Server says your username is: XIII.Dragon
+[10/04/2012 9:36:57 PM][GInterface] Server says your country is: NZ
+[10/04/2012 9:36:57 PM][GInterface] Server says your experience is: 29
+[10/04/2012 9:36:57 PM][GInterface] Server says your email address is: XIII.Dragon@hotmail.com
+[10/04/2012 9:36:57 PM][GInterface] GSPLoop: received 1360 bytes of encrypted data
+[10/04/2012 9:36:57 PM][Main] Waiting for lookup response...
+[10/04/2012 9:36:57 PM][GInterface] GSPLoop: unknown type received: 70
+[10/04/2012 9:36:58 PM][GInterface] GSPLoop: received 64 bytes of encrypted data
+[10/04/2012 9:36:58 PM][GInterface] GSPLoop: unknown type received: 92
+[10/04/2012 9:36:58 PM][GInterface] GSPLoop: received 512 bytes of encrypted data
+[10/04/2012 9:36:58 PM][GInterface] GSPLoop: unknown type received: -115
+[10/04/2012 9:36:58 PM][GInterface] PeerLoop: set address to 125.237.95.211 and port to 1514
+[10/04/2012 9:36:58 PM][Main] Received lookup response!
+[10/04/2012 9:36:58 PM][GInterface] Connecting to room...
+[10/04/2012 9:36:58 PM][GInterface] Conducting hostname lookup...
+[10/04/2012 9:36:58 PM][GInterface] Connecting to 67.228.179.60...
+[10/04/2012 9:36:58 PM][GInterface] Using local port: 10891
+[10/04/2012 9:36:58 PM][GInterface] Sending GCRP me join...
+[10/04/2012 9:36:58 PM][GEncrypt] Internal IP address determined at 192.168.1.100
+[10/04/2012 9:36:58 PM][GInterface] deflated myinfo block from 116 bytes to 83 bytes
+[10/04/2012 9:36:58 PM][GInterface] Sending GCRP START...
+[10/04/2012 9:36:58 PM][SQLThread] Creating new connection...
+[10/04/2012 9:36:58 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:58 PM][SQLThread] Creating users table if not exists...
+[10/04/2012 9:36:58 PM][SQLThread] Creating bans table if not exists...
+[10/04/2012 9:36:58 PM][SQLThread] Creating unbans table if not exists...
+[10/04/2012 9:36:58 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:58 PM][SQLThread] Creating phrases table if not exists...
+[10/04/2012 9:36:58 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:36:58 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:58 PM][SQLThread] Refresh: found 1198 Users
+[10/04/2012 9:36:58 PM][SQLThread] Refresh: found 1 Auto Announcements
+[10/04/2012 9:36:59 PM][GInterface] There are 236 members in this room
+[10/04/2012 9:36:59 PM][SQLThread] Creating new connection...
+[10/04/2012 9:36:59 PM][GInterface] Server says: Is your account banned from all public rooms? Read: http://fairplay.garena.com/showthread.php?219391
+
+YEAR OF THE DRAGON! ALL SALUTE <GG.Dragon>
+
+Recruiting 2 New Zealand Channel Admins info here: http://fairplay.garena.com/showthread.php?323269
+
+Selling Gold Member in NZ$: http://fairplay.garena.com/showthread.php?324449
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:36:59 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:00 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:01 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][GarenaInterface] c.h.a.r.k.y with ID 59740349 has stopped playing
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:02 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:03 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:04 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:05 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:37:05 PM][PluginManager] Searching through 0 files for plugins...
+[10/04/2012 9:37:05 PM][PluginManager] 0 plugins found!
+[10/04/2012 9:37:05 PM][PluginManager] Loading 1 plugins...
+[10/04/2012 9:37:10 PM][GarenaInterface] zijianchina with ID 6929873 has stopped playing
+[10/04/2012 9:37:28 PM][GarenaInterface] akocjolo11 with ID 72366061: any host please?
+[10/04/2012 9:37:44 PM][GarenaInterface] jjjcoolbe with ID 5656304: .asd
+[10/04/2012 9:37:44 PM][GChatBot] Received command "asd" with payload "" from Random jjjcoolbe
+[10/04/2012 9:37:44 PM][QUEUED: 5656304] Invalid command. Please check your spelling and try again
+[10/04/2012 9:37:44 PM][GarenaInterface] Sending whisper to 5656304: Invalid command. Please check your spelling and try again
+[10/04/2012 9:37:55 PM][GarenaInterface] OrrzOrrz with ID 12517664 has stopped playing
+[10/04/2012 9:37:58 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:37:58 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:37:58 PM][SQLThread] Refresh: found 1198 Users
+[10/04/2012 9:37:58 PM][SQLThread] Refresh: found 1 Auto Announcements
+[10/04/2012 9:38:04 PM][GarenaInterface] zpczpc123 with ID 51325956 has stopped playing
+[10/04/2012 9:38:12 PM][GInterface] Initializing...
+[10/04/2012 9:38:12 PM][GEncrypt] Initializing AES Keys...
+[10/04/2012 9:38:13 PM][GEncrypt] Initializing RSA Keys...
+[10/04/2012 9:38:13 PM][GEncrypt] Reading private key in PEM format...
+[10/04/2012 9:38:13 PM][GInterface] Connecting to 74.86.218.64...
+[10/04/2012 9:38:13 PM][GInterface] Using local port: 10902
+[10/04/2012 9:38:13 PM][GInterface] Sending GSP session init...
+[10/04/2012 9:38:13 PM][GInterface] Reading GSP session init reply...
+[10/04/2012 9:38:14 PM][GInterface] GSP session init reply received!
+[10/04/2012 9:38:14 PM][GInterface] Sending GSP session hello...
+[10/04/2012 9:38:14 PM][GInterface] Reading GSP session hello reply...
+[10/04/2012 9:38:14 PM][GInterface] GSP session hello reply received!
+[10/04/2012 9:38:14 PM][GInterface] Sending GSP session login...
+[10/04/2012 9:38:14 PM][GEncrypt] Internal IP address determined at 192.168.1.100
+[10/04/2012 9:38:14 PM][GInterface] Reading GSP session login reply...
+[10/04/2012 9:38:14 PM][GInterface] Successfully logged in!
+[10/04/2012 9:38:14 PM][GInterface] Server says your ID is: 14632659
+[10/04/2012 9:38:14 PM][GInterface] Server says your username is: XIII.Dragon
+[10/04/2012 9:38:14 PM][GInterface] Server says your country is: NZ
+[10/04/2012 9:38:14 PM][GInterface] Server says your experience is: 29
+[10/04/2012 9:38:14 PM][GInterface] Server says your email address is: XIII.Dragon@hotmail.com
+[10/04/2012 9:38:14 PM][Main] Waiting for lookup response...
+[10/04/2012 9:38:14 PM][GInterface] GSPLoop: received 1360 bytes of encrypted data
+[10/04/2012 9:38:14 PM][GInterface] GSPLoop: unknown type received: 70
+[10/04/2012 9:38:15 PM][GInterface] GSPLoop: received 64 bytes of encrypted data
+[10/04/2012 9:38:15 PM][GInterface] GSPLoop: unknown type received: 92
+[10/04/2012 9:38:15 PM][GInterface] GSPLoop: received 512 bytes of encrypted data
+[10/04/2012 9:38:15 PM][GInterface] GSPLoop: unknown type received: -115
+[10/04/2012 9:38:15 PM][GInterface] PeerLoop: set address to 125.237.95.211 and port to 1514
+[10/04/2012 9:38:15 PM][Main] Received lookup response!
+[10/04/2012 9:38:15 PM][GInterface] Connecting to room...
+[10/04/2012 9:38:15 PM][GInterface] Conducting hostname lookup...
+[10/04/2012 9:38:15 PM][GInterface] Connecting to 67.228.179.60...
+[10/04/2012 9:38:15 PM][GInterface] Using local port: 10903
+[10/04/2012 9:38:15 PM][GInterface] Sending GCRP me join...
+[10/04/2012 9:38:15 PM][GEncrypt] Internal IP address determined at 192.168.1.100
+[10/04/2012 9:38:15 PM][GInterface] deflated myinfo block from 116 bytes to 83 bytes
+[10/04/2012 9:38:15 PM][GInterface] Sending GCRP START...
+[10/04/2012 9:38:15 PM][SQLThread] Creating new connection...
+[10/04/2012 9:38:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:15 PM][SQLThread] Creating users table if not exists...
+[10/04/2012 9:38:15 PM][SQLThread] Creating bans table if not exists...
+[10/04/2012 9:38:15 PM][SQLThread] Creating unbans table if not exists...
+[10/04/2012 9:38:15 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:15 PM][SQLThread] Creating phrases table if not exists...
+[10/04/2012 9:38:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:38:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:15 PM][SQLThread] Refresh: found 1198 Users
+[10/04/2012 9:38:15 PM][SQLThread] Refresh: found 1 Auto Announcements
+[10/04/2012 9:38:15 PM][GInterface] There are 236 members in this room
+[10/04/2012 9:38:16 PM][GInterface] Server says: Is your account banned from all public rooms? Read: http://fairplay.garena.com/showthread.php?219391
+
+YEAR OF THE DRAGON! ALL SALUTE <GG.Dragon>
+
+Recruiting 2 New Zealand Channel Admins info here: http://fairplay.garena.com/showthread.php?323269
+
+Selling Gold Member in NZ$: http://fairplay.garena.com/showthread.php?324449
+[10/04/2012 9:38:16 PM][SQLThread] Creating new connection...
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][GInterface] GSPLoop: received 16 bytes of encrypted data
+[10/04/2012 9:38:16 PM][GInterface] GSPLoop: unknown type received: 81
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:17 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:18 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:20 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:21 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:38:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:38:22 PM][PluginManager] Searching through 0 files for plugins...
+[10/04/2012 9:38:22 PM][PluginManager] 0 plugins found!
+[10/04/2012 9:38:22 PM][PluginManager] Loading 1 plugins...
+[10/04/2012 9:38:22 PM][GInterface] PeerLoop: unknown type received: 24; size is: 16
+[10/04/2012 9:38:23 PM][GarenaInterface] zpczpc123 with ID 51325956 has left the room
+[10/04/2012 9:38:27 PM][QUEUED: -2] asd
+[10/04/2012 9:38:27 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:27 PM][GInterface] Server says: asd
+[10/04/2012 9:38:28 PM][GInterface] GCRPLoop: unknown type received: 42; size is: 310
+[10/04/2012 9:38:32 PM][QUEUED: -2] asd
+[10/04/2012 9:38:32 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:32 PM][GInterface] Server says: asd
+[10/04/2012 9:38:35 PM][GInterface] GCRPLoop: unknown type received: 42; size is: 310
+[10/04/2012 9:38:37 PM][QUEUED: -2] asd
+[10/04/2012 9:38:37 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:37 PM][GInterface] Server says: asd
+[10/04/2012 9:38:39 PM][GInterface] GCRPLoop: unknown type received: 42; size is: 310
+[10/04/2012 9:38:42 PM][QUEUED: -2] asd
+[10/04/2012 9:38:42 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:42 PM][GInterface] Server says: asd
+[10/04/2012 9:38:47 PM][QUEUED: -2] asd
+[10/04/2012 9:38:47 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:47 PM][GInterface] Server says: asd
+[10/04/2012 9:38:52 PM][QUEUED: -2] asd
+[10/04/2012 9:38:52 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:52 PM][GInterface] Server says: asd
+[10/04/2012 9:38:57 PM][GarenaInterface] Asynkritos with ID 73784950: Yes we get it your asd/
+[10/04/2012 9:38:57 PM][QUEUED: -2] asd
+[10/04/2012 9:38:57 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:38:57 PM][GInterface] Server says: asd
+[10/04/2012 9:39:00 PM][GarenaInterface] Asynkritos with ID 73784950: lawl
+[10/04/2012 9:39:00 PM][GInterface] GSPLoop: received 16 bytes of encrypted data
+[10/04/2012 9:39:00 PM][GInterface] GSPLoop: unknown type received: 86
+[10/04/2012 9:39:02 PM][QUEUED: -2] asd
+[10/04/2012 9:39:02 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:02 PM][GInterface] PeerLoop: unknown type received: 24; size is: 16
+[10/04/2012 9:39:03 PM][GInterface] Server says: asd
+[10/04/2012 9:39:07 PM][QUEUED: -2] asd
+[10/04/2012 9:39:07 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:07 PM][GInterface] Server says: asd
+[10/04/2012 9:39:08 PM][GarenaInterface] GG.Dragon with ID 3774503: .setannounceinterval 10
+[10/04/2012 9:39:08 PM][GChatBot] Received command "setannounceinterval" with payload "10" from Root Admin GG.Dragon
+[10/04/2012 9:39:08 PM][QUEUED: 3774503] Success! Auto messages will now be sent every 10 seconds
+[10/04/2012 9:39:09 PM][GarenaInterface] Sending whisper to 3774503: Success! Auto messages will now be sent every 10 seconds
+[10/04/2012 9:39:10 PM][GarenaInterface] New member joined: lhs120 with id 38753599
+[10/04/2012 9:39:10 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:39:10 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:39:12 PM][QUEUED: -2] asd
+[10/04/2012 9:39:12 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:12 PM][GarenaInterface] Asynkritos with ID 73784950: What do we need to do to be "safe listed"
+[10/04/2012 9:39:13 PM][GInterface] Server says: asd
+[10/04/2012 9:39:13 PM][GarenaInterface] lhs120 with ID 38753599 has started playing
+[10/04/2012 9:39:13 PM][GarenaInterface] Asynkritos with ID 73784950: Gg?
+[10/04/2012 9:39:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:39:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:39:15 PM][SQLThread] Refresh: found 1198 Users
+[10/04/2012 9:39:15 PM][SQLThread] Refresh: found 1 Auto Announcements
+[10/04/2012 9:39:22 PM][QUEUED: -2] asd
+[10/04/2012 9:39:22 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:22 PM][GInterface] Server says: asd
+[10/04/2012 9:39:32 PM][QUEUED: -2] asd
+[10/04/2012 9:39:32 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:32 PM][GInterface] Server says: asd
+[10/04/2012 9:39:41 PM][GarenaInterface] GG.Dragon with ID 3774503: well first thing is to not disturb me when im thinking >.>
+[10/04/2012 9:39:42 PM][QUEUED: -2] asd
+[10/04/2012 9:39:42 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:42 PM][GInterface] Server says: asd
+[10/04/2012 9:39:43 PM][GarenaInterface] lhs120 with ID 38753599 has stopped playing
+[10/04/2012 9:39:43 PM][GarenaInterface] superv_panda with ID 29820837: .asd
+[10/04/2012 9:39:43 PM][GChatBot] Received command "asd" with payload "" from Random superv_panda
+[10/04/2012 9:39:43 PM][QUEUED: 29820837] Invalid command. Please check your spelling and try again
+[10/04/2012 9:39:44 PM][GarenaInterface] Sending whisper to 29820837: Invalid command. Please check your spelling and try again
+[10/04/2012 9:39:45 PM][GarenaInterface] blitz_gene with ID 25850554: haha it finally worked huh grandpa
+[10/04/2012 9:39:46 PM][GarenaInterface] lhs120 with ID 38753599 has left the room
+[10/04/2012 9:39:46 PM][GarenaInterface] blitz_gene with ID 25850554: :P
+[10/04/2012 9:39:47 PM][GarenaInterface] Asynkritos with ID 73784950: lol sorry
+[10/04/2012 9:39:52 PM][QUEUED: -2] asd
+[10/04/2012 9:39:52 PM][GarenaInterface] Sending announce: asd
+[10/04/2012 9:39:52 PM][GarenaInterface] New member joined: dadasprees with id 45874027
+[10/04/2012 9:39:52 PM][SQLThread] Creating new connection...
+[10/04/2012 9:39:52 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:39:52 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:39:53 PM][GInterface] Server says: asd
+[10/04/2012 9:39:55 PM][GarenaInterface] dadasprees with ID 45874027 has started playing
+[10/04/2012 9:39:56 PM][GarenaInterface] Asynkritos with ID 73784950: asd
+[10/04/2012 9:39:57 PM][GarenaInterface] GG.Dragon with ID 3774503: .delannounce asd
+[10/04/2012 9:39:57 PM][GChatBot] Received command "delannounce" with payload "asd" from Root Admin GG.Dragon
+[10/04/2012 9:39:57 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:39:57 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:39:57 PM][QUEUED: 3774503] Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:39:57 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:40:05 PM][GarenaInterface] Asynkritos with ID 73784950: .commands
+[10/04/2012 9:40:05 PM][GChatBot] Received command "commands" with payload "" from Random Asynkritos
+[10/04/2012 9:40:05 PM][QUEUED: -2] Public commands: [whoami, commands, baninfo, uptime, version]
+[10/04/2012 9:40:05 PM][GarenaInterface] Sending announce: Public commands: [whoami, commands, baninfo, uptime, version]
+[10/04/2012 9:40:05 PM][GInterface] Server says: Public commands: [whoami, commands, baninfo, uptime, version]
+[10/04/2012 9:40:05 PM][GInterface] GSPLoop: received 16 bytes of encrypted data
+[10/04/2012 9:40:05 PM][GInterface] GSPLoop: unknown type received: 82
+[10/04/2012 9:40:12 PM][GarenaInterface] superv_panda with ID 29820837: .whoami
+[10/04/2012 9:40:12 PM][GChatBot] Received command "whoami" with payload "" from Random superv_panda
+[10/04/2012 9:40:12 PM][QUEUED: -1] <superv_panda> [Random]. UID: 29820837. Last seen: 10-04-2012 21:38:18
+[10/04/2012 9:40:12 PM][GarenaInterface] Sending message: <superv_panda> [Random]. UID: 29820837. Last seen: 10-04-2012 21:38:18
+[10/04/2012 9:40:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:40:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:15 PM][SQLThread] Refresh: found 1199 Users
+[10/04/2012 9:40:15 PM][SQLThread] Refresh: found 0 Auto Announcements
+[10/04/2012 9:40:16 PM][GarenaInterface] GG.Dragon with ID 3774503: .addannounce 1
+[10/04/2012 9:40:16 PM][GChatBot] Received command "addannounce" with payload "1" from Root Admin GG.Dragon
+[10/04/2012 9:40:16 PM][SQLThread] Creating new connection...
+[10/04/2012 9:40:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:16 PM][QUEUED: 3774503] Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:16 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:21 PM][QUEUED: -2] 1
+[10/04/2012 9:40:21 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:40:21 PM][GInterface] Server says: 1
+[10/04/2012 9:40:22 PM][GarenaInterface] New member joined: IM-gundam with id 10528381
+[10/04/2012 9:40:22 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:22 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:23 PM][GarenaInterface] DonFacunDo.NZ with ID 1767197: zz
+[10/04/2012 9:40:24 PM][GarenaInterface] IM-gundam with ID 10528381 has started playing
+[10/04/2012 9:40:26 PM][GarenaInterface] Asynkritos with ID 73784950: .baninfo <Asynkritos>
+[10/04/2012 9:40:26 PM][GChatBot] Received command "baninfo" with payload "<Asynkritos>" from Random Asynkritos
+[10/04/2012 9:40:26 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:26 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:26 PM][QUEUED: 73784950] Failed. Can not find any ban information for Asynkritos. Are you sure they were banned by this bot?
+[10/04/2012 9:40:26 PM][GarenaInterface] Sending whisper to 73784950: Failed. Can not find any ban information for Asynkritos. Are you sure they were banned by this bot?
+[10/04/2012 9:40:28 PM][GarenaInterface] SBJOHN with ID 6123962 has left the room
+[10/04/2012 9:40:31 PM][QUEUED: -2] 1
+[10/04/2012 9:40:31 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:40:31 PM][GInterface] Server says: 1
+[10/04/2012 9:40:32 PM][GarenaInterface] Asynkritos with ID 73784950: .baninfo Asynkritos
+[10/04/2012 9:40:32 PM][GChatBot] Received command "baninfo" with payload "Asynkritos" from Random Asynkritos
+[10/04/2012 9:40:32 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:32 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:32 PM][QUEUED: 73784950] Failed. Can not find any ban information for Asynkritos. Are you sure they were banned by this bot?
+[10/04/2012 9:40:32 PM][GarenaInterface] GG.Dragon with ID 3774503: .addannounce 2
+[10/04/2012 9:40:32 PM][GChatBot] Received command "addannounce" with payload "2" from Root Admin GG.Dragon
+[10/04/2012 9:40:32 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:32 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:32 PM][QUEUED: 3774503] Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:33 PM][GarenaInterface] Sending whisper to 73784950: Failed. Can not find any ban information for Asynkritos. Are you sure they were banned by this bot?
+[10/04/2012 9:40:33 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:34 PM][GarenaInterface] MUNI2012 with ID 8274270 has stopped playing
+[10/04/2012 9:40:41 PM][GarenaInterface] MUNI2012 with ID 8274270 has left the room
+[10/04/2012 9:40:41 PM][QUEUED: -2] 2
+[10/04/2012 9:40:41 PM][GarenaInterface] Sending announce: 2
+[10/04/2012 9:40:41 PM][GInterface] Server says: 2
+[10/04/2012 9:40:42 PM][GarenaInterface] IM-gundam with ID 10528381: any1 host
+[10/04/2012 9:40:42 PM][GarenaInterface] Asynkritos with ID 73784950: .uptime
+[10/04/2012 9:40:42 PM][GChatBot] Received command "uptime" with payload "" from Random Asynkritos
+[10/04/2012 9:40:42 PM][QUEUED: -1] Online since: 10-04-2012 21:38:15
+[10/04/2012 9:40:43 PM][GarenaInterface] Sending message: Online since: 10-04-2012 21:38:15
+[10/04/2012 9:40:51 PM][QUEUED: -2] 1
+[10/04/2012 9:40:51 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:40:51 PM][GInterface] Server says: 1
+[10/04/2012 9:40:55 PM][GarenaInterface] GG.Dragon with ID 3774503: .addannounce 3
+[10/04/2012 9:40:55 PM][GChatBot] Received command "addannounce" with payload "3" from Root Admin GG.Dragon
+[10/04/2012 9:40:55 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:40:55 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:40:55 PM][QUEUED: 3774503] Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:55 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been added to the auto announcement list
+[10/04/2012 9:40:56 PM][GarenaInterface] Asynkritos with ID 73784950: one
+[10/04/2012 9:41:01 PM][QUEUED: -2] 2
+[10/04/2012 9:41:01 PM][GarenaInterface] Sending announce: 2
+[10/04/2012 9:41:01 PM][GInterface] Server says: 2
+[10/04/2012 9:41:11 PM][QUEUED: -2] 3
+[10/04/2012 9:41:11 PM][GarenaInterface] Sending announce: 3
+[10/04/2012 9:41:11 PM][GInterface] Server says: 3
+[10/04/2012 9:41:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:41:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:41:15 PM][SQLThread] Refresh: found 1200 Users
+[10/04/2012 9:41:15 PM][SQLThread] Refresh: found 3 Auto Announcements
+[10/04/2012 9:41:19 PM][GarenaInterface] GG.Dragon with ID 3774503: .delannounce 2
+[10/04/2012 9:41:19 PM][GChatBot] Received command "delannounce" with payload "2" from Root Admin GG.Dragon
+[10/04/2012 9:41:19 PM][SQLThread] Creating new connection...
+[10/04/2012 9:41:19 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:41:19 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:41:19 PM][QUEUED: 3774503] Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:41:19 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:41:21 PM][QUEUED: -2] 1
+[10/04/2012 9:41:21 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:41:21 PM][GInterface] Server says: 1
+[10/04/2012 9:41:31 PM][QUEUED: -2] 3
+[10/04/2012 9:41:31 PM][GarenaInterface] Sending announce: 3
+[10/04/2012 9:41:31 PM][GInterface] Server says: 3
+[10/04/2012 9:41:37 PM][GarenaInterface] IM-gundam with ID 10528381: host pls
+[10/04/2012 9:41:39 PM][GarenaInterface] Asynkritos with ID 73784950: .addannounce 3 if .addanounce2 interval=10
+[10/04/2012 9:41:39 PM][GChatBot] Received command "addannounce" with payload "3 if .addanounce2 interval=10" from Random Asynkritos
+[10/04/2012 9:41:39 PM][QUEUED: 73784950] You do not have access to this command
+[10/04/2012 9:41:39 PM][GarenaInterface] Sending whisper to 73784950: You do not have access to this command
+[10/04/2012 9:41:39 PM][GarenaInterface] dadasprees with ID 45874027: any host?
+[10/04/2012 9:41:41 PM][QUEUED: -2] 1
+[10/04/2012 9:41:41 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:41:41 PM][GInterface] Server says: 1
+[10/04/2012 9:41:46 PM][GarenaInterface] blitz_gene with ID 25850554 has left the room
+[10/04/2012 9:41:46 PM][GarenaInterface] New member joined: mindhack001 with id 59724848
+[10/04/2012 9:41:46 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:41:46 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:41:51 PM][QUEUED: -2] 3
+[10/04/2012 9:41:51 PM][GarenaInterface] Sending announce: 3
+[10/04/2012 9:41:51 PM][GInterface] Server says: 3
+[10/04/2012 9:41:52 PM][GarenaInterface] GG.Dragon with ID 3774503: .aDDannounce 2
+[10/04/2012 9:41:52 PM][GChatBot] Received command "aDDannounce" with payload "2" from Root Admin GG.Dragon
+[10/04/2012 9:41:52 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:41:53 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:41:53 PM][QUEUED: 3774503] Success! Your message has been added to the auto announcement list
+[10/04/2012 9:41:53 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been added to the auto announcement list
+[10/04/2012 9:41:58 PM][GarenaInterface] Fender with ID 60209725: join me
+[10/04/2012 9:42:01 PM][QUEUED: -2] 2
+[10/04/2012 9:42:01 PM][GarenaInterface] Sending announce: 2
+[10/04/2012 9:42:01 PM][GInterface] Server says: 2
+[10/04/2012 9:42:11 PM][GarenaInterface] Asynkritos with ID 73784950: having fun lol
+[10/04/2012 9:42:11 PM][QUEUED: -2] 1
+[10/04/2012 9:42:11 PM][GarenaInterface] Sending announce: 1
+[10/04/2012 9:42:11 PM][GInterface] Server says: 1
+[10/04/2012 9:42:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:42:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:42:15 PM][SQLThread] Refresh: found 1201 Users
+[10/04/2012 9:42:15 PM][SQLThread] Refresh: found 3 Auto Announcements
+[10/04/2012 9:42:16 PM][GarenaInterface] Asynkritos with ID 73784950: what are you trying to do
+[10/04/2012 9:42:16 PM][GarenaInterface] GG.Dragon with ID 3774503: .delannounce 1
+[10/04/2012 9:42:16 PM][GChatBot] Received command "delannounce" with payload "1" from Root Admin GG.Dragon
+[10/04/2012 9:42:16 PM][SQLThread] Creating new connection...
+[10/04/2012 9:42:16 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:42:16 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:42:16 PM][QUEUED: 3774503] Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:16 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:21 PM][QUEUED: -2] 3
+[10/04/2012 9:42:21 PM][GarenaInterface] Sending announce: 3
+[10/04/2012 9:42:21 PM][GInterface] Server says: 3
+[10/04/2012 9:42:24 PM][GarenaInterface] Pavcamboy with ID 17832006 has stopped playing
+[10/04/2012 9:42:27 PM][GarenaInterface] GG.Dragon with ID 3774503: .delAnnounce 2
+[10/04/2012 9:42:27 PM][GChatBot] Received command "delAnnounce" with payload "2" from Root Admin GG.Dragon
+[10/04/2012 9:42:27 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:42:27 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:42:27 PM][QUEUED: 3774503] Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:27 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:27 PM][GarenaInterface] you_mad with ID 45185575 has stopped playing
+[10/04/2012 9:42:31 PM][GarenaInterface] GG.Dragon with ID 3774503: .delannOunce 3
+[10/04/2012 9:42:31 PM][GChatBot] Received command "delannOunce" with payload "3" from Root Admin GG.Dragon
+[10/04/2012 9:42:31 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:42:31 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:42:31 PM][QUEUED: 3774503] Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:31 PM][GarenaInterface] Sending whisper to 3774503: Success! Your message has been deleted from the auto announcement list
+[10/04/2012 9:42:50 PM][GarenaInterface] GG.Dragon with ID 3774503: do u know java
+[10/04/2012 9:42:59 PM][GarenaInterface] Fender with ID 60209725: +1
+[10/04/2012 9:43:03 PM][GarenaInterface] Asynkritos with ID 73784950: I know what it is, but I cannot code i'm only 15 lol
+[10/04/2012 9:43:14 PM][GarenaInterface] Asynkritos with ID 73784950: Well maybe if I had an instructor it couldnt be so bad.
+[10/04/2012 9:43:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:43:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:43:15 PM][SQLThread] Refresh: found 1201 Users
+[10/04/2012 9:43:15 PM][SQLThread] Refresh: found 0 Auto Announcements
+[10/04/2012 9:43:26 PM][GarenaInterface] GG.Dragon with ID 3774503: i knew a guy who was 15, he was better than i am now
+[10/04/2012 9:43:32 PM][GarenaInterface] lllusions with ID 54244351: 6 me
+[10/04/2012 9:43:33 PM][GarenaInterface] nunbyoungsin with ID 40877228: ?..
+[10/04/2012 9:43:33 PM][GarenaInterface] lllusions with ID 54244351: ^
+[10/04/2012 9:43:36 PM][GarenaInterface] GG.Dragon with ID 3774503: dont use age as an excuse
+[10/04/2012 9:43:38 PM][GarenaInterface] Dont_Rape_Me with ID 74023569 has stopped playing
+[10/04/2012 9:43:40 PM][GarenaInterface] Asynkritos with ID 73784950: haha nice, probably got modivation off trying to hack maplestory and learned c++
+[10/04/2012 9:43:45 PM][GarenaInterface] New member joined: GomNaNa with id 67014410
+[10/04/2012 9:43:45 PM][SQLThread] Creating new connection...
+[10/04/2012 9:43:45 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:43:45 PM][SQLThread] Recovering connection; now at 1 connections
+[10/04/2012 9:43:52 PM][GarenaInterface] Asynkritos with ID 73784950: well I dont have the time gotta focus on dem studies lol
+[10/04/2012 9:44:08 PM][GarenaInterface] GG.Dragon with ID 3774503: what studies, youre in high school -.
+[10/04/2012 9:44:10 PM][GarenaInterface] GG.Dragon with ID 3774503: -.-
+[10/04/2012 9:44:15 PM][GarenaInterface] paparazzzi with ID 60978760: join me!!!
+[10/04/2012 9:44:15 PM][SQLThread] Refreshing internal lists with database...
+[10/04/2012 9:44:15 PM][SQLThread] Currently have 1 connections
+[10/04/2012 9:44:15 PM][SQLThread] Refresh: found 1201 Users
+[10/04/2012 9:44:15 PM][SQLThread] Refresh: found 0 Auto Announcements

@@ -15,13 +15,16 @@ import java.util.Scanner;
 import java.util.Vector;
 import java.util.ArrayList;
 import org.apache.commons.configuration.ConversionException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 /**
  *
  * @author wizardus & GG.Dragon
  */
  
-public class GChatBot implements GarenaListener {
+public class GChatBot implements GarenaListener, ActionListener {
 	//Rank levels
 	public static final int LEVEL_ROOT_ADMIN = 10;
 	public static final int LEVEL_ADMIN = 6;
@@ -42,8 +45,10 @@ public class GChatBot implements GarenaListener {
 	public static final int MEMBERSHIP_GOLD = 100;
 	
 	public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
-	private int rotateAnn = -1; //Track which announcement the bot is up to
 	private final String startTime;
+	private Timer autoAnnTimer;
+	private int rotateAnn = 0;
+	private int announceInterval;
 	
 	public GarenaInterface garena;
 	public PluginManager plugins;
@@ -73,9 +78,11 @@ public class GChatBot implements GarenaListener {
 	private String warcraftVersion; //for informational purposes only, just a string
 	
 	private ArrayList<String> ignoreList;
-	//thread safe objects
+	
 	public TreeNode userDatabaseRoot; //contains the user database, often synched with mysql database. May be quite large
 	
+	//thread safe objects
+	public Vector<String> autoAnn; //contains the auto announcements
 	private HashMap<String, String> aliasToCommand; //maps aliases to the command they alias
 	private HashMap<String, String[]> commandToAlias; //maps commands to all of the command's aliases
 	private Vector<String> rootCommands;
@@ -102,6 +109,8 @@ public class GChatBot implements GarenaListener {
 		safelistCommands = new Vector<String>();
 		publicCommands = new Vector<String>();
 		shitlistCommands = new Vector<String>();
+		
+		autoAnn = new Vector<String>();
 		
 		aliasToCommand = new HashMap<String, String>();
 		commandToAlias = new HashMap<String, String[]>();
@@ -130,9 +139,11 @@ public class GChatBot implements GarenaListener {
 		entryLevels = GRCConfig.configuration.getBoolean("grc_bot_entry_levels", false);
 		minLevel = GRCConfig.configuration.getInt("grc_bot_min_level", 10);
 		maxLevel = GRCConfig.configuration.getInt("grc_bot_max_level", 60);
-		
 		dotaVersion = GRCConfig.getString("grc_bot_dota_version");
 		warcraftVersion = GRCConfig.getString("grc_bot_warcraft_version");
+		announceInterval = GRCConfig.configuration.getInt("grc_bot_auto_ann_interval", 120);
+		
+		autoAnnTimer = new Timer(announceInterval * 1000, this);
 		
 		registerCommand("exit", LEVEL_ROOT_ADMIN);
 		registerCommand("deleteuser", LEVEL_ROOT_ADMIN);
@@ -148,12 +159,16 @@ public class GChatBot implements GarenaListener {
 		registerCommand("quickkick", LEVEL_ADMIN);
 		registerCommand("ban", LEVEL_ADMIN);
 		registerCommand("unban", LEVEL_ADMIN);
+		registerCommand("addannounce", LEVEL_ADMIN);
+		registerCommand("delannounce", LEVEL_ADMIN);
+		registerCommand("setannounceinterval", LEVEL_ADMIN);
 		
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
 		registerCommand("checkuserip", LEVEL_TRUSTED);
 		registerCommand("traceuser", LEVEL_TRUSTED);
 		//registerCommand("traceip", LEVEL_TRUSTED);
+		registerCommand("refresh", LEVEL_TRUSTED);
 		
 		registerCommand("announce", LEVEL_VIP);
 		registerCommand("getpromote", LEVEL_VIP);
@@ -186,6 +201,21 @@ public class GChatBot implements GarenaListener {
 		if(commandline) {
 			CommandInputThread commandThread = new CommandInputThread(this);
 			commandThread.start();
+		}
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == autoAnnTimer) {
+			boolean announce = true;
+			while(announce) {
+				if(rotateAnn < autoAnn.size()-1) {
+					rotateAnn++;
+				} else {
+					rotateAnn = 0;
+				}
+				chatthread.queueChat(autoAnn.get(rotateAnn), chatthread.ANNOUNCEMENT);
+				announce = false;
+			}
 		}
 	}
 
@@ -509,6 +539,50 @@ public class GChatBot implements GarenaListener {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 					return null;
 				}
+			} else if(command.equals("addannounce")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid foramt detected. Correct format is " + trigger + "addannounce <message>. For further help use " + trigger + "help addannounce", member.userID);
+					return null;
+				}
+				if(sqlthread.addAnnounce(payload)) {
+					autoAnn.add(payload);
+					startAnnTimer();
+					chatthread.queueChat("Success! Your message has been added to the auto announcement list", member.userID);
+					return null;
+				} else {
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					return null;
+				}
+			} else if(command.equals("delannounce")) {
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "delannounce <message>. For further help use " + trigger + "help delannounce", member.userID);
+					return null;
+				}
+				if(autoAnn.contains(payload)) { //check if payload is in the autoann vector
+					if(sqlthread.delAnnounce(payload)) {
+						autoAnn.remove(payload);
+						if(autoAnn.size() == 0) { //if autoann is empty, stop
+							autoAnnTimer.stop();
+						}
+						chatthread.queueChat("Success! Your message has been deleted from the auto announcement list", member.userID);
+						return null;
+					} else {
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+						return null;
+					}
+				} else {
+					chatthread.queueChat("Failed. No such message found! Tip: message is case sensitive", member.userID);
+					return null;
+				}
+			} else if(command.equals("setannounceinterval")) {
+				payload = removeSpaces(payload);
+				if(payload.equals("") || !GarenaEncrypt.isInteger(payload)) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "setannounceinterval <time_in_seconds>. For further help use " + trigger + "help setannounceinterval", member.userID);
+					return null;
+				}
+				autoAnnTimer.setDelay(Integer.parseInt(payload) * 1000); //convert seconds to ms
+				chatthread.queueChat("Success! Auto messages will now be sent every " + autoAnnTimer.getDelay() / 1000 + " seconds", member.userID);
+				return null;
 			}
 		}
 		
@@ -546,6 +620,13 @@ public class GChatBot implements GarenaListener {
 				}
 				chatthread.queueChat("http://www.dnsstuff.com/tools/whois/?ip=" + payload + " or http://www.ip-adress.com/ip_tracer/" + payload, member.userID);
 				return null;
+			} else if(command.equals("refresh")) {
+				if(sqlthread.syncDatabase()) {
+					return "Refresh: found " + UserInfo.numUsers + " Users, " + autoAnn.size() + " announcements.";
+				} else {
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					return null;
+				}
 			}
 		}
 		
@@ -883,7 +964,7 @@ public class GChatBot implements GarenaListener {
 			playingPlural = " have";
 		}
 		//There are 100 players in this room. 1 gold member, 99 basic members. 50 have Warcraft 3 open. 200 users are stored in the database
-		return "There are " + numPlayers + " players in this room. " + numGold + goldPlural + ", " + numBasic + basicPlural + ". " + numPlaying + playingPlural + " Warcraft 3 open. " + UserInfo.numUsers + " users are stored in the database";
+		return "There are " + numPlayers + " players in this room. " + numGold + goldPlural + ", " + numBasic + basicPlural + ". " + numPlaying + playingPlural + " Warcraft 3 open. ";
 	}
 	
 	public void commandList(int memberRank) {
@@ -1440,6 +1521,12 @@ public class GChatBot implements GarenaListener {
 	public void exit() {
 		garena.disconnectRoom();
 		System.exit(0);
+	}
+	
+	public void startAnnTimer() {
+		if(!autoAnnTimer.isRunning()) { //if timer isn't running, start
+			autoAnnTimer.start();
+		}
 	}
 	
 	public static String arrayToString(String[] a) {

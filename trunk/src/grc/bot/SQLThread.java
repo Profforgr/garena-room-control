@@ -47,7 +47,7 @@ public class SQLThread extends Thread {
 		password = GRCConfig.configuration.getString("grc_db_password");
 		botId = GRCConfig.configuration.getInt("grc_bot_id", 0); //Default 0
 		bannedWordDetectType = GRCConfig.configuration.getInt("grc_bot_detect", 3); //Default 3
-		dbRefreshRate = GRCConfig.configuration.getInt("grc_db_refresh_rate", 60); //Default 60 seconds, 1 minute
+		dbRefreshRate = GRCConfig.configuration.getInt("grc_db_refresh_rate", 86400); //Default 86400 seconds, 1 hour
 	}
 
 	public void init() {
@@ -87,6 +87,39 @@ public class SQLThread extends Thread {
 			connections.add(connection);
 			Main.println("[SQLThread] Recovering connection; now at " + connections.size() + " connections", Main.DATABASE);
 		}
+	}
+	
+	public boolean addAnnounce(String message) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO phrases (id, type, phrase) VALUES (NULL, ?, ?)");
+			statement.setString(1, "autoannounce");
+			statement.setString(2, message);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to add announcement: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
+	
+	public boolean delAnnounce(String message) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("DELETE FROM phrases WHERE phrase=?");
+			statement.setString(1, message);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to delete announcement: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
 	}
 	
 	public String getBanInfo(String user) {
@@ -283,10 +316,11 @@ public class SQLThread extends Thread {
 		return false;
 	}
 	
-	//sync user database with mysql database
+	//sync database with mysql database
 	//unfortunately the best way to do this is to remake the userDB tree each time
 	public boolean syncDatabase() {
 		try {
+			/* sync user database */
 			Connection connection = connection();
 			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby FROM users");
 			ResultSet result = statement.executeQuery();
@@ -315,6 +349,14 @@ public class SQLThread extends Thread {
 				bot.addUserByName(newUser, bot.userDatabaseRoot);
 				UserInfo.numUsers++;
 			}
+			
+			/* sync auto announcement database */
+			result = statement.executeQuery("SELECT phrase FROM phrases WHERE type='autoannounce'");
+			bot.autoAnn.clear();
+			while(result.next()) {
+				bot.autoAnn.add(result.getString("phrase"));
+			}
+			bot.addRoot();
 			return true;
 		} catch(SQLException e) {
 			//give error information to Main
@@ -328,36 +370,8 @@ public class SQLThread extends Thread {
 		while(true) {
 			if(initial) {
 				Connection connection = connection();
-				/*try {
-					Main.println("[SQLThread] Creating bans table if not exists...");
-					Statement statement = connection.createStatement();
-					statement.execute("CREATE TABLE IF NOT EXISTS bans (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid int(11) NOT NULL, server varchar(100) NOT NULL, name varchar(15) NOT NULL, ip varchar(15) NOT NULL, date datetime NOT NULL, gamename varchar(31) NOT NULL, admin varchar(15) NOT NULL, reason varchar(255) NOT NULL, gamecount int(11) NOT NULL DEFAULT '0', expiredate varchar(31) NOT NULL DEFAULT '', warn int(11) NOT NULL DEFAULT '0') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
-				} catch(SQLException e) {
-					if(Main.DEBUG) {
-						e.printStackTrace();
-					}
-					Main.println("[SQLThread] Error while creating bans table: " + e.getLocalizedMessage());
-				}
-				try {
-					Main.println("[SQLThread] Creating kicks table if not exists...");
-					Statement statement = connection.createStatement();
-					statement.execute("CREATE TABLE IF NOT EXISTS kicks (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, botid int(11) NOT NULL, server varchar(100) NOT NULL, name varchar(15) NOT NULL, ip varchar(15) NOT NULL, date datetime NOT NULL, admin varchar(15) NOT NULL, reason varchar (150) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
-				} catch(SQLException e) {
-					if(Main.DEBUG) {
-						e.printStackTrace();
-					}
-					Main.println("[SQLThread] Error while creating kicks table: " + e.getLocalizedMessage());
-				}
-				try {
-					Main.println("[SQLThread] Creating phrases table if not exists...");
-					Statement statement = connection.createStatement();
-					statement.execute("CREATE TABLE IF NOT EXISTS phrases (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, type varchar(100) NOT NULL, phrase varchar(150) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
-				} catch(SQLException e) {
-					if(Main.DEBUG) {
-						e.printStackTrace();
-					}
-					Main.println("[SQLThread] Error while creating phrases table: " + e.getLocalizedMessage());
-				}*/
+				
+				/* users table */
 				try {
 					Main.println("[SQLThread] Creating users table if not exists...", Main.DATABASE);
 					
@@ -369,6 +383,8 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Error while creating users table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
+				
+				/* bans table */
 				try {
 					Main.println("[SQLThread] Creating bans table if not exists...", Main.DATABASE);
 					Statement statement = connection.createStatement();
@@ -379,6 +395,8 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Error while creating bans table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
+				
+				/* unbans table */
 				try {
 					Main.println("[SQLThread] Creating unbans table if not exists...", Main.DATABASE);
 					Statement statement = connection.createStatement();
@@ -390,6 +408,18 @@ public class SQLThread extends Thread {
 					Main.stackTrace(e);
 				}
 				connectionReady(connection);
+				
+				/* phrases table */
+				try {
+					Main.println("[SQLThread] Creating phrases table if not exists...", Main.DATABASE);
+					Statement statement = connection.createStatement();
+					//not sure how to write this statement without it being a block of text
+					statement.execute("CREATE TABLE IF NOT EXISTS phrases (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, type varchar(100) NOT NULL, phrase varchar(150) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
+				} catch(SQLException e) {
+					//give error information to Main
+					Main.println("[SQLThread] Error while creating phrases table: " + e.getLocalizedMessage(), Main.ERROR);
+					Main.stackTrace(e);
+				}
 			}
 			Main.println("[SQLThread] Refreshing internal lists with database...", Main.DATABASE);
 			
@@ -397,13 +427,12 @@ public class SQLThread extends Thread {
 			syncDatabase();
 			
 			Main.println("[SQLThread] Refresh: found " + UserInfo.numUsers + " Users", Main.DATABASE);
+			Main.println("[SQLThread] Refresh: found " + bot.autoAnn.size() + " Auto Announcements", Main.DATABASE);
 			
 			
 			if(initial) {
 				initial = false;
 			}
-			
-			bot.addRoot();
 			
 			try {
 				Thread.sleep(dbRefreshRate*1000);
