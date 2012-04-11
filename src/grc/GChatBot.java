@@ -167,7 +167,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("findip", LEVEL_TRUSTED);
 		registerCommand("checkuserip", LEVEL_TRUSTED);
 		registerCommand("traceuser", LEVEL_TRUSTED);
-		//registerCommand("traceip", LEVEL_TRUSTED);
+		registerCommand("traceip", LEVEL_TRUSTED);
 		registerCommand("refresh", LEVEL_TRUSTED);
 		
 		registerCommand("announce", LEVEL_VIP);
@@ -716,6 +716,19 @@ public class GChatBot implements GarenaListener, ActionListener {
 				return "Online since: " + startTime;
 			} else if(command.equals("version")) {
 				return "Current DotA version is " + dotaVersion + ", current Warcraft 3 version is " + warcraftVersion;
+			} else if(command.equals("alias")) {
+				payload = removeSpaces(payload);
+				if(payload.equals("")) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "alias <command>. For further help use " + trigger + "help alias", member.userID);
+					return null;
+				}
+				String cmd_check = processAlias(payload);
+				if(commandToAlias.containsKey(cmd_check)) {
+					return "Aliases: " + arrayToString(commandToAlias.get(cmd_check));
+				} else {
+					chatthread.queueChat("Command has no aliases or command not found!", member.userID);
+					return null;
+				}
 			}
 		}
 		
