@@ -435,7 +435,7 @@ public class SQLThread extends Thread {
 			}
 			
 			try {
-				Thread.sleep(dbRefreshRate*1000);
+				Thread.sleep(dbRefreshRate*1000); //convert seconds to ms
 			} catch(InterruptedException e) {
 				//give error information to Main
 				Main.println("[SQLThread] Run sleep was interrupted: " + e.getLocalizedMessage(), Main.ERROR);
