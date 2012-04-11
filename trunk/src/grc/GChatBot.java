@@ -194,7 +194,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		//registerCommand("allstaff", public_level);
 		//registerCommand("staff", public_level);
 		//registerCommand("creater", public_level);
-		//registerCommand("alias", public_level);
+		registerCommand("alias", public_level);
 		//registerCommand("help", public_level);
 		
 		//start input thread
