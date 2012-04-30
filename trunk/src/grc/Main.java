@@ -249,7 +249,7 @@ public class Main {
 				garena.disconnectRoom();
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(10000);
 				} catch(InterruptedException e) {}
 
 				initRoom(true);
