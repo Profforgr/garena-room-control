@@ -1065,6 +1065,7 @@ public class GarenaInterface {
 	}
 
 	public void processMemberList(int packet_size, ByteBuffer lbuf) throws IOException {
+		hasRoomList = false;
 		lbuf.clear();
 		//read 8 bytes
 		byte[] tmp = new byte[8];
@@ -1079,6 +1080,8 @@ public class GarenaInterface {
 
 		int num_members = lbuf.getInt(4);
 		Main.println("[GInterface] There are " + num_members + " members in this room", Main.ROOM);
+		
+		members.clear(); //in case of reconnecting when dc
 
 		for(int i = 0; i < num_members; i++) {
 			readMemberInfo(64, lbuf);
@@ -1091,7 +1094,6 @@ public class GarenaInterface {
 		}
 
 		displayMemberInfo();
-		
 		hasRoomList = true;
 	}
 
