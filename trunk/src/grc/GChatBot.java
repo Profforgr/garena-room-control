@@ -162,6 +162,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("addannounce", LEVEL_ADMIN);
 		registerCommand("delannounce", LEVEL_ADMIN);
 		registerCommand("setannounceinterval", LEVEL_ADMIN);
+		registerCommand("reconnect", LEVEL_ADMIN);
 		
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
@@ -404,7 +405,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
 						Main.stackTrace(e);
 					}
-					chatthread.queueChat("For information about this kick use " + trigger + "kickinfo " + victim.username, chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
 					return null;
 				} else {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
@@ -445,7 +446,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Main.stackTrace(e);
 					}
 					garena.unban(victim.username);
-					chatthread.queueChat("For information about this kick use " + trigger + "kickinfo " + victim.username, chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
 					return null;
 				} else {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
@@ -582,6 +583,9 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				autoAnnTimer.setDelay(Integer.parseInt(payload) * 1000); //convert seconds to ms
 				chatthread.queueChat("Success! Auto messages will now be sent every " + autoAnnTimer.getDelay() / 1000 + " seconds", member.userID);
+				return null;
+			} else if(command.equals("reconnect")) {
+				main.reconnectRoom();
 				return null;
 			}
 		}
