@@ -179,8 +179,6 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("whoisuid", LEVEL_SAFELIST);
 		registerCommand("roomstats", LEVEL_SAFELIST);
 		registerCommand("random", LEVEL_SAFELIST);
-		registerCommand("8ball", LEVEL_SAFELIST);
-		registerCommand("slap", LEVEL_SAFELIST);
 		//registerCommand("status", LEVEL_SAFELIST);
 		
 		int public_level = LEVEL_PUBLIC;
@@ -188,6 +186,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 			public_level = LEVEL_SAFELIST;
 		}
 		
+		registerCommand("8ball", public_level);
+		registerCommand("slap", public_level);
 		registerCommand("whoami", public_level);
 		registerCommand("commands", public_level);
 		registerCommand("baninfo", public_level);
@@ -695,15 +695,6 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				long random = (long)(Math.random()*scale)+1;
 				return "You randomed: " + random;
-			} else if(command.equals("8ball")) {
-				return magicEightBall();
-			} else if(command.equals("slap")) {
-				String tempString = removeSpaces(payload);
-				if(tempString.equals("")) {
-					int randomUser = (int)(Math.random()*garena.members.size()); //no +1 because array starts at 0
-					payload = garena.members.get(randomUser).username;
-				}
-				return slap(member.username, payload);
 			}
 		}
 		
@@ -744,6 +735,15 @@ public class GChatBot implements GarenaListener, ActionListener {
 					chatthread.queueChat("Command has no aliases or command not found!", member.userID);
 					return null;
 				}
+			} else if(command.equals("8ball")) {
+				return magicEightBall();
+			} else if(command.equals("slap")) {
+				String tempString = removeSpaces(payload);
+				if(tempString.equals("")) {
+					int randomUser = (int)(Math.random()*garena.members.size()); //no +1 because array starts at 0
+					payload = garena.members.get(randomUser).username;
+				}
+				return slap(member.username, payload);
 			}
 		}
 		
