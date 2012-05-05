@@ -179,6 +179,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("whoisuid", LEVEL_SAFELIST);
 		registerCommand("roomstats", LEVEL_SAFELIST);
 		registerCommand("random", LEVEL_SAFELIST);
+		registerCommand("8ball", LEVEL_SAFELIST);
+		registerCommand("slap", LEVEL_SAFELIST);
 		//registerCommand("status", LEVEL_SAFELIST);
 		
 		int public_level = LEVEL_PUBLIC;
@@ -693,6 +695,15 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				long random = (long)(Math.random()*scale)+1;
 				return "You randomed: " + random;
+			} else if(command.equals("8ball")) {
+				return magicEightBall();
+			} else if(command.equals("slap")) {
+				String tempString = removeSpaces(payload);
+				if(tempString.equals("")) {
+					int randomUser = (int)(Math.random()*garena.members.size()); //no +1 because array starts at 0
+					payload = garena.members.get(randomUser).username;
+				}
+				return slap(member.username, payload);
 			}
 		}
 		
@@ -801,6 +812,112 @@ public class GChatBot implements GarenaListener, ActionListener {
 			}
 		}
 		return listOfUsers;
+	}
+	
+	public String slap(String user, String target) {
+		UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot);
+		if(targetUser != null) {
+			if(!targetUser.properUsername.equals("unknown")) {
+				/* if user exists and has a proper username, use it instead of target */
+				target = "<" + targetUser.properUsername + ">";
+			}
+		}
+		user = "<" + user + ">"; //so you can find yourself in room
+		if(user.equals(target)) {
+			int scale = 7;
+			int random = (int)(Math.random()*scale) + 1;
+			switch(random) {
+				case 1:
+					return user + " slaps himself with a large trout.";
+				case 2:
+					return user + " slaps himself with a pink Macintosh.";
+				case 3:
+					return user + " throws a Playstation 3 at himself.";
+				case 4:
+					return user + " drives a car over himself.";
+				case 5:
+					return user + " steals his cookies. mwahahah!";
+				case 6:
+					return user + " burns his house.";
+				case 7:
+					return user + " finds his picture on uglypeople.com.";
+				default:
+					return "";
+			}
+		} else {
+			int scale = 8;
+			int random = (int)(Math.random()*scale) + 1;
+			switch(random) {
+				case 1:
+					return user + " slaps " + target + " with a large trout.";
+				case 2:
+					return user + " slaps " + target + " with a pink Macintosh.";
+				case 3:
+					return user + " throws a Playstation 3 at " + target + ".";
+				case 4:
+					return user + " drives a car over " + target + ".";
+				case 5:
+					return user + " steals " + target + "'s cookies. mwahahah!";
+				case 6:
+					return user + " washes " + target + "'s car. Oh, the irony!";
+				case 7:
+					return user + " burns " + target + "'s house.";
+				case 8:
+					return user + " finds " + target + "'s picture on uglypeople.com.";
+				default:
+					return "";
+			}
+		}
+	}
+	
+	public String magicEightBall() {
+		//based on info from http://en.wikipedia.org/wiki/Magic_8-Ball
+		int scale = 20;
+		int random = (int)(Math.random()*scale) + 1;
+		switch(random) {
+			case 1:
+				return "It is certain";
+			case 2:
+				return "It is decidedly so";
+			case 3:
+				return "Without a doubt";
+			case 4:
+				return "Yes – definitely";
+			case 5:
+				return "You may rely on it";
+			case 6:
+				return "As I see it, yes";
+			case 7:
+				return "Most likely";
+			case 8:
+				return "Outlook good";
+			case 9:
+				return "Signs point to yes";
+			case 10:
+				return "Yes";
+			case 11:
+				return "Reply hazy, try again";
+			case 12:
+				return "Ask again later";
+			case 13:
+				return "Better not tell you now";
+			case 14:
+				return "Cannot predict now";
+			case 15:
+				return "Concentrate and ask again";
+			case 16:
+				return "Don't count on it";
+			case 17:
+				return "My reply is no";
+			case 18:
+				return "My sources say no";
+			case 19:
+				return "Outlook not so good";
+			case 20:
+				return "Very doubtful";
+			default:
+				return "";
+		}
 	}
 	
 	public void traceUser(String payload, MemberInfo member) {
