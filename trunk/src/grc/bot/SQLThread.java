@@ -407,7 +407,6 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Error while creating unbans table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
-				connectionReady(connection);
 				
 				/* phrases table */
 				try {
@@ -420,6 +419,7 @@ public class SQLThread extends Thread {
 					Main.println("[SQLThread] Error while creating phrases table: " + e.getLocalizedMessage(), Main.ERROR);
 					Main.stackTrace(e);
 				}
+				connectionReady(connection);
 			}
 			Main.println("[SQLThread] Refreshing internal lists with database...", Main.DATABASE);
 			
