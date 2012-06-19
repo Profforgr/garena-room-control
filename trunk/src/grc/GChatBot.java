@@ -198,7 +198,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		//registerCommand("staff", public_level);
 		//registerCommand("creater", public_level);
 		registerCommand("alias", public_level);
-		//registerCommand("help", public_level);
+		registerCommand("help", public_level);
 		
 		//start input thread
 		if(commandline) {
@@ -280,7 +280,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return "Failed. You can't delete a Root Admin!";
 				}
 				if(sqlthread.deleteUser(target.toLowerCase())) {
-					//cant be bothered to remove the user from binary tree, it'll be deleted when it refreshes
+					sqlthread.syncDatabase();
 					return "Success! " + targetUser.username + " has been deleted";
 				} else {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
@@ -457,7 +457,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			} else if(command.equals("ban")) {
 				String[] parts = payload.split(" ", 3);
 				if(parts.length < 3 || !GarenaEncrypt.isInteger(parts[1])) {
-					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "ban <username> <length_in_hours> <reason>. For further help use " + trigger + "help ban", member.userID);
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "ban <username> <time_in_hours> <reason>. For further help use " + trigger + "help ban", member.userID);
 					return null;
 				}
 				String target = trimUsername(removeSpaces(parts[0])); //format payload into something easier to process
@@ -728,7 +728,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "alias <command>. For further help use " + trigger + "help alias", member.userID);
 					return null;
 				}
-				String cmd_check = processAlias(payload);
+				String cmd_check = processAlias(payload.toLowerCase());
 				if(commandToAlias.containsKey(cmd_check)) {
 					return "Aliases: " + arrayToString(commandToAlias.get(cmd_check));
 				} else {
@@ -744,6 +744,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 					payload = garena.members.get(randomUser).username;
 				}
 				return slap(member.username, payload);
+			} else if(command.equals("help")) {
+				return help(payload);
 			}
 		}
 		
@@ -771,7 +773,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		UserInfo targetUser = getUserFromName(payload.toLowerCase(), userDatabaseRoot); //get userinfo
 		//check if targetuser is ok
 		if(targetUser == null) {
-			chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help traceuser", member.userID);
+			chatthread.queueChat("Failed. " + payload + " is an unknown user! For further help use " + trigger + "help promote", member.userID);
 			return;
 		}
 		//targetuser is ok, continue
@@ -823,50 +825,35 @@ public class GChatBot implements GarenaListener, ActionListener {
 			}
 		}
 		user = "<" + user + ">"; //so you can find yourself in room
-		if(user.equals(target)) {
-			int scale = 7;
-			int random = (int)(Math.random()*scale) + 1;
-			switch(random) {
-				case 1:
-					return user + " slaps himself with a large trout.";
-				case 2:
-					return user + " slaps himself with a pink Macintosh.";
-				case 3:
-					return user + " throws a Playstation 3 at himself.";
-				case 4:
-					return user + " drives a car over himself.";
-				case 5:
-					return user + " steals his cookies. mwahahah!";
-				case 6:
-					return user + " burns his house.";
-				case 7:
-					return user + " finds his picture on uglypeople.com.";
-				default:
-					return "";
-			}
-		} else {
-			int scale = 8;
-			int random = (int)(Math.random()*scale) + 1;
-			switch(random) {
-				case 1:
-					return user + " slaps " + target + " with a large trout.";
-				case 2:
-					return user + " slaps " + target + " with a pink Macintosh.";
-				case 3:
-					return user + " throws a Playstation 3 at " + target + ".";
-				case 4:
-					return user + " drives a car over " + target + ".";
-				case 5:
-					return user + " steals " + target + "'s cookies. mwahahah!";
-				case 6:
-					return user + " washes " + target + "'s car. Oh, the irony!";
-				case 7:
-					return user + " burns " + target + "'s house.";
-				case 8:
-					return user + " finds " + target + "'s picture on uglypeople.com.";
-				default:
-					return "";
-			}
+		int scale = 12;
+		int random = (int)(Math.random()*scale) + 1;
+		switch(random) {
+			case 1:
+				return user + " slaps " + target + " with a large trout.";
+			case 2:
+				return user + " slaps " + target + " with a pink Macintosh.";
+			case 3:
+				return user + " throws a Playstation 3 at " + target + ".";
+			case 4:
+				return user + " drives a car over " + target + ".";
+			case 5:
+				return user + " steals " + target + "'s cookies. mwahahah!";
+			case 6:
+				return user + " washes " + target + "'s car. Oh, the irony!";
+			case 7:
+				return user + " burns " + target + "'s house.";
+			case 8:
+				return user + " finds " + target + "'s picture on uglypeople.com.";
+			case 9:
+				return user + " breaks out the slapping rod and looks sternly at " + target + ".";
+			case 10:
+				return user + " tosses " + target + " into a pile of needles.";
+			case 11:
+				return user + " slaps some sense into " + target + ".";
+			case 12:
+				return user + " throws " + target + " into a rose bush.";
+			default:
+				return "";
 		}
 	}
 	
@@ -1729,6 +1716,91 @@ public class GChatBot implements GarenaListener, ActionListener {
 			return true;
 		} catch(NumberFormatException nfe) {
 			return false;
+		}
+	}
+	
+	public String help(String cmd) {
+		if(cmd.equals("")) {
+			return "Command trigger: '" + trigger + "' Use " + trigger + "help <command> for info on a specific command. For a list of commands use " + trigger + "commands. For a list of aliases of a command use " + trigger + "alias <command>. If you whisper a command to the bot, it will respond in a whisper if possible. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
+		} else {
+			cmd = processAlias(removeSpaces(cmd.toLowerCase()));
+			if(cmd.equals("exit")) {
+				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "exit. Shuts down the bot";
+			} else if(cmd.equals("deleteuser")) {
+				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "deleteuser <username>. Deletes target user from the database";
+			} else if(cmd.equals("addadmin")) {
+				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "addadmin <username>. Promotes target user to Admin rank";
+			} else if(cmd.equals("addtrialadmin")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addtrialadmin <username>. Promotes target user to Trial Admin rank";
+			} else if(cmd.equals("addtrusted")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addtrusted <username>. Promotes target user to Trusted rank";
+			} else if(cmd.equals("addvip")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addvip <username>. Promotes target user to V.I.P. rank";
+			} else if(cmd.equals("promote")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "promote <username>. Promotes target user up one rank";
+			} else if(cmd.equals("demote")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "demote <username>. Demotes target user down one rank";
+			} else if(cmd.equals("kick")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "kick <username> <reason>. Bans the user from the room for 15 minutes. Must have a reason specified";
+			} else if(cmd.equals("quickkick")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "quickkick <username> <reason>. Bans the user from the room for 1 second. Must specify a reason";
+			} else if(cmd.equals("ban")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "ban <username> <time_in_hours> <reason>. Bans the user from the room for specified length of time. Must specify a reason";
+			} else if(cmd.equals("unban")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "unban <username> <reason>. Unbans the user from the room. Must specify a reason.";
+			} else if(cmd.equals("addannounce")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addannounce <message>. Adds the message to a list of messages which are announced every " + autoAnnTimer.getDelay() / 1000 + "seconds";
+			} else if(cmd.equals("delannounce")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "delannounce <message>. Deletes the message from the list of automatic announce messages. Is case sensitive";
+			} else if(cmd.equals("setannounceinterval")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "setannounceinterval <time_in_seconds>. Sets the interval between automatic announce messages from being sent. Must be a valid number";
+			} else if(cmd.equals("reconnect")) {
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "reconnect. Makes the bot rejoin the room with a small delay. Used to fix certain errors";
+			} else if(cmd.equals("clear")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "clear. Clears the chat queue. Used if the bot has too many messages queued up";
+			} else if(cmd.equals("findip")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "findip <ip_address>. Finds all the users in the room who are using the IP address";
+			} else if(cmd.equals("checkuserip")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "checkuserip <username>. Finds all users in the room who share an IP address with target user";
+			} else if(cmd.equals("traceuser")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceuser <username>. Returns 2 website links that give approximate geo location of the IP address";
+			} else if(cmd.equals("traceip")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceip <ip_address>. Returns 2 website links that give approximate geo location of the IP address";
+			} else if(cmd.equals("refresh")) {
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "refresh. Syncs bot memory with MySQL database";
+			} else if(cmd.equals("announce")) {
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "announce <message>. Sends the message as a system message";
+			} else if(cmd.equals("getpromote")) {
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "getpromote <username>. Gets all the players target user has promoted";
+			} else if(cmd.equals("whois")) {
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whois <username>. Returns basic information about target user";
+			} else if(cmd.equals("whoisuid")) {
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whoisuid <uid>. Returns basic information about target UID. Must be a number";
+			} else if(cmd.equals("roomstats")) {
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "roomstats. Returns basic information about the users in the room";
+			} else if(cmd.equals("random")) {
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "random <number>. Randoms a number between 1 and specified number. If no number is given, defaults to 100";
+			} else if(cmd.equals("8ball")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "8ball. Returns a phrase from the popular novelty toy 8ball";
+			} else if(cmd.equals("slap")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "slap <username>. Slaps target user with a random slap phrase. If no username is given, randomly picks a user in the room to slap";
+			} else if(cmd.equals("whoami")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "whoami. Returns basic information about yourself";
+			} else if(cmd.equals("commands")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "commands. Returns a list of commands that you are able to use";
+			} else if(cmd.equals("baninfo")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "baninfo <username>. Returns ban information about target user. Only works on users banned by this bot";
+			} else if(cmd.equals("uptime")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "uptime. Returns the time the bot was started";
+			} else if(cmd.equals("version")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "version. Returns current DotA and Warcraft 3 TFT version";
+			} else if(cmd.equals("alias")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "alias <command>. Returns a list of accepted aliases for specified command";
+			} else if(cmd.equals("help")) {
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "help <command>. Returns help information about the specified command. If no command is given it returns general help information";
+			} else {
+				return "Can not find any help information for specified command. If you think you have received this response in error, contact GG.Dragon";
+			}
 		}
 	}
 }

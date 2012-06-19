@@ -377,7 +377,7 @@ public class SQLThread extends Thread {
 					
 					Statement statement = connection.createStatement();
 					statement.execute(	"CREATE TABLE IF NOT EXISTS users (" + 
-										"id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT " + 
+										"id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, " + 
 										"username varchar(15) NOT NULL, " + 
 										"properusername varchar(15) NOT NULL DEFAULT 'unknown', " + 
 										"uid INT(10) NOT NULL DEFAULT '0', " + 
