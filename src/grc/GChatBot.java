@@ -729,7 +729,11 @@ public class GChatBot implements GarenaListener, ActionListener {
 				if(target == null) {
 					return "Invalid user - can't be found";
 				}
-				return "<" + targetUser + ">'s entry message is: " + targetUser.entryMsg;
+				if(targetUser.properUsername.equals("unknown")) {
+					return "<" + target + ">'s entry message is: " + targetUser.entryMsg;
+				} else {
+					return "<" + targetUser.properUsername + ">'s entry message is: " + targetUser.entryMsg;
+				}
 			}
 		}
 		
