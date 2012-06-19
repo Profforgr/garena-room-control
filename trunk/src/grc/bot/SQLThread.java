@@ -270,7 +270,24 @@ public class SQLThread extends Thread {
 			return true;
 		} catch(SQLException e) {
 			//give error information to Main
-			Main.println("[SQLThread] Unable to update user " + username + ": " + e.getLocalizedMessage(), Main.ERROR);
+			Main.println("[SQLThread] Unable to update " + username + "'s rank: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.stackTrace(e);
+		}
+		return false;
+	}
+	
+	public boolean updateEntryMsg(String username, String msg) {
+		try {
+			Connection connection = connection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE users SET entrymsg=? WHERE username=?");
+			statement.setString(1, msg);
+			statement.setString(2, username);
+			statement.execute();
+			connectionReady(connection);
+			return true;
+		} catch(SQLException e) {
+			//give error information to Main
+			Main.println("[SQLThread] Unable to update " + username + "'s entry message: " + e.getLocalizedMessage(), Main.ERROR);
 			Main.stackTrace(e);
 		}
 		return false;
@@ -322,7 +339,7 @@ public class SQLThread extends Thread {
 		try {
 			/* sync user database */
 			Connection connection = connection();
-			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby FROM users");
+			PreparedStatement statement = connection.prepareStatement("SELECT username, properusername, uid, rank, ip, lastseen, promotedby, entrymsg FROM users");
 			ResultSet result = statement.executeQuery();
 			bot.userDatabaseRoot.clear();
 			UserInfo.numUsers = 0;
@@ -340,6 +357,7 @@ public class SQLThread extends Thread {
 				user.ipAddress = result.getString("ip");
 				user.lastSeen = result.getString("lastseen");
 				user.promotedBy = result.getString("promotedby");
+				user.entryMsg = result.getString("entrymsg");
 				TreeNode newUser = new TreeNode(user);
 				if(user.userID != 0) {
 					//if user does not have a valid uid, don't add to uid sorted database
@@ -384,7 +402,8 @@ public class SQLThread extends Thread {
 										"rank INT(2) NOT NULL DEFAULT '0', " + 
 										"ip varchar(15) NOT NULL DEFAULT 'unknown', " + 
 										"lastseen varchar(31) NOT NULL DEFAULT 'unknown', " + 
-										"promotedby varchar(15) NOT NULL DEFAULT 'unknown') " + 
+										"promotedby varchar(15) NOT NULL DEFAULT 'unknown', " + 
+										"entrymsg varchar(150) NOT NULL DEFAULT '') " + 
 										"ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
 				} catch(SQLException e) {
 					//give error information to Main

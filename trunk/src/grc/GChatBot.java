@@ -163,6 +163,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("delannounce", LEVEL_ADMIN);
 		registerCommand("setannounceinterval", LEVEL_ADMIN);
 		registerCommand("reconnect", LEVEL_ADMIN);
+		registerCommand("entrymessage", LEVEL_ADMIN);
 		
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
@@ -179,6 +180,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("whoisuid", LEVEL_SAFELIST);
 		registerCommand("roomstats", LEVEL_SAFELIST);
 		registerCommand("random", LEVEL_SAFELIST);
+		registerCommand("getentrymessage", LEVEL_SAFELIST);
 		//registerCommand("status", LEVEL_SAFELIST);
 		
 		int public_level = LEVEL_PUBLIC;
@@ -589,6 +591,28 @@ public class GChatBot implements GarenaListener, ActionListener {
 			} else if(command.equals("reconnect")) {
 				main.reconnectRoom();
 				return null;
+			} else if(command.equals("entrymessage")) {
+				if(payload.length() == 0) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "entrymessage <user> <message>. For further help use " + trigger + "help entrymessage", member.userID);
+					return null;
+				}
+				String[] parts = payload.split(" ", 2);
+				if(parts.length < 2) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "entrymessage <user> <message>. For further help use " + trigger + "help entrymessage", member.userID);
+					return null;
+				}
+				String target = trimUsername(parts[0]); //format payload into something easier to process
+				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
+				if(target == null) {
+					return "Invalid user - can't be found";
+				}
+				if(sqlthread.updateEntryMsg(target, parts[1])) {
+					targetUser.entryMsg = parts[1];
+					return "Success - " + target + "'s new custom entry message is: " + targetUser.entryMsg;
+				} else {
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					return null;
+				}
 			}
 		}
 		
@@ -695,6 +719,17 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				long random = (long)(Math.random()*scale)+1;
 				return "You randomed: " + random;
+			} else if(command.equals("getentrymessage")) {
+				String target = trimUsername(removeSpaces(payload));
+				if(target.length() == 0) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "getentrymessage <username>. For further help use " + trigger + "help getentrymessage", member.userID);
+					return null;
+				}
+				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
+				if(target == null) {
+					return "Invalid user - can't be found";
+				}
+				return "<" + targetUser + ">'s entry message is: " + targetUser.entryMsg;
 			}
 		}
 		
@@ -1232,24 +1267,29 @@ public class GChatBot implements GarenaListener, ActionListener {
 	}
 	
 	public void joinAnnouncement(MemberInfo target, UserInfo user) {
-		if(user == null) {
+		if(user == null) { //if user doesn't exist
 			return;
 		}
-		switch(user.rank) {
-			case LEVEL_ROOT_ADMIN:
-				chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
-				return;
-			case LEVEL_ADMIN:
-				chatthread.queueChat("Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
-				return;
-			case LEVEL_TRIAL_ADMIN:
-				chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
-				return;
-			case LEVEL_VIP:
-				chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
-				return;
-			default:
-				return;
+		if(user.entryMsg.length() > 0) { //if user has a custom entry msg
+			chatthread.queueChat(user.entryMsg, chatthread.ANNOUNCEMENT);
+			return;
+		} else { //else display default custom entry msg
+			switch(user.rank) {
+				case LEVEL_ROOT_ADMIN:
+					chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					return;
+				case LEVEL_ADMIN:
+					chatthread.queueChat("Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					return;
+				case LEVEL_TRIAL_ADMIN:
+					chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					return;
+				case LEVEL_VIP:
+					chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					return;
+				default:
+					return;
+			}
 		}
 	}
 	
@@ -1720,7 +1760,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 	}
 	
 	public String help(String cmd) {
-		if(cmd.equals("")) {
+		if(cmd.length() == 0) {
 			return "Command trigger: '" + trigger + "' Use " + trigger + "help <command> for info on a specific command. For a list of commands use " + trigger + "commands. For a list of aliases of a command use " + trigger + "alias <command>. If you whisper a command to the bot, it will respond in a whisper if possible. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
 		} else {
 			cmd = processAlias(removeSpaces(cmd.toLowerCase()));
