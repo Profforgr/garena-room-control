@@ -20,6 +20,7 @@ public class UserInfo {
 	public String ipAddress;
 	public String lastSeen;
 	public String promotedBy;
+	public String entryMsg;
 	
 	public UserInfo() {
 		username = "unknown";
@@ -29,5 +30,6 @@ public class UserInfo {
 		ipAddress = "unknown";
 		lastSeen = "unknown";
 		promotedBy = "unknown";
+		entryMsg = "";
 	}
 }
