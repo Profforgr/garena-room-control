@@ -148,6 +148,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("exit", LEVEL_ROOT_ADMIN);
 		registerCommand("deleteuser", LEVEL_ROOT_ADMIN);
 		registerCommand("addadmin", LEVEL_ROOT_ADMIN);
+		registerCommand("diagnostics", LEVEL_ROOT_ADMIN);
 		//registerCommand("room", LEVEL_ROOT_ADMIN);
 		
 		registerCommand("addtrialadmin", LEVEL_ADMIN);
@@ -164,6 +165,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("setannounceinterval", LEVEL_ADMIN);
 		registerCommand("reconnect", LEVEL_ADMIN);
 		registerCommand("entrymessage", LEVEL_ADMIN);
+		registerCommand("kicktroll", LEVEL_ADMIN);
+		//registerCommand("banbot", LEVEL_ADMIN);
 		
 		registerCommand("clear", LEVEL_TRUSTED);
 		registerCommand("findip", LEVEL_TRUSTED);
@@ -288,6 +291,10 @@ public class GChatBot implements GarenaListener, ActionListener {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 					return null;
 				}
+			} else if(command.equals("diagnostics")) {
+				int uidTreeHeight = getUidTreeHeight(userDatabaseRoot);
+				int nameTreeHeight = getNameTreeHeight(userDatabaseRoot);
+				return "Height of uid tree: " + uidTreeHeight + ". Height of name tree: " + nameTreeHeight;
 			}
 		}
 		
@@ -381,40 +388,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return null;
 				}
 				String target = trimUsername(removeSpaces(parts[0])); //format payload into something easier to process
-				//check if kick is ok
-				if(target.equalsIgnoreCase(member.username)) {
-					return "Failed. You can not kick yourself!";
-				}
-				//don't kick if user is not in room
-				MemberInfo victim = garena.memberFromName(target);
-				if(victim == null) {
-					return "Failed. Unable to find " + target + " in room";
-				}
-				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
-				if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-					return "Failed. " + target + " is a Root Admin!";
-				} else if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
-					return "Failed. " + target + " is an Admin!";
-				}
-				//kick is ok, continue
 				String reason = parts[1];
-				String date = time();
-				String expiry = time(15); //15 minutes for a kick
-				if(sqlthread.ban(victim.username, victim.userID, victim.externalIP.toString().substring(1), member.username, reason, date, expiry, garena.room_id)) {
-					garena.kick(victim, reason);
-					try {
-						Thread.sleep(1100);
-					} catch(InterruptedException e) {
-						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
-						Main.stackTrace(e);
-					}
-					chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
-					return null;
-				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-					return null;
-				}
+				return kick(member, user, target, reason, false);
 			} else if(command.equals("quickkick")) {
 				String[] parts = payload.split(" ", 2);
 				if(parts.length < 2) {
@@ -422,40 +397,8 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return null;
 				}
 				String target = trimUsername(removeSpaces(parts[0])); //format payload into something easier to process
-				//check if quickkick is ok
-				if(target.equalsIgnoreCase(member.username)) {
-					return "Failed. You can't quick kick yourself!";
-				}
-				MemberInfo victim = garena.memberFromName(target);
-				if(victim == null) {
-					return "Failed. Unable to find " + target + " in room";
-				}
-				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
-				if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-					return "Failed. " + target + " is a Root Admin!";
-				} else if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
-					return "Failed. " + target + " is an Admin!";
-				}
-				//quick kick is ok, continue
 				String reason = parts[1];
-				String date = time();
-				String expiry = time(); //no expiry for a quickkick
-				if(sqlthread.ban(victim.username, victim.userID, victim.externalIP.toString().substring(1), member.username, reason, date, expiry, garena.room_id)) {
-					garena.kick(victim, reason);
-					try {
-						Thread.sleep(1100);
-					} catch(InterruptedException e) {
-						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
-						Main.stackTrace(e);
-					}
-					garena.unban(victim.username);
-					chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
-					return null;
-				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-					return null;
-				}
+				return kick(member, user, target, reason, true);
 			} else if(command.equals("ban")) {
 				String[] parts = payload.split(" ", 3);
 				if(parts.length < 3 || !GarenaEncrypt.isInteger(parts[1])) {
@@ -608,11 +551,27 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				if(sqlthread.updateEntryMsg(target, parts[1])) {
 					targetUser.entryMsg = parts[1];
-					return "Success - " + target + "'s new custom entry message is: " + targetUser.entryMsg;
+					if(targetUser.properUsername.equals("unknown")) {
+						return "Success - " + target + "'s new custom entry message is: " + targetUser.entryMsg;
+					} else {
+						return "Success - " + targetUser.properUsername + "'s new custom entry message is: " + targetUser.entryMsg;
+					}
 				} else {
 					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 					return null;
 				}
+			} else if(command.equals("kicktroll")) {
+				String[] parts = payload.split(" ", 2);
+				String target = trimUsername(removeSpaces(parts[0])); //format payload into something easier to process
+				if(target.length() == 0) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "kicktroll <username>. For further help use " + trigger + "help kicktroll", member.userID);
+					return null;
+				}
+				String reason = "troll";
+				if(parts.length > 1) {
+					reason += " - " + parts[1];
+				}
+				return kick(member, user, target, reason, true);
 			}
 		}
 		
@@ -805,6 +764,58 @@ public class GChatBot implements GarenaListener, ActionListener {
 		//if command is not recognised
 		chatthread.queueChat("Invalid command. Please check your spelling and try again", member.userID);
 		return null;
+	}
+	
+	public String kick(MemberInfo member, UserInfo user, String target, String reason, boolean quick) {
+		//check if kick is ok
+		if(target.equalsIgnoreCase(member.username)) {
+			return "Failed. You can't kick yourself!";
+		}
+		//don't kick if user is not in room
+		MemberInfo victim = garena.memberFromName(target);
+		if(victim == null) {
+			return "Failed. Unable to find " + target + " in room";
+		}
+		//don't kick if target is an admin
+		UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
+		if(targetUser.rank == LEVEL_ROOT_ADMIN) {
+			return "Failed. " + target + " is a Root Admin!";
+		} else if(targetUser.rank == LEVEL_ADMIN && user.rank != LEVEL_ROOT_ADMIN) {
+			return "Failed. " + target + " is an Admin!";
+		}
+		//kick is ok, continue
+		String date = time();
+		String expiry;
+		if(quick) { //if quickkick
+			expiry = date; //no ban time for a quickkick
+		} else { //if normal kick
+			expiry = time(15); //15 minutes for a kick
+		}
+		if(sqlthread.ban(victim.username, victim.userID, victim.externalIP.toString().substring(1), member.username, reason, date, expiry, garena.room_id)) {
+			garena.kick(victim, reason);
+			try {
+				Thread.sleep(1100);
+			} catch(InterruptedException e) {
+				//give error information to Main
+				Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.stackTrace(e);
+			}
+			if(quick) { //unban straight away if a quick kick
+				garena.unban(victim.username);
+				try {
+					Thread.sleep(1000);
+				} catch(InterruptedException e) {
+					//give error information to Main
+					Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+					Main.stackTrace(e);
+				}
+			}
+			chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
+			return null;
+		} else {
+			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+			return null;
+		}
 	}
 	
 	public void getPromote(String payload, MemberInfo member) {
@@ -1760,6 +1771,22 @@ public class GChatBot implements GarenaListener, ActionListener {
 			return true;
 		} catch(NumberFormatException nfe) {
 			return false;
+		}
+	}
+	
+	public int getNameTreeHeight(TreeNode node) {
+		if(node == null) {
+			return 0;
+		} else {
+			return Math.max(getNameTreeHeight(node.getLeftUser()), getNameTreeHeight(node.getRightUser())) + 1;
+		}
+	}
+	
+	public int getUidTreeHeight(TreeNode node) {
+		if(node == null) {
+			return 0;
+		} else {
+			return Math.max(getUidTreeHeight(node.getLeftUid()), getUidTreeHeight(node.getRightUid())) + 1;
 		}
 	}
 	
