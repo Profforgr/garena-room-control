@@ -151,10 +151,6 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("diagnostics", LEVEL_ROOT_ADMIN);
 		//registerCommand("room", LEVEL_ROOT_ADMIN);
 		
-		//registerCommand("addtrialadmin", LEVEL_ADMIN);
-		//registerCommand("addtrusted", LEVEL_ADMIN);
-		//registerCommand("addvip", LEVEL_ADMIN);
-		registerCommand("demote", LEVEL_ADMIN);
 		registerCommand("kick", LEVEL_ADMIN);
 		registerCommand("quickkick", LEVEL_ADMIN);
 		registerCommand("ban", LEVEL_ADMIN);
@@ -177,6 +173,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("announce", LEVEL_VIP);
 		registerCommand("getpromote", LEVEL_VIP);
 		registerCommand("promote", LEVEL_VIP);
+		registerCommand("demote", LEVEL_ADMIN);
 		//registerCommand("getunban", LEVEL_VIP);
 		
 		registerCommand("whois", LEVEL_SAFELIST);
@@ -727,6 +724,9 @@ public class GChatBot implements GarenaListener, ActionListener {
 		}
 		//do checks for loopholes so users can't mess with ranks
 		//if it's ok, promote
+		if(newRank < target.rank) { //don't let users promote down ranks
+			return "Failed - you can't promote users down ranks. Use " + trigger + "demote instead";
+		}
 		switch(newRank) {
 			case LEVEL_ROOT_ADMIN:
 				return "Failed - you can't promote users to Root Admin!";
@@ -755,19 +755,83 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return setRank(member, target, newRank);
 				}
 			case LEVEL_SAFELIST:
-				if(user.rank < LEVEL_VIP) {
+				if(user.rank < LEVEL_VIP) { //not actually needed because promote requires vip rank anyway
 					return "Failed - you must be at least a V.I.P. to promote users to Safelist";
 				} else { //promote is ok
 					return setRank(member, target, newRank);
 				}
 			case LEVEL_PUBLIC:
-				if(user.rank < LEVEL_ADMIN) {
+				if(user.rank < LEVEL_TRUSTED) {
 					return "Failed - you must be at least Trusted to remove users from shitlist";
 				} else { //promote is ok
 					return setRank(member, target, newRank);
 				}
-			default:
-				return "Failed - you can't promote people to shitlist, use " + trigger + "demote instead";
+			default: //this should never occur
+				return "Failed - you can't promote users to the Shitlist, use " + trigger + "demote instead";
+		}
+	}
+	
+	public String demote(MemberInfo member, UserInfo user, UserInfo target) {
+		String rank = getTitle(target.rank - 1); //get name for rank above current rank
+		return promote(member, user, target, rank);
+	}
+	
+	public String demote(MemberInfo member, UserInfo user, UserInfo target, String rank) {
+		//get rank number from name
+		int newRank = getRankNumber(rank.toLowerCase());
+		if(newRank < 0) { //if returned rank is negative, invalid rank name was given
+			return "Failed - invalid rank!";
+		}
+		//do checks for loopholes so users can't mess with ranks
+		//if it's ok, demote
+		if(newRank > target.rank) { //don't let users demote up ranks
+			return "Failed - you can't demote users up ranks. Use " + trigger + "promote instead";
+		} else if(user.rank < target.rank) {
+			return "Failed - you can't demote users above your rank";
+		}
+		switch(newRank) {
+			case LEVEL_ROOT_ADMIN:
+				return "Failed - you can't demote users to Root Admin!";
+			case LEVEL_ADMIN:
+				return "Failed - you can't demote users to Admin!";
+			case LEVEL_TRIAL_ADMIN:
+				if(user.rank < LEVEL_ROOT_ADMIN) {
+					return "Failed - only the Root Admin may demote Admins";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
+			case LEVEL_TRUSTED:
+				if(user.rank < LEVEL_ADMIN) {
+					return "Failed - you must be at least an Admin to demote users to Trusted";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
+			case LEVEL_VIP:
+				if(user.rank < LEVEL_ADMIN) {
+					return "Failed - you must be at least an Admin to demote users to V.I.P.";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
+			case LEVEL_SAFELIST:
+				if(user.rank < LEVEL_ADMIN) {
+					return "Failed - you must be at least an Admin to demote users to Safelist";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
+			case LEVEL_PUBLIC:
+				if(user.rank < LEVEL_VIP) { //not actually needed because demote requires vip rank anyway
+					return "Failed - you must be at least a V.I.P. to demote users to public";
+				} else if(!user.username.equalsIgnoreCase(target.promotedBy) && user.rank == LEVEL_VIP) { //if a vip, can only demote users you promtoed
+					return "Failed - you can only demote users you have promoted";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
+			default: //shitlist
+				if(user.rank < LEVEL_TRUSTED) {
+					return "Failed - you must be at least Trusted to add users to the Shitlist";
+				} else { //demote is ok
+					return setRank(member, target, newRank);
+				}
 		}
 	}
 	
@@ -777,7 +841,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			targetUser.rank = rank;
 			targetUser.promotedBy = admin.username;
 			//Success! <GG.Dragon> is now an Admin!
-			return "Success - <" + targetUser.properUsername + "> is now " + getGrammaticalTitle(rank) + "!";
+			return "Success - <" + targetUser.properUsername + "> is now " + getGrammaticalTitle(rank);
 		} else {
 			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
 			return null;
@@ -1068,41 +1132,6 @@ public class GChatBot implements GarenaListener, ActionListener {
 			return "There are no users in the room with IP address: " + payload + ".";
 		}
 	}
-	
-	/*public String setRank(MemberInfo admin, UserInfo targetUser, int rank) {
-		if(targetUser.username.equalsIgnoreCase(admin.username)) {
-			return "Failed. You can't change your own rank!";
-		}
-		if(targetUser != null) { //if user exists in database
-			//prevent demotion of root admins
-			if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-				return "Failed. It's impossible to demote a Root Admin!";
-			}
-			//update rank in database and in memory
-			if(sqlthread.updateRank(targetUser.username, admin.username, rank)) {
-				targetUser.rank = rank;
-				targetUser.promotedBy = admin.username;
-				//Success! <GG.Dragon> is now an Admin!
-				return "Success! <" + targetUser.properUsername + "> is now " + getGrammaticalTitle(rank);
-			} else {
-				chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-				return null;
-			}
-		} else { //if user doesn't exist in database create new user
-			if(sqlthread.addUser(targetUser.username, "unknown", 0, rank, "unknown", "unknown", admin.username)) {
-				UserInfo newUser = new UserInfo();
-				newUser.username = targetUser.username;
-				newUser.rank = rank;
-				newUser.promotedBy = admin.username;
-				//add user to database
-				addUserByName(new TreeNode(newUser), userDatabaseRoot);
-				return "Success! " + targetUser.username + " is now " + getGrammaticalTitle(rank);
-			} else {
-				chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
-				return null;
-			}
-		}
-	}*/
 	
 	public String whois(String target) {
 		UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot);
@@ -1832,83 +1861,75 @@ public class GChatBot implements GarenaListener, ActionListener {
 	
 	public String help(String cmd) {
 		if(cmd.length() == 0) {
-			return "Command trigger: '" + trigger + "' Use " + trigger + "help <command> for info on a specific command. For a list of commands use " + trigger + "commands. For a list of aliases of a command use " + trigger + "alias <command>. If you whisper a command to the bot, it will respond in a whisper if possible. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
+			return "Command trigger: '" + trigger + "' Use " + trigger + "help [command] for info on a specific command. For a list of commands use " + trigger + "commands. For a list of aliases of a command use " + trigger + "alias [command]. If you whisper a command to the bot, it will respond in a whisper if possible. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
 		} else {
 			cmd = processAlias(removeSpaces(cmd.toLowerCase()));
 			if(cmd.equals("exit")) {
 				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "exit. Shuts down the bot";
 			} else if(cmd.equals("deleteuser")) {
-				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "deleteuser <username>. Deletes target user from the database";
-			} else if(cmd.equals("addadmin")) {
-				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "addadmin <username>. Promotes target user to Admin rank";
-			} else if(cmd.equals("addtrialadmin")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addtrialadmin <username>. Promotes target user to Trial Admin rank";
-			} else if(cmd.equals("addtrusted")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addtrusted <username>. Promotes target user to Trusted rank";
-			} else if(cmd.equals("addvip")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addvip <username>. Promotes target user to V.I.P. rank";
+				return "Rank required: " + getTitle(LEVEL_ROOT_ADMIN) + ". Format: " + trigger + "deleteuser [username]. Deletes target user from the database";
 			} else if(cmd.equals("promote")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "promote <username>. Promotes target user up one rank";
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "promote [username] [rank]. Rank is optional. Promotes up one rank if no rank is given. V.I.P. users can only promote users up to Safelist";
 			} else if(cmd.equals("demote")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "demote <username>. Demotes target user down one rank";
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "demote [username] [rank]. Rank is optional. Demotes down one rank if no rank is given. V.I.P. users can only demote users they promoted";
 			} else if(cmd.equals("kick")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "kick <username> <reason>. Bans the user from the room for 15 minutes. Must have a reason specified";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "kick [username] [reason]. Bans the user from the room for 15 minutes. Must have a reason specified";
 			} else if(cmd.equals("quickkick")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "quickkick <username> <reason>. Bans the user from the room for 1 second. Must specify a reason";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "quickkick [username] [reason]. Bans the user from the room for 1 second. Must specify a reason";
 			} else if(cmd.equals("ban")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "ban <username> <time_in_hours> <reason>. Bans the user from the room for specified length of time. Must specify a reason";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "ban [username] [time_in_hours] [reason}. Bans the user from the room for specified length of time. Must specify a reason";
 			} else if(cmd.equals("unban")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "unban <username> <reason>. Unbans the user from the room. Must specify a reason.";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "unban [username] [reason]. Unbans the user from the room. Must specify a reason.";
 			} else if(cmd.equals("addannounce")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addannounce <message>. Adds the message to a list of messages which are announced every " + autoAnnTimer.getDelay() / 1000 + "seconds";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "addannounce [message]. Adds the message to a list of messages which are announced every " + autoAnnTimer.getDelay() / 1000 + "seconds";
 			} else if(cmd.equals("delannounce")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "delannounce <message>. Deletes the message from the list of automatic announce messages. Is case sensitive";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "delannounce [message]. Deletes the message from the list of automatic announce messages. Is case sensitive";
 			} else if(cmd.equals("setannounceinterval")) {
-				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "setannounceinterval <time_in_seconds>. Sets the interval between automatic announce messages from being sent. Must be a valid number";
+				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "setannounceinterval [time_in_seconds]. Sets the interval between automatic announce messages from being sent. Must be a valid number";
 			} else if(cmd.equals("reconnect")) {
 				return "Rank required: " + getTitle(LEVEL_ADMIN) + ". Format: " + trigger + "reconnect. Makes the bot rejoin the room with a small delay. Used to fix certain errors";
 			} else if(cmd.equals("clear")) {
 				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "clear. Clears the chat queue. Used if the bot has too many messages queued up";
 			} else if(cmd.equals("findip")) {
-				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "findip <ip_address>. Finds all the users in the room who are using the IP address";
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "findip [ip_address]. Finds all the users in the room who are using the IP address";
 			} else if(cmd.equals("checkuserip")) {
-				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "checkuserip <username>. Finds all users in the room who share an IP address with target user";
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "checkuserip [username]. Finds all users in the room who share an IP address with target user";
 			} else if(cmd.equals("traceuser")) {
-				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceuser <username>. Returns 2 website links that give approximate geo location of the IP address";
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceuser [username]. Returns 2 website links that give approximate geo location of the IP address";
 			} else if(cmd.equals("traceip")) {
-				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceip <ip_address>. Returns 2 website links that give approximate geo location of the IP address";
+				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "traceip [ip_address]. Returns 2 website links that give approximate geo location of the IP address";
 			} else if(cmd.equals("refresh")) {
 				return "Rank required: " + getTitle(LEVEL_TRUSTED) + ". Format: " + trigger + "refresh. Syncs bot memory with MySQL database";
 			} else if(cmd.equals("announce")) {
-				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "announce <message>. Sends the message as a system message";
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "announce [message]. Sends the message as a system message";
 			} else if(cmd.equals("getpromote")) {
-				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "getpromote <username>. Gets all the players target user has promoted";
+				return "Rank required: " + getTitle(LEVEL_VIP) + ". Format: " + trigger + "getpromote [username]. Gets all the players target user has promoted";
 			} else if(cmd.equals("whois")) {
-				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whois <username>. Returns basic information about target user";
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whois [username]. Returns basic information about target user";
 			} else if(cmd.equals("whoisuid")) {
-				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whoisuid <uid>. Returns basic information about target UID. Must be a number";
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "whoisuid [uid]. Returns basic information about target UID. Must be a number";
 			} else if(cmd.equals("roomstats")) {
 				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "roomstats. Returns basic information about the users in the room";
 			} else if(cmd.equals("random")) {
-				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "random <number>. Randoms a number between 1 and specified number. If no number is given, defaults to 100";
+				return "Rank required: " + getTitle(LEVEL_SAFELIST) + ". Format: " + trigger + "random [number]. Randoms a number between 1 and specified number. If no number is given, defaults to 100";
 			} else if(cmd.equals("8ball")) {
 				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "8ball. Returns a phrase from the popular novelty toy 8ball";
 			} else if(cmd.equals("slap")) {
-				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "slap <username>. Slaps target user with a random slap phrase. If no username is given, randomly picks a user in the room to slap";
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "slap [username]. Slaps target user with a random slap phrase. If no username is given, randomly picks a user in the room to slap";
 			} else if(cmd.equals("whoami")) {
 				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "whoami. Returns basic information about yourself";
 			} else if(cmd.equals("commands")) {
 				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "commands. Returns a list of commands that you are able to use";
 			} else if(cmd.equals("baninfo")) {
-				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "baninfo <username>. Returns ban information about target user. Only works on users banned by this bot";
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "baninfo [username]. Returns ban information about target user. Only works on users banned by this bot";
 			} else if(cmd.equals("uptime")) {
 				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "uptime. Returns the time the bot was started";
 			} else if(cmd.equals("version")) {
 				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "version. Returns current DotA and Warcraft 3 TFT version";
 			} else if(cmd.equals("alias")) {
-				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "alias <command>. Returns a list of accepted aliases for specified command";
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "alias [command]. Returns a list of accepted aliases for specified command";
 			} else if(cmd.equals("help")) {
-				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "help <command>. Returns help information about the specified command. If no command is given it returns general help information";
+				return "Rank required: " + getTitle(LEVEL_PUBLIC) + ". Format: " + trigger + "help [command]. Returns help information about the specified command. If no command is given it returns general help information";
 			} else {
 				return "Can not find any help information for specified command. If you think you have received this response in error, contact GG.Dragon";
 			}
