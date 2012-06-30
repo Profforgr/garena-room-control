@@ -8,14 +8,7 @@ package grc;
 import grc.bot.ChatThread;
 import grc.bot.SQLThread;
 import grc.plugin.PluginManager;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -23,66 +16,26 @@ import java.util.Date;
  */
  
 public class Main {
-	public static String VERSION = "GRC v0.01";
+	public static final String VERSION = "GRC v0.01";
 	public static boolean DEBUG = false;
 	public static boolean SHOW_INFO = false;
-	public static final String DATE_FORMAT = "yyyy-MM-dd";
-	public static final int SERVER = 1;
-	public static final int ROOM = 2;
-	public static final int COMMAND = 3;
-	public static final int DATABASE = 4;
-	public static final int ERROR = 5;
-	public static final int TIME = 6;
-	public static boolean log;
-	public static boolean log_single;
-	public static boolean log_server;
-	public static boolean log_room;
-	public static boolean log_command;
-	public static boolean log_database;
-	public static boolean log_error;
-	public static boolean log_time;
-
-	public static PrintWriter log_single_out;
-	public static PrintWriter log_server_out;
-	public static PrintWriter log_room_out;
-	public static PrintWriter log_command_out;
-	public static PrintWriter log_database_out;
-	public static PrintWriter log_error_out;
-	public static PrintWriter log_time_out;
 	
-	private GChatBot bot;
+	private static boolean keepLog;
 
-	private PluginManager plugins;
 	public GarenaInterface garena;
+	private GChatBot bot;
+	private PluginManager plugins;
 	private GarenaThread gsp_thread;
 	private GarenaThread gcrp_thread;
 	private GarenaThread pl_thread;
 	private SQLThread sqlthread;
 	private ChatThread chatthread;
 	private GarenaReconnect reconnect;
+	private Log log;
 
 	public void init(String[] args) {
 		System.out.println(VERSION);
 		GRCConfig.load(args);
-
-		//log settings
-		log = GRCConfig.configuration.getBoolean("grc_log", false);
-		if(log) {
-			log_single = GRCConfig.configuration.getBoolean("grc_log_single", false);
-			log_server = GRCConfig.configuration.getBoolean("grc_log_server", false);
-			log_room = GRCConfig.configuration.getBoolean("grc_log_room", false);
-			log_command = GRCConfig.configuration.getBoolean("grc_log_command", false);
-			log_database = GRCConfig.configuration.getBoolean("grc_log_database", false);
-			log_error = GRCConfig.configuration.getBoolean("grc_log_error", false);
-			log_time = GRCConfig.configuration.getBoolean("grc_log_time", true);
-		} else {
-			log_single = false;
-			log_server = false;
-			log_room = false;
-			log_command = false;
-			log_database = false;
-			log_error = false;
-		}
 	}
 
 	public void initPlugins() {
@@ -109,7 +62,7 @@ public class Main {
 
 		initPeer();
 
-		//authenticate with login server
+		//authenticate with login Log.SERVER
 		if(!garena.sendGSPSessionInit()) return false;
 		if(!garena.readGSPSessionInitReply()) return false;
 		if(!garena.sendGSPSessionHello()) return false;
@@ -143,19 +96,19 @@ public class Main {
 		//lookup
 		garena.sendPeerLookup();
 
-		Main.println("[Main] Waiting for lookup response...", SERVER);
+		Main.println("[Main] Waiting for lookup response...", Log.SERVER);
 		while(garena.iExternal == null) {
 			try {
 				Thread.sleep(100);
 			} catch(InterruptedException e) {}
 		}
 
-		Main.println("[Main] Received lookup response!", SERVER);
+		Main.println("[Main] Received lookup response!", Log.SERVER);
 	}
 
 	//returns whether init succeeded; restart=true indicates this isn't the first time we're calling
 	public boolean initRoom(boolean restart) {
-		//connect to room
+		//connect to Log.ROOM
 		if(!garena.initRoom()) return false;
 		if(!garena.sendGCRPMeJoin()) return false;
 
@@ -171,7 +124,7 @@ public class Main {
 	}
 	
 	public void reconnectRoom() {
-		Main.println("[Main] Reconnecting to Garena room", SERVER);
+		Main.println("[Main] Reconnecting to Garena Log.ROOM", Log.SERVER);
 		garena.disconnectRoom();
 		//garena.hasRoomList = false;
 		
@@ -202,6 +155,17 @@ public class Main {
 		bot.sqlthread = sqlthread;
 		
 		syncRoomLoop();
+	}
+	
+	public void initLog() {
+		if(keepLog) {
+			log = new Log();
+			try {
+				log.init();
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
 	}
 	
 	public void helloLoop() {
@@ -244,8 +208,8 @@ public class Main {
 			//handle reconnection interval
 			if(reconnectInterval != -1 && reconnectCounter >= reconnectInterval) {
 				reconnectCounter = 0;
-				//reconnect to Garena room
-				Main.println("[Main] Reconnecting to Garena room", ROOM);
+				//reconnect to Garena Log.ROOM
+				Main.println("[Main] Reconnecting to Garena Log.ROOM", Log.ROOM);
 				garena.disconnectRoom();
 
 				try {
@@ -259,13 +223,13 @@ public class Main {
 			if(xpCounter >= xpInterval) {
 				xpCounter = 0;
 
-				//send GSP XP packet only if connected to room
+				//send GSP XP packet only if connected to Log.ROOM
 				if(garena.room_socket.isConnected()) {
-					//xp rate = 100 (doesn't matter what they actually are, server determines amount of exp gained)
+					//xp rate = 100 (doesn't matter what they actually are, Log.SERVER determines amount of exp gained)
 					//gametype = 1001 for warcraft/dota
 					garena.sendGSPXP(garena.user_id, 100, 1001);
 					if(DEBUG) {
-						println("[Main] Sent exp packet to Garena", SERVER);
+						println("[Main] Sent exp packet to Garena", Log.SERVER);
 					}
 				}
 			}
@@ -277,7 +241,7 @@ public class Main {
 	}
 
 	/**
-	 * @param args the command line arguments
+	 * @param args the Log.COMMAND line arguments
 	 */
 	public static void main(String[] args) throws IOException {
 		/* Use this to decrypt Garena packets
@@ -306,125 +270,35 @@ public class Main {
 		
 		Main main = new Main();
 		main.init(args);
-
-		//init log
-		if(log) {
-			if(log_single) {
-				log_single_out = new PrintWriter(new FileWriter("grc.log", true), true);
-			}
-			if(log_server) {
-				//keep seperate logs in seperate folders
-				File log_server_dir = new File("log/log_server/");
-				//if folder doesn't exist, create
-				if(!log_server_dir.exists()) {
-					log_server_dir.mkdir();
-				}
-				//set target to folder and set file name
-				File log_server_target = new File(log_server_dir, "grc_server.log");
-				//initialize printwriter
-				log_server_out = new PrintWriter(new FileWriter(log_server_target, true), true);
-			}
-			if(log_room) {
-				//see comments for log_server, same code but with different file names
-				File log_room_dir = new File("log/log_room/");
-				if(!log_room_dir.exists()) {
-					log_room_dir.mkdir();
-				}
-				File log_room_target = new File(log_room_dir, "grc_room.log");
-				log_room_out = new PrintWriter(new FileWriter(log_room_target, true), true);
-			}
-			if(log_command) {
-				//see comments for log_server, same code but with different file names
-				File log_cmd_dir = new File("log/log_cmd/");
-				if(!log_cmd_dir.exists()) {
-					log_cmd_dir.mkdir();
-				}
-				File log_cmd_target = new File(log_cmd_dir, "grc_cmd.log");
-				log_command_out = new PrintWriter(new FileWriter(log_cmd_target, true), true);
-			}
-			if(log_database) {
-				//see comments for log_server, same code but with different file names
-				File log_db_dir = new File("log/log_database/");
-				if(!log_db_dir.exists()) {
-					log_db_dir.mkdir();
-				}
-				File log_db_target = new File(log_db_dir, "grc_db.log");
-				log_database_out = new PrintWriter(new FileWriter(log_db_target, true), true);
-			}
-			if(log_error) {
-				//see comments for log_server, same code but with different file names
-				File log_error_dir = new File("log/log_error/");
-				if(!log_error_dir.exists()) {
-					log_error_dir.mkdir();
-				}
-				File log_error_target = new File(log_error_dir, "grc_error.log");
-				log_error_out = new PrintWriter(new FileWriter(log_error_target, true), true);
-			}
-		}
 		
 		//whether to output information on console
 		DEBUG = GRCConfig.configuration.getBoolean("grc_debug", false);
 		SHOW_INFO = GRCConfig.configuration.getBoolean("grc_show_info", false);
+		
+		//whether to keep a log
+		keepLog = GRCConfig.configuration.getBoolean("grc_log", false);
 
 		main.initPlugins();
 		if(!main.initGarena(false)) return;
 		if(!main.initRoom(false)) return;
 		main.initBot();
 		main.loadPlugins();
+		main.initLog();
 		main.helloLoop();
 	}
 
 	public static void println(String str, int type) {
 		//check whether to display each type
-		if(type == ROOM || type == COMMAND || ((type == DATABASE || type == SERVER) && SHOW_INFO) || (type == ERROR && DEBUG)) {
+		if(type == Log.ROOM || type == Log.COMMAND || ((type == Log.DATABASE || type == Log.SERVER) && SHOW_INFO) || (type == Log.ERROR && DEBUG)) {
 			System.out.println(str);
 		}
 		
-		if(log) {
-			//format date nicely
-			Date date = new Date();
-			String dateString = DateFormat.getDateTimeInstance().format(date);
-			
-			//for single log file
-			if(log_single && log_single_out != null) {
-				log_single_out.println("[" + dateString + "]" + str);
-			}
-			//for each log type (server, room, command, database, error)
-			switch(type) {
-				case SERVER:
-					//write to file
-					if(log_server && log_server_out != null) {
-						log_server_out.println("[" + dateString + "]" + str);
-					}
-					break;
-				case ROOM:
-					if(log_room && log_room_out != null) {
-						log_room_out.println("[" + dateString + "]" + str);
-					}
-					break;
-				case COMMAND:
-					if(log_command && log_command_out != null) {
-						log_command_out.println("[" + dateString + "]" + str);
-					}
-					break;
-				case DATABASE:
-					if(log_database && log_database_out != null) {
-						log_database_out.println("[" + dateString + "]" + str);
-					}
-					break;
-				case ERROR:
-					if(log_error && log_error_out != null) {
-						log_error_out.println("[" + dateString + "]" + str);
-					}
-					break;
-				default:
-					System.out.println(str);
-					System.out.println("Ouput type unknown, discarding");
-			}
+		if(keepLog) {
+			Log.println(str, type);
 		}
 	}
 	
-	//poll garena interface if it has finished parsing room list for users every second
+	//poll garena interface if it has finished parsing Log.ROOM list for users every second
 	public void syncRoomLoop() {
 		while(true) {
 			if(garena.hasRoomList) {
@@ -435,13 +309,13 @@ public class Main {
 				try {
 					Thread.sleep(1000);
 				} catch(InterruptedException e) {
-					println("[Main] sync room loop sleep interrupted", ERROR);
+					println("[Main] sync Log.ROOM loop sleep interrupted", Log.ERROR);
 				}
 			}
 		}
 	}
 	
-	//if garena interface has finished parsing room list, sync with user database
+	//if garena interface has finished parsing Log.ROOM list, sync with user Log.DATABASE
 	public void syncRoom() {
 		for(int i = 0; i < garena.members.size(); i++) {
 			bot.addUserToDatabase(garena.members.get(i));
@@ -449,23 +323,12 @@ public class Main {
 	}
 	
 	public static void stackTrace(Exception e) {
-		//show error stack trace on console
+		//show Log.ERROR stack trace on console
 		if(DEBUG) {
 			e.printStackTrace();
 		}
-		//save error stack trace in log
-		if(log_error) {
-			e.printStackTrace(log_error_out);
-		}
-		if(log_single) {
-			e.printStackTrace(log_single_out);
-		}
-	}
-	
-	public static String date() {
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-		return sdf.format(cal.getTime());
+		//save Log.ERROR stack trace in log
+		Log.stackTrace(e);
 	}
 
 	//hexadecimal string to byte array

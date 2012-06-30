@@ -193,7 +193,6 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("whoami", public_level);
 		registerCommand("commands", public_level);
 		registerCommand("baninfo", public_level);
-		//registerCommand("kickinfo", public_level);
 		registerCommand("uptime", public_level);
 		registerCommand("version", public_level);
 		//registerCommand("allstaff", public_level);
@@ -233,7 +232,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		UserInfo user = getUserFromName(member.username, userDatabaseRoot);
 		int memberRank = user.rank;
 		String memberRankTitle = getTitle(memberRank);
-		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Main.COMMAND);
+		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Log.COMMAND);
 
 		command = processAlias(command.toLowerCase()); //if it's alias, convert it to original command
 		
@@ -362,7 +361,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Thread.sleep(1000);
 					} catch(InterruptedException e) {
 						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
 						Main.stackTrace(e);
 					}
 					garena.ban(target, banLength);
@@ -402,7 +401,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Thread.sleep(1000);
 					} catch(InterruptedException e) {
 						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
 						Main.stackTrace(e);
 					}
 					chatthread.queueChat("For information about this unban use " + trigger + "unbaninfo " + target, chatthread.ANNOUNCEMENT);
@@ -901,7 +900,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				Thread.sleep(1100);
 			} catch(InterruptedException e) {
 				//give error information to Main
-				Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+				Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
 				Main.stackTrace(e);
 			}
 			if(quick) { //unban straight away if a quick kick
@@ -910,7 +909,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					Thread.sleep(1000);
 				} catch(InterruptedException e) {
 					//give error information to Main
-					Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Main.ERROR);
+					Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
 					Main.stackTrace(e);
 				}
 			}
@@ -1302,7 +1301,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			try {
 				aliases = GRCConfig.configuration.getStringArray("grc_bot_alias_" + command);
 			} catch(ConversionException e) {
-				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command, Main.ERROR);
+				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command, Log.ERROR);
 				aliases = new String[] {command};
 			}
 		}
@@ -1466,7 +1465,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				//add user to database
 				addUserByName(new TreeNode(user), userDatabaseRoot);
 			} else {
-				Main.println("Failed to add root admin " + root_admin + ". There was an error with your database. Please inform GG.Dragon", Main.ERROR);
+				Main.println("Failed to add root admin " + root_admin + ". There was an error with your database. Please inform GG.Dragon", Log.ERROR);
 			}
 		}
 		UserInfo root = getUserFromName("gg.dragon", userDatabaseRoot);
@@ -1861,7 +1860,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 	
 	public String help(String cmd) {
 		if(cmd.length() == 0) {
-			return "Command trigger: '" + trigger + "' Use " + trigger + "help [command] for info on a specific command. For a list of commands use " + trigger + "commands. For a list of aliases of a command use " + trigger + "alias [command]. If you whisper a command to the bot, it will respond in a whisper if possible. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
+			return "Command trigger: '" + trigger + "' Use " + trigger + "help [command] for info on a specific command. For a list of commands use " + trigger + "commands. Garena Client Broadcaster is developed by uakf.b. Chat bot is developed by GG.Dragon aka XIII.Dragon";
 		} else {
 			cmd = processAlias(removeSpaces(cmd.toLowerCase()));
 			if(cmd.equals("exit")) {
