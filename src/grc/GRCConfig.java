@@ -33,7 +33,7 @@ public class GRCConfig {
 				e.printStackTrace();
 			}
 			
-			Main.println("[GRCConfig] Error while loading config file: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.println("[GRCConfig] Error while loading config file: " + e.getLocalizedMessage(), Log.ERROR);
 		}
 	}
 

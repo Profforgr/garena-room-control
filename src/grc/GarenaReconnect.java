@@ -24,13 +24,13 @@ public class GarenaReconnect implements GarenaListener {
 	public void playerStopped(MemberInfo member) {} //player stopped playing
 	public void disconnected(int x) {
 		if(x == GarenaInterface.GARENA_MAIN) {
-			Main.println("[GarenaReconnect] GARENA_MAIN disconnected; reconnecting shortly...", Main.SERVER);
+			Main.println("[GarenaReconnect] GARENA_MAIN disconnected; reconnecting shortly...", Log.SERVER);
 		} else if(x == GarenaInterface.GARENA_PEER) {
-			Main.println("[GarenaReconnect] GARENA_PEER disconnected; reconnecting shortly...", Main.SERVER);
+			Main.println("[GarenaReconnect] GARENA_PEER disconnected; reconnecting shortly...", Log.SERVER);
 		} else if(x == GarenaInterface.GARENA_ROOM) {
-			Main.println("[GarenaReconnect] GARENA_ROOM disconnected; reconnecting shortly...", Main.SERVER);
+			Main.println("[GarenaReconnect] GARENA_ROOM disconnected; reconnecting shortly...", Log.SERVER);
 		} else {
-			Main.println("[GarenaReconnect] Error: unknown type: " + x, Main.ERROR);
+			Main.println("[GarenaReconnect] Error: unknown type: " + x, Log.ERROR);
 			return;
 		}
 

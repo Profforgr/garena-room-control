@@ -54,7 +54,7 @@ public class GarenaEncrypt {
 	}
 
 	public void initAES() {
-		Main.println("[GEncrypt] Initializing AES Keys...", Main.SERVER);
+		Main.println("[GEncrypt] Initializing AES Keys...", Log.SERVER);
 		KeyGenerator kgen = null;
 		
 		try {
@@ -83,11 +83,11 @@ public class GarenaEncrypt {
 	}
 
 	public void initRSA() {
-		Main.println("[GEncrypt] Initializing RSA Keys...", Main.SERVER);
+		Main.println("[GEncrypt] Initializing RSA Keys...", Log.SERVER);
 		BouncyCastleProvider bcp = new BouncyCastleProvider();
 		Security.addProvider(bcp);
 
-		Main.println("[GEncrypt] Reading private key in PEM format...", Main.SERVER);
+		Main.println("[GEncrypt] Reading private key in PEM format...", Log.SERVER);
 		try {
 			PEMReader pemreader = new PEMReader(new FileReader("gkey.pem"));
 			rsaKey = (KeyPair) pemreader.readObject();
@@ -207,7 +207,7 @@ public class GarenaEncrypt {
 		try {
 		return new String(input, 0, null_index, charset);
 		} catch(UnsupportedEncodingException e) {
-			Main.println("[GEncrypt] " + charset + " is unsupported: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.println("[GEncrypt] " + charset + " is unsupported: " + e.getLocalizedMessage(), Log.ERROR);
 			return null;
 		}
 	}
@@ -225,7 +225,7 @@ public class GarenaEncrypt {
 		try {
 			return new String(input, 0, null_index, "UnicodeLittleUnmarked");
 		} catch(UnsupportedEncodingException e) {
-			Main.println("[GEncrypt] UnicodeLittleUnmarked is unsupported: " + e.getLocalizedMessage(), Main.ERROR);
+			Main.println("[GEncrypt] UnicodeLittleUnmarked is unsupported: " + e.getLocalizedMessage(), Log.ERROR);
 			return null;
 		}
 	}
@@ -362,7 +362,7 @@ public class GarenaEncrypt {
 
 			InetAddress ip = InetAddress.getByName(parts[6].substring(25));
 
-			Main.println("[GEncrypt] External IP address determined at " + ip.getHostAddress(), Main.SERVER);
+			Main.println("[GEncrypt] External IP address determined at " + ip.getHostAddress(), Log.SERVER);
 
 			return ip.getAddress();
 		} catch(IOException ioe) {
@@ -374,7 +374,7 @@ public class GarenaEncrypt {
 	public static byte[] internalAddress() {
 		try {
 			InetAddress local_address = getFirstNonLoopbackAddress(true, false);
-			Main.println("[GEncrypt] Internal IP address determined at " + local_address.getHostAddress(), Main.SERVER);
+			Main.println("[GEncrypt] Internal IP address determined at " + local_address.getHostAddress(), Log.SERVER);
 			return local_address.getAddress();
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
