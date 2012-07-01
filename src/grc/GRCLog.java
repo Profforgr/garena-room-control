@@ -19,7 +19,7 @@ import java.util.Date;
  * @author GG.Dragon
  */
  
-public class Log {
+public class GRCLog {
 
 	//public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String DATE_FORMAT = "dd/MM/yyyy h:mm a";
@@ -45,7 +45,7 @@ public class Log {
 	public static PrintWriter log_database_out;
 	public static PrintWriter log_error_out;
 	
-	public Log() {
+	public GRCLog() {
 		//load log settings
 		log_single = GRCConfig.configuration.getBoolean("grc_log_single", false);
 		log_server = GRCConfig.configuration.getBoolean("grc_log_server", false);

@@ -31,7 +31,7 @@ public class Main {
 	private SQLThread sqlthread;
 	private ChatThread chatthread;
 	private GarenaReconnect reconnect;
-	private Log log;
+	private GRCLog log;
 
 	public void init(String[] args) {
 		System.out.println(VERSION);
@@ -62,7 +62,7 @@ public class Main {
 
 		initPeer();
 
-		//authenticate with login Log.SERVER
+		//authenticate with login server
 		if(!garena.sendGSPSessionInit()) return false;
 		if(!garena.readGSPSessionInitReply()) return false;
 		if(!garena.sendGSPSessionHello()) return false;
@@ -96,19 +96,19 @@ public class Main {
 		//lookup
 		garena.sendPeerLookup();
 
-		Main.println("[Main] Waiting for lookup response...", Log.SERVER);
+		Main.println("[Main] Waiting for lookup response...", GRCLog.SERVER);
 		while(garena.iExternal == null) {
 			try {
 				Thread.sleep(100);
 			} catch(InterruptedException e) {}
 		}
 
-		Main.println("[Main] Received lookup response!", Log.SERVER);
+		Main.println("[Main] Received lookup response!", GRCLog.SERVER);
 	}
 
 	//returns whether init succeeded; restart=true indicates this isn't the first time we're calling
 	public boolean initRoom(boolean restart) {
-		//connect to Log.ROOM
+		//connect to room
 		if(!garena.initRoom()) return false;
 		if(!garena.sendGCRPMeJoin()) return false;
 
@@ -124,7 +124,7 @@ public class Main {
 	}
 	
 	public void reconnectRoom() {
-		Main.println("[Main] Reconnecting to Garena Log.ROOM", Log.SERVER);
+		Main.println("[Main] Reconnecting to Garena room", GRCLog.SERVER);
 		garena.disconnectRoom();
 		//garena.hasRoomList = false;
 		
@@ -159,7 +159,7 @@ public class Main {
 	
 	public void initLog() {
 		if(keepLog) {
-			log = new Log();
+			log = new GRCLog();
 			try {
 				log.init();
 			} catch(IOException ioe) {
@@ -208,8 +208,8 @@ public class Main {
 			//handle reconnection interval
 			if(reconnectInterval != -1 && reconnectCounter >= reconnectInterval) {
 				reconnectCounter = 0;
-				//reconnect to Garena Log.ROOM
-				Main.println("[Main] Reconnecting to Garena Log.ROOM", Log.ROOM);
+				//reconnect to Garena Room
+				Main.println("[Main] Reconnecting to Garena Room", GRCLog.ROOM);
 				garena.disconnectRoom();
 
 				try {
@@ -223,13 +223,13 @@ public class Main {
 			if(xpCounter >= xpInterval) {
 				xpCounter = 0;
 
-				//send GSP XP packet only if connected to Log.ROOM
+				//send GSP XP packet only if connected to room
 				if(garena.room_socket.isConnected()) {
-					//xp rate = 100 (doesn't matter what they actually are, Log.SERVER determines amount of exp gained)
+					//xp rate = 100 (doesn't matter what they actually are, server determines amount of exp gained)
 					//gametype = 1001 for warcraft/dota
 					garena.sendGSPXP(garena.user_id, 100, 1001);
 					if(DEBUG) {
-						println("[Main] Sent exp packet to Garena", Log.SERVER);
+						println("[Main] Sent exp packet to Garena", GRCLog.SERVER);
 					}
 				}
 			}
@@ -241,7 +241,7 @@ public class Main {
 	}
 
 	/**
-	 * @param args the Log.COMMAND line arguments
+	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) throws IOException {
 		/* Use this to decrypt Garena packets
@@ -289,16 +289,16 @@ public class Main {
 
 	public static void println(String str, int type) {
 		//check whether to display each type
-		if(type == Log.ROOM || type == Log.COMMAND || ((type == Log.DATABASE || type == Log.SERVER) && SHOW_INFO) || (type == Log.ERROR && DEBUG)) {
+		if(type == GRCLog.ROOM || type == GRCLog.COMMAND || ((type == GRCLog.DATABASE || type == GRCLog.SERVER) && SHOW_INFO) || (type == GRCLog.ERROR && DEBUG)) {
 			System.out.println(str);
 		}
 		
 		if(keepLog) {
-			Log.println(str, type);
+			GRCLog.println(str, type);
 		}
 	}
 	
-	//poll garena interface if it has finished parsing Log.ROOM list for users every second
+	//poll garena interface if it has finished parsing room list for users every second
 	public void syncRoomLoop() {
 		while(true) {
 			if(garena.hasRoomList) {
@@ -309,13 +309,13 @@ public class Main {
 				try {
 					Thread.sleep(1000);
 				} catch(InterruptedException e) {
-					println("[Main] sync Log.ROOM loop sleep interrupted", Log.ERROR);
+					println("[Main] sync room loop sleep interrupted", GRCLog.ERROR);
 				}
 			}
 		}
 	}
 	
-	//if garena interface has finished parsing Log.ROOM list, sync with user Log.DATABASE
+	//if garena interface has finished parsing room list, sync with user database
 	public void syncRoom() {
 		for(int i = 0; i < garena.members.size(); i++) {
 			bot.addUserToDatabase(garena.members.get(i));
@@ -323,12 +323,12 @@ public class Main {
 	}
 	
 	public static void stackTrace(Exception e) {
-		//show Log.ERROR stack trace on console
+		//show error stack trace on console
 		if(DEBUG) {
 			e.printStackTrace();
 		}
-		//save Log.ERROR stack trace in log
-		Log.stackTrace(e);
+		//save error stack trace in log
+		GRCLog.stackTrace(e);
 	}
 
 	//hexadecimal string to byte array
