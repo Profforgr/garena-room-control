@@ -232,7 +232,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		UserInfo user = getUserFromName(member.username, userDatabaseRoot);
 		int memberRank = user.rank;
 		String memberRankTitle = getTitle(memberRank);
-		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, Log.COMMAND);
+		Main.println("[GChatBot] Received command \"" + command + "\" with payload \"" + payload + "\" from " + memberRankTitle + " " + member.username, GRCLog.COMMAND);
 
 		command = processAlias(command.toLowerCase()); //if it's alias, convert it to original command
 		
@@ -361,7 +361,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Thread.sleep(1000);
 					} catch(InterruptedException e) {
 						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
+						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), GRCLog.ERROR);
 						Main.stackTrace(e);
 					}
 					garena.ban(target, banLength);
@@ -401,7 +401,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Thread.sleep(1000);
 					} catch(InterruptedException e) {
 						//give error information to Main
-						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
+						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), GRCLog.ERROR);
 						Main.stackTrace(e);
 					}
 					chatthread.queueChat("For information about this unban use " + trigger + "unbaninfo " + target, chatthread.ANNOUNCEMENT);
@@ -900,7 +900,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				Thread.sleep(1100);
 			} catch(InterruptedException e) {
 				//give error information to Main
-				Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
+				Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), GRCLog.ERROR);
 				Main.stackTrace(e);
 			}
 			if(quick) { //unban straight away if a quick kick
@@ -909,7 +909,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					Thread.sleep(1000);
 				} catch(InterruptedException e) {
 					//give error information to Main
-					Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), Log.ERROR);
+					Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), GRCLog.ERROR);
 					Main.stackTrace(e);
 				}
 			}
@@ -1301,7 +1301,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			try {
 				aliases = GRCConfig.configuration.getStringArray("grc_bot_alias_" + command);
 			} catch(ConversionException e) {
-				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command, Log.ERROR);
+				Main.println("[GChatBot] Warning: unable to parse entry for alias of " + command, GRCLog.ERROR);
 				aliases = new String[] {command};
 			}
 		}
@@ -1465,7 +1465,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				//add user to database
 				addUserByName(new TreeNode(user), userDatabaseRoot);
 			} else {
-				Main.println("Failed to add root admin " + root_admin + ". There was an error with your database. Please inform GG.Dragon", Log.ERROR);
+				Main.println("Failed to add root admin " + root_admin + ". There was an error with your database. Please inform GG.Dragon", GRCLog.ERROR);
 			}
 		}
 		UserInfo root = getUserFromName("gg.dragon", userDatabaseRoot);
