@@ -217,7 +217,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				} else {
 					rotateAnn = 0;
 				}
-				chatthread.queueChat(autoAnn.get(rotateAnn), chatthread.ANNOUNCEMENT);
+				chatthread.queueChat(autoAnn.get(rotateAnn), ChatThread.ANNOUNCEMENT);
 				announce = false;
 			}
 		}
@@ -272,7 +272,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					sqlthread.syncDatabase();
 					return "Success! " + targetUser.username + " has been deleted";
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			} else if(command.equals("diagnostics")) {
@@ -336,7 +336,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				String date = time();
 				String expiry = time(banLength*60); //convert hours to minutes
 				if(sqlthread.ban(target, uid, ip, member.username, reason, date, expiry, garena.room_id)) {
-					chatthread.queueChat("For information about this ban use " + trigger + "baninfo " + target, chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("For information about this ban use " + trigger + "baninfo " + target, ChatThread.ANNOUNCEMENT);
 					try {
 						Thread.sleep(1000);
 					} catch(InterruptedException e) {
@@ -347,7 +347,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					garena.ban(target, banLength);
 					return null;
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			} else if(command.equals("unban")) {
@@ -362,7 +362,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return "Failed. You can't unban yourself!";
 				}
 				if(!sqlthread.doesBanExist(target.toLowerCase())) {
-					chatthread.queueChat("Failed. " + target + " was not banned by this bot!", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. " + target + " was not banned by this bot!", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 				//unban is ok, continue
@@ -384,10 +384,10 @@ public class GChatBot implements GarenaListener, ActionListener {
 						Main.println("[GChatBot] Sleep interrupted: " + e.getLocalizedMessage(), GRCLog.ERROR);
 						Main.stackTrace(e);
 					}
-					chatthread.queueChat("For information about this unban use " + trigger + "unbaninfo " + target, chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("For information about this unban use " + trigger + "unbaninfo " + target, ChatThread.ANNOUNCEMENT);
 					return null;
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			} else if(command.equals("addannounce")) {
@@ -401,7 +401,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					chatthread.queueChat("Success! Your message has been added to the auto announcement list", member.userID);
 					return null;
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			} else if(command.equals("delannounce")) {
@@ -418,7 +418,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						chatthread.queueChat("Success! Your message has been deleted from the auto announcement list", member.userID);
 						return null;
 					} else {
-						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+						chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 						return null;
 					}
 				} else {
@@ -460,7 +460,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 						return "Success - " + targetUser.properUsername + "'s new custom entry message is: " + targetUser.entryMsg;
 					}
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			} else if(command.equals("kicktroll")) {
@@ -516,7 +516,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				if(sqlthread.syncDatabase()) {
 					return "Refresh: found " + UserInfo.numUsers + " Users, " + autoAnn.size() + " announcements.";
 				} else {
-					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 					return null;
 				}
 			}
@@ -536,7 +536,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "announce <message>. For further help use " + trigger + "help announce", member.userID);
 					return null;
 				}
-				chatthread.queueChat(payload, chatthread.ANNOUNCEMENT);
+				chatthread.queueChat(payload, ChatThread.ANNOUNCEMENT);
 				return null;
 			} else if(command.equals("promote")) {
 				if(payload.length() == 0) {
@@ -630,7 +630,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return null;
 				}
 				UserInfo targetUser = getUserFromName(target, userDatabaseRoot);
-				if(target == null) {
+				if(targetUser == null) {
 					return "Invalid user - can't be found";
 				}
 				if(targetUser.properUsername.equals("unknown")) {
@@ -843,7 +843,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			//Success! <GG.Dragon> is now an Admin!
 			return "Success - <" + targetUser.properUsername + "> is now " + getGrammaticalTitle(rank);
 		} else {
-			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 			return null;
 		}
 	}
@@ -914,10 +914,10 @@ public class GChatBot implements GarenaListener, ActionListener {
 					Main.stackTrace(e);
 				}
 			}
-			chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, chatthread.ANNOUNCEMENT);
+			chatthread.queueChat("For information about this kick use " + trigger + "baninfo " + victim.username, ChatThread.ANNOUNCEMENT);
 			return null;
 		} else {
-			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", chatthread.ANNOUNCEMENT);
+			chatthread.queueChat("Failed. There was an error with your database. Please inform GG.Dragon", ChatThread.ANNOUNCEMENT);
 			return null;
 		}
 	}
@@ -1243,7 +1243,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				}
 				str = str + "Public commands: " + publicCommands.toString();
 			default:
-				chatthread.queueChat(str, chatthread.ANNOUNCEMENT);
+				chatthread.queueChat(str, ChatThread.ANNOUNCEMENT);
 		}
 	}
 	
@@ -1355,21 +1355,21 @@ public class GChatBot implements GarenaListener, ActionListener {
 			return;
 		}
 		if(user.entryMsg.length() > 0) { //if user has a custom entry msg
-			chatthread.queueChat(user.entryMsg, chatthread.ANNOUNCEMENT);
+			chatthread.queueChat(user.entryMsg, ChatThread.ANNOUNCEMENT);
 			return;
 		} else { //else display default custom entry msg
 			switch(user.rank) {
 				case LEVEL_ROOT_ADMIN:
-					chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Root Admin <" + target.username + "> has entered the room", ChatThread.ANNOUNCEMENT);
 					return;
 				case LEVEL_ADMIN:
-					chatthread.queueChat("Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Admin <" + target.username + "> has entered the room", ChatThread.ANNOUNCEMENT);
 					return;
 				case LEVEL_TRIAL_ADMIN:
-					chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("Trial Admin <" + target.username + "> has entered the room", ChatThread.ANNOUNCEMENT);
 					return;
 				case LEVEL_VIP:
-					chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", chatthread.ANNOUNCEMENT);
+					chatthread.queueChat("V.I.P. <" + target.username + "> has entered the room", ChatThread.ANNOUNCEMENT);
 					return;
 				default:
 					return;
@@ -1524,7 +1524,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 	}
 
 	public void chatReceived(MemberInfo player, String chat, boolean whisper) {
-		UserInfo user = getUserFromName(player.username, userDatabaseRoot);
+		//UserInfo user = getUserFromName(player.username, userDatabaseRoot);
 		//int memberRank = getUserRank(player.username.toLowerCase());
 		
 		if(player != null && chat.startsWith("?trigger")) {
@@ -1533,7 +1533,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 			if(whisper) {
 				chatthread.queueChat(trigger_msg, player.userID);
 			} else {
-				chatthread.queueChat(trigger_msg, chatthread.MAIN_CHAT);
+				chatthread.queueChat(trigger_msg, ChatThread.MAIN_CHAT);
 			}
 		}
 
@@ -1554,7 +1554,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 				if(whisper) {
 					chatthread.queueChat(response, player.userID);
 				} else {
-					chatthread.queueChat(response, chatthread.MAIN_CHAT);
+					chatthread.queueChat(response, ChatThread.MAIN_CHAT);
 				}
 			}
 		}

@@ -26,8 +26,6 @@ import java.util.Vector;
 import java.util.zip.CRC32;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  *
@@ -357,7 +355,7 @@ public class GarenaInterface {
 		try {
 			byte[] size_bytes = new byte[3];
 			in.read(size_bytes);
-			int size = crypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
+			int size = GarenaEncrypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
 
 			//next byte should be 1
 			if(in.read() != 1) {
@@ -431,7 +429,7 @@ public class GarenaInterface {
 		try {
 			byte[] size_bytes = new byte[3];
 			in.read(size_bytes);
-			int size = crypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
+			int size = GarenaEncrypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
 
 			//next byte should be 1
 			if(in.read() != 1) {
@@ -516,7 +514,7 @@ public class GarenaInterface {
 		block.put((byte) 1);
 
 		//now we need to put internal IP
-		byte[] addr = crypt.internalAddress();
+		byte[] addr = GarenaEncrypt.internalAddress();
 		block.put(addr);
 
 		//external peer port; don't change from 1513
@@ -557,7 +555,7 @@ public class GarenaInterface {
 		try {
 			byte[] size_bytes = new byte[3];
 			in.read(size_bytes);
-			int size = crypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
+			int size = GarenaEncrypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
 
 			//next byte should be 1
 			if(in.read() != 1) {
@@ -610,7 +608,7 @@ public class GarenaInterface {
 		Main.println("[GInterface] Server says your country is: " + (crypt.strFromBytes(str_bytes)), GRCLog.SERVER);
 
 		unknown1 = buf.get(24);
-		Main.println("[GInterface] Server says your experience is: " + crypt.unsignedByte(buf.get(25)), GRCLog.SERVER);
+		Main.println("[GInterface] Server says your experience is: " + GarenaEncrypt.unsignedByte(buf.get(25)), GRCLog.SERVER);
 		unknown2 = buf.get(26);
 
 		/* get ports through lookup method
@@ -642,7 +640,7 @@ public class GarenaInterface {
 			try {
 				byte[] size_bytes = new byte[3];
 				in.readFully(size_bytes);
-				int size = crypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
+				int size = GarenaEncrypt.byteArrayToIntLittleLength(size_bytes, 0, 3);
 
 				if(in.read() != 1) {
 					Main.println("[GInterface] GSPLoop: warning: invalid data from Garena server", GRCLog.ERROR);
@@ -675,7 +673,7 @@ public class GarenaInterface {
 	}
 
 	public void processQueryResponse(byte[] data) throws IOException {
-		int id = crypt.byteArrayToIntLittle(data, 1);
+		int id = GarenaEncrypt.byteArrayToIntLittle(data, 1);
 		Main.println("[GInterface] Query response: user ID is " + id, GRCLog.SERVER);
 	}
 
@@ -861,7 +859,7 @@ public class GarenaInterface {
 		}
 
 		//internal address
-		iInternal = crypt.internalAddress();
+		iInternal = GarenaEncrypt.internalAddress();
 		myinfo[32] = iInternal[0];
 		myinfo[33] = iInternal[1];
 		myinfo[34] = iInternal[2];
@@ -869,13 +867,13 @@ public class GarenaInterface {
 
 		//put external port, in big endian
 		if(pExternal != 0) {
-			byte[] port = crypt.shortToByteArray((short) pExternal);
+			byte[] port = GarenaEncrypt.shortToByteArray((short) pExternal);
 			myinfo[40] = port[0];
 			myinfo[41] = port[1];
 		}
 
 		//put internal port, in big endian
-		byte[] port = crypt.shortToByteArray((short) room_socket.getPort());
+		byte[] port = GarenaEncrypt.shortToByteArray((short) room_socket.getPort());
 		myinfo[42] = (byte) port[0];
 		myinfo[43] = (byte) port[1];
 
@@ -967,7 +965,7 @@ public class GarenaInterface {
 				byte[] header = new byte[4];
 				rin.readFully(header);
 
-				int size = crypt.byteArrayToIntLittleLength(header, 0, 3);
+				int size = GarenaEncrypt.byteArrayToIntLittleLength(header, 0, 3);
 				int type = rin.read();
 
 				if(type == 48) {
@@ -1125,7 +1123,7 @@ public class GarenaInterface {
 		lbuf.position(23);
 		member.membership = lbuf.get();
 
-		member.experience = crypt.unsignedByte(lbuf.get(25));
+		member.experience = GarenaEncrypt.unsignedByte(lbuf.get(25));
 		member.playing = (lbuf.get(27)) == 1;
 
 		//external IP
@@ -1154,9 +1152,9 @@ public class GarenaInterface {
 
 		//ports in big endian
 		lbuf.order(ByteOrder.BIG_ENDIAN);
-		member.externalPort = crypt.unsignedShort(lbuf.getShort(40));
-		member.internalPort = crypt.unsignedShort(lbuf.getShort(42));
-		member.virtualSuffix = crypt.unsignedByte(lbuf.get(44));
+		member.externalPort = GarenaEncrypt.unsignedShort(lbuf.getShort(40));
+		member.internalPort = GarenaEncrypt.unsignedShort(lbuf.getShort(42));
+		member.virtualSuffix = GarenaEncrypt.unsignedByte(lbuf.get(44));
 		lbuf.order(ByteOrder.LITTLE_ENDIAN);
 		members.add(member);
 
@@ -1569,28 +1567,28 @@ public class GarenaInterface {
 					pExternal = lbuf.getShort(12);
 					lbuf.order(ByteOrder.LITTLE_ENDIAN);
 
-					String str_external = crypt.unsignedByte(iExternal[0]) +
-							"." + crypt.unsignedByte(iExternal[1]) +
-							"." + crypt.unsignedByte(iExternal[2]) +
-							"." + crypt.unsignedByte(iExternal[3]);
+					String str_external = GarenaEncrypt.unsignedByte(iExternal[0]) +
+							"." + GarenaEncrypt.unsignedByte(iExternal[1]) +
+							"." + GarenaEncrypt.unsignedByte(iExternal[2]) +
+							"." + GarenaEncrypt.unsignedByte(iExternal[3]);
 
 					Main.println("[GInterface] PeerLoop: set address to " + str_external + " and port to " + pExternal, GRCLog.SERVER);
 				} else if(buf_array[0] == 0x3F) {
-					int room_prefix = crypt.unsignedShort(lbuf.getShort(1));
-					int num_rooms = crypt.unsignedByte(lbuf.get(3));
+					int room_prefix = GarenaEncrypt.unsignedShort(lbuf.getShort(1));
+					int num_rooms = GarenaEncrypt.unsignedByte(lbuf.get(3));
 
 					Main.println("[GInterface] Receiving " + num_rooms + " rooms with prefix " + room_prefix, GRCLog.SERVER);
 
 					for(int i = 0; i < num_rooms; i++) {
 						RoomInfo room = new RoomInfo();
-						int suffix = crypt.unsignedByte(lbuf.get(4 + i * 2));
+						int suffix = GarenaEncrypt.unsignedByte(lbuf.get(4 + i * 2));
 						room.roomId = room_prefix * 256 + suffix;
 
-						room.numUsers = crypt.unsignedByte(lbuf.get(5 + i * 2));
+						room.numUsers = GarenaEncrypt.unsignedByte(lbuf.get(5 + i * 2));
 						rooms.add(room);
 					}
 				} else if(buf_array[0] == 0x0F) {
-					int id = crypt.byteArrayToIntLittle(buf_array, 4);
+					int id = GarenaEncrypt.byteArrayToIntLittle(buf_array, 4);
 					MemberInfo member = memberFromID(id);
 
 					if(member != null) {
@@ -1600,7 +1598,7 @@ public class GarenaInterface {
 						//Main.println("[GInterface] Received HELLO reply from invalid member: " + id, GRCLog.ROOM);
 					}
 				} else if(buf_array[0] == 0x02) {
-					int id = crypt.byteArrayToIntLittle(buf_array, 4);
+					int id = GarenaEncrypt.byteArrayToIntLittle(buf_array, 4);
 					MemberInfo member = memberFromID(id);
 
 					if(member != null) {
@@ -1612,7 +1610,7 @@ public class GarenaInterface {
 						//Main.println("[GInterface] Received HELLO from invalid member: " + id, GRCLog.ROOM);
 					}
 				} else if(buf_array[0] == 0x0D) {
-					int conn_id = crypt.byteArrayToIntLittle(buf_array, 4);
+					int conn_id = GarenaEncrypt.byteArrayToIntLittle(buf_array, 4);
 
 					if(conn_id == 0) {
 						continue; //happens sometimes

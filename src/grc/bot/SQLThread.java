@@ -351,8 +351,8 @@ public class SQLThread extends Thread {
 				user.userID = result.getInt("uid");
 				int rank = result.getInt("rank");
 				//prevent people from editing database to give themselves root admin
-				if(user.rank == bot.LEVEL_ROOT_ADMIN) {
-					rank = bot.LEVEL_ADMIN;
+				if(user.rank == GChatBot.LEVEL_ROOT_ADMIN) {
+					rank = GChatBot.LEVEL_ADMIN;
 				}
 				user.rank = rank;
 				user.ipAddress = result.getString("ip");

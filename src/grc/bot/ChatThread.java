@@ -8,6 +8,7 @@ package grc.bot;
 import grc.GRCConfig;
 import grc.GarenaInterface;
 import grc.Main;
+import grc.GRCLog;
 import java.util.LinkedList;
 
 /**
@@ -63,7 +64,7 @@ public class ChatThread extends Thread {
 			}
 
 			chat_queue.notifyAll(); //in case run() is waiting for us
-			Main.println("[QUEUED: " + target_user + "] " + message, Main.ROOM);
+			Main.println("[QUEUED: " + target_user + "] " + message, GRCLog.ROOM);
 		}
 	}
 
@@ -99,13 +100,13 @@ public class ChatThread extends Thread {
 				try {
 					Thread.sleep(1500);
 				} catch(InterruptedException e) {
-					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), Main.ERROR);
+					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), GRCLog.ERROR);
 				}
 			} else if(message.target_user == SLEEP) { //stops the bot sending messages too quickly
 				try {
 				Thread.sleep(1500); //prevent flooding
 				} catch(InterruptedException e) {
-					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), Main.ERROR);
+					Main.println("[ChatThread] Sleep was interrupted!" + e.getLocalizedMessage(), GRCLog.ERROR);
 				}
 			} else {
 				garena.sendGCRPWhisper(message.target_user, message.str);
