@@ -163,8 +163,11 @@ public class Main {
 			try {
 				log.init();
 			} catch(IOException ioe) {
-				ioe.printStackTrace();
+				//give error information to Main
+				println("[Main] init log failed: " + ioe.getLocalizedMessage(), GRCLog.ERROR);
+				stackTrace(ioe);
 			}
+			log.newLogLoop();
 		}
 	}
 	

@@ -173,7 +173,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		registerCommand("announce", LEVEL_VIP);
 		registerCommand("getpromote", LEVEL_VIP);
 		registerCommand("promote", LEVEL_VIP);
-		registerCommand("demote", LEVEL_ADMIN);
+		registerCommand("demote", LEVEL_VIP);
 		//registerCommand("getunban", LEVEL_VIP);
 		
 		registerCommand("whois", LEVEL_SAFELIST);
@@ -284,27 +284,7 @@ public class GChatBot implements GarenaListener, ActionListener {
 		
 		//ADMIN COMMANDS
 		if(memberRank >= LEVEL_ADMIN) {
-			if(command.equals("demote")) {
-				if(payload.equals("")) {
-					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "demote <username>. For further help use " + trigger + "help demote", member.userID);
-					return null;
-				}
-				String target = trimUsername(removeSpaces(payload)); //format payload into something easier to process
-				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot); //get userinfo
-				if(targetUser == null) { //if user can't be found
-					return "Failed. " + target + " is an unknown user! For further help use " + trigger + "help demote";
-				}
-				//target user is searched for by username, so will only be found if they have been seen by the bot at least once
-				//check for loopholes
-				if(targetUser.rank == LEVEL_ROOT_ADMIN) {
-					return "Failed. " + targetUser.properUsername + " is a Root Admin!";
-				} else if(targetUser.rank == LEVEL_ADMIN && memberRank != LEVEL_ROOT_ADMIN) {
-					return "Failed. " + targetUser.properUsername + " can only be demoted by a Root Admin";
-				} else {
-					//demotion is ok
-					return setRank(member, targetUser, targetUser.rank - 1);
-				}
-			} else if(command.equals("kick")) {
+			if(command.equals("kick")) {
 				String[] parts = payload.split(" ", 2);
 				if(parts.length < 2) {
 					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "kick <username> <reason>. For further help use " + trigger + "help kick", member.userID);
@@ -578,6 +558,27 @@ public class GChatBot implements GarenaListener, ActionListener {
 					return promote(member, user, targetUser);
 				} else { //else username and rank given
 					return promote(member, user, targetUser, parts[1]);
+				}
+			} else if(command.equals("demote")) {
+				if(payload.length() == 0) {
+					chatthread.queueChat("Invalid format detected. Correct format is " + trigger + "demote [user] [rank]. Rank is optional. For further help use " + trigger + "help demote", member.userID);
+				}
+				//split payload into user and rank
+				String[] parts = payload.split(" ", 2);
+				String target = trimUsername(parts[0]);
+				//stop users from demoting themselves
+				if(target.toLowerCase().equals(user.username)) {
+					return "Failed - you can't demote yourself!";
+				}
+				//find target userinfo
+				UserInfo targetUser = getUserFromName(target.toLowerCase(), userDatabaseRoot);
+				if(targetUser == null) { //target wasn't found
+					return "Failed - " + target + " can't be found!";
+				}
+				if(parts.length == 1) { //if only username given
+					return demote(member, user, targetUser);
+				} else { //else username and rank given
+					return demote(member, user, targetUser, parts[1]);
 				}
 			}
 		}
