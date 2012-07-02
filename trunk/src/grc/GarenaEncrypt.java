@@ -383,10 +383,10 @@ public class GarenaEncrypt {
 	}
 	
 	private static InetAddress getFirstNonLoopbackAddress(boolean preferIpv4, boolean preferIPv6) throws SocketException {
-		Enumeration en = NetworkInterface.getNetworkInterfaces();
+		Enumeration<?> en = NetworkInterface.getNetworkInterfaces();
 		while (en.hasMoreElements()) {
 			NetworkInterface i = (NetworkInterface) en.nextElement();
-			for (Enumeration en2 = i.getInetAddresses(); en2.hasMoreElements();) {
+			for (Enumeration<?> en2 = i.getInetAddresses(); en2.hasMoreElements();) {
 				InetAddress addr = (InetAddress) en2.nextElement();
 				if (!addr.isLoopbackAddress()) {
 					if (addr instanceof Inet4Address) {
